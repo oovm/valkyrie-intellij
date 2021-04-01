@@ -26,6 +26,7 @@ public interface ValkyrieTypes {
   IElementType CONDITION = new ValkyrieElementType("CONDITION");
   IElementType DEF_BLOCK = new ValkyrieElementType("DEF_BLOCK");
   IElementType DEF_ITEM = new ValkyrieElementType("DEF_ITEM");
+  IElementType DEF_ITEM_SIGN = new ValkyrieElementType("DEF_ITEM_SIGN");
   IElementType DEF_STATEMENT = new ValkyrieElementType("DEF_STATEMENT");
   IElementType DEF_TUPLE = new ValkyrieElementType("DEF_TUPLE");
   IElementType EF_STATEMENT = new ValkyrieElementType("EF_STATEMENT");
@@ -214,6 +215,9 @@ public interface ValkyrieTypes {
       }
       else if (type == DEF_ITEM) {
         return new ValkyrieDefItemNode(node);
+      }
+      else if (type == DEF_ITEM_SIGN) {
+        return new ValkyrieDefItemSignNode(node);
       }
       else if (type == DEF_STATEMENT) {
         return new ValkyrieDefStatementNode(node);

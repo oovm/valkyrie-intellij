@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.mixin.ValkyrieClassBraceMixin;
+import com.github.valkyrie.language.mixin.MixinClassBrace;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieClassBraceItemNode extends ValkyrieClassBraceMixin implements ValkyrieClassBraceItem {
+public class ValkyrieClassBraceItemNode extends MixinClassBrace implements ValkyrieClassBraceItem {
 
   public ValkyrieClassBraceItemNode(@NotNull ASTNode node) {
     super(node);

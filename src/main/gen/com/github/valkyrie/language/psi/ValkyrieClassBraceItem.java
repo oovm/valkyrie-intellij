@@ -19,4 +19,12 @@ public interface ValkyrieClassBraceItem extends PsiElement {
   @NotNull
   ValkyrieTypeExpression getTypeExpression();
 
+  //WARNING: getSymbol(...) is skipped
+  //matching getSymbol(ValkyrieClassBraceItem, ...)
+  //methods are not found in ASTMethods
+
+  //WARNING: getModifiers(...) is skipped
+  //matching getModifiers(ValkyrieClassBraceItem, ...)
+  //methods are not found in ASTMethods
+
 }

@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.mixin.ValkyrieDefineMixin;
+import com.github.valkyrie.language.mixin.MixinDefine;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieDefStatementNode extends ValkyrieDefineMixin implements ValkyrieDefStatement {
+public class ValkyrieDefStatementNode extends MixinDefine implements ValkyrieDefStatement {
 
   public ValkyrieDefStatementNode(@NotNull ASTNode node) {
     super(node);
@@ -62,6 +62,23 @@ public class ValkyrieDefStatementNode extends ValkyrieDefineMixin implements Val
   @Nullable
   public ValkyrieTypeExpression getTypeExpression() {
     return findChildByClass(ValkyrieTypeExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieIdentifier getSymbol() {
+    return ASTMethods.getSymbol(this);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieIdentifier[] getModifiers() {
+    return ASTMethods.getModifiers(this);
+  }
+
+  @Override
+  public boolean isMethod() {
+    return ASTMethods.isMethod(this);
   }
 
 }

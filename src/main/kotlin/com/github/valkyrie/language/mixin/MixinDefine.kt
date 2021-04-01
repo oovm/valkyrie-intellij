@@ -9,12 +9,11 @@ import com.intellij.psi.PsiElement
 import javax.swing.Icon
 import kotlin.random.Random
 
-abstract class ValkyrieDefineMixin(node: ASTNode) : DeclareNode(node),
+abstract class MixinDefine(node: ASTNode) : DeclareNode(node),
     ValkyrieDefStatement {
-    override val viewIcon: Icon? = if (this.isMethod()) {
-        Method
-    } else {
-        Function
+    override val viewIcon: Icon? = when {
+        this.isMethod -> Method
+        else -> Function
     }
 
     override fun getNameIdentifier(): PsiElement? {
@@ -23,10 +22,6 @@ abstract class ValkyrieDefineMixin(node: ASTNode) : DeclareNode(node),
 
     override fun setName(name: String): PsiElement {
         TODO("Not yet implemented")
-    }
-
-    private fun isMethod(): Boolean {
-        return Random.nextBoolean()
     }
 }
 

@@ -30,8 +30,8 @@ public class ValkyrieMatchStatementNode extends ValkyrieElement implements Valky
 
   @Override
   @NotNull
-  public ValkyrieExpression getExpression() {
-    return findNotNullChildByClass(ValkyrieExpression.class);
+  public List<ValkyrieIdentifier> getIdentifierList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
   }
 
   @Override

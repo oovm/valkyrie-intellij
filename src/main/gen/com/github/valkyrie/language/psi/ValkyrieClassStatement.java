@@ -13,6 +13,9 @@ public interface ValkyrieClassStatement extends PsiElement {
   @Nullable
   ValkyrieClassTuple getClassTuple();
 
+  @Nullable
+  ValkyrieIdentifier getIdentifier();
+
   @NotNull
   ValkyrieModifierSymbols getModifierSymbols();
 

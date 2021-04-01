@@ -52,8 +52,13 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
     }
 
     override fun visitDefStatement(o: ValkyrieDefStatement) {
-        highlightSymbolList(o.modifierSymbols.identifierList, Color.SYM_FUNCTION_FREE)
-        super.visitDefStatement(o)
+        highlight(o.symbol, Color.SYM_FUNCTION_FREE)
+        highlightModifiers(o.modifiers)
+    }
+
+    override fun visitDefItem(o: ValkyrieDefItem) {
+        highlight(o.symbol, o.symbolColor)
+        highlightModifiers(o.modifiers)
     }
 
     override fun visitForallStatement(o: ValkyrieForallStatement) {
@@ -66,6 +71,7 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
 
     override fun visitClassStatement(o: ValkyrieClassStatement) {
         highlight(o.symbol, Color.SYM_CLASS)
+        o.identifier?.let { highlight(it, Color.SYM_TRAIT) }
         highlightModifiers(o.modifiers)
     }
 
@@ -80,6 +86,11 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
     }
 
     override fun visitTraitStatement(o: ValkyrieTraitStatement) {
+        highlight(o.symbol, Color.SYM_TRAIT)
+        highlightModifiers(o.modifiers)
+    }
+
+    override fun visitExtendsStatement(o: ValkyrieExtendsStatement) {
         highlight(o.symbol, Color.SYM_TRAIT)
         highlightModifiers(o.modifiers)
     }
@@ -119,7 +130,6 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
             "u8", "u16", "u32", "u64", "u128", "u256",
             "i8", "i16", "i32", "i64", "i128", "i256",
             "int", "bool", "str", "f32", "f64", "char", "byte", "void",
-            "self", "Self",
             -> {
                 highlight(o, Color.KEYWORD)
             }

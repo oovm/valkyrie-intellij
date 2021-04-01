@@ -4,8 +4,12 @@ package com.github.valkyrie.language.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor;
 
 public interface ValkyrieDefItem extends PsiElement {
+
+  @Nullable
+  ValkyrieDefItemSign getDefItemSign();
 
   @Nullable
   ValkyrieExpression getExpression();
@@ -18,5 +22,14 @@ public interface ValkyrieDefItem extends PsiElement {
 
   @Nullable
   ValkyrieTypeExpression getTypeExpression();
+
+  @NotNull
+  ValkyrieIdentifier getSymbol();
+
+  @NotNull
+  ValkyrieIdentifier[] getModifiers();
+
+  @NotNull
+  ValkyrieHighlightColor getSymbolColor();
 
 }

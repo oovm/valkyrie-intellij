@@ -8,7 +8,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import javax.swing.Icon
 
-abstract class ValkyrieClassBraceMixin(node: ASTNode) : DeclareNode(node),
+abstract class MixinClassBrace(node: ASTNode) : DeclareNode(node),
     ValkyrieClassBraceItem {
     override val viewIcon: Icon = AllIcons.Nodes.Field;
     override fun addChildrenView(childrenView: MutableSet<ValkyrieViewElement>) {

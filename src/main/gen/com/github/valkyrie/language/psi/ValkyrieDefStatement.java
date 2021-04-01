@@ -25,4 +25,12 @@ public interface ValkyrieDefStatement extends PsiElement {
   @Nullable
   ValkyrieTypeExpression getTypeExpression();
 
+  @NotNull
+  ValkyrieIdentifier getSymbol();
+
+  @NotNull
+  ValkyrieIdentifier[] getModifiers();
+
+  boolean isMethod();
+
 }

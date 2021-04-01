@@ -41,6 +41,12 @@ public class ValkyrieClassStatementNode extends MixinClass implements ValkyrieCl
   }
 
   @Override
+  @Nullable
+  public ValkyrieIdentifier getIdentifier() {
+    return findChildByClass(ValkyrieIdentifier.class);
+  }
+
+  @Override
   @NotNull
   public ValkyrieModifierSymbols getModifierSymbols() {
     return findNotNullChildByClass(ValkyrieModifierSymbols.class);

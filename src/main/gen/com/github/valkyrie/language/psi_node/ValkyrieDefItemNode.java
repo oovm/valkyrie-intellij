@@ -8,11 +8,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieElement;
+import com.github.valkyrie.language.mixin.MixinDefineItem;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
+import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor;
 
-public class ValkyrieDefItemNode extends ValkyrieElement implements ValkyrieDefItem {
+public class ValkyrieDefItemNode extends MixinDefineItem implements ValkyrieDefItem {
 
   public ValkyrieDefItemNode(@NotNull ASTNode node) {
     super(node);
@@ -26,6 +27,12 @@ public class ValkyrieDefItemNode extends ValkyrieElement implements ValkyrieDefI
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ValkyrieVisitor) accept((ValkyrieVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @Nullable
+  public ValkyrieDefItemSign getDefItemSign() {
+    return findChildByClass(ValkyrieDefItemSign.class);
   }
 
   @Override
@@ -50,6 +57,24 @@ public class ValkyrieDefItemNode extends ValkyrieElement implements ValkyrieDefI
   @Nullable
   public ValkyrieTypeExpression getTypeExpression() {
     return findChildByClass(ValkyrieTypeExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieIdentifier getSymbol() {
+    return ASTMethods.getSymbol(this);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieIdentifier[] getModifiers() {
+    return ASTMethods.getModifiers(this);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieHighlightColor getSymbolColor() {
+    return ASTMethods.getSymbolColor(this);
   }
 
 }

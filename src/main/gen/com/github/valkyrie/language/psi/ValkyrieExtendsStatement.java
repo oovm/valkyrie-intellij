@@ -19,4 +19,10 @@ public interface ValkyrieExtendsStatement extends PsiElement {
   @Nullable
   ValkyrieTypeExpression getTypeExpression();
 
+  @NotNull
+  ValkyrieIdentifier getSymbol();
+
+  @NotNull
+  ValkyrieIdentifier[] getModifiers();
+
 }

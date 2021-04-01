@@ -79,6 +79,10 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitDefItemSign(@NotNull ValkyrieDefItemSign o) {
+    visitPsiElement(o);
+  }
+
   public void visitDefStatement(@NotNull ValkyrieDefStatement o) {
     visitPsiElement(o);
   }
