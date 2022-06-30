@@ -129,15 +129,12 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
             }
             "u8", "u16", "u32", "u64", "u128", "u256",
             "i8", "i16", "i32", "i64", "i128", "i256",
-            "int", "bool", "str", "f32", "f64", "char", "byte", "void",
+            "int", "bool", "str", "string", "f32", "f64", "char", "byte", "void",
             -> {
                 highlight(o, Color.KEYWORD)
             }
             "_", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" -> {
                 highlight(o, Color.SYM_GENERIC)
-            }
-            "rhs", "f" -> {
-                highlight(o, Color.SYM_ARG)
             }
             "map", "or" -> {
                 highlight(o, Color.SYM_FUNCTION_SELF)
@@ -148,7 +145,7 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
             "Option", "Result", "Current", "Target" -> {
                 highlight(o, Color.SYM_CLASS)
             }
-            "None", "Some" -> {
+            "None", "Some", "Success", "Failure" -> {
                 highlight(o, Color.SYM_VARIANT)
             }
             else -> {}
