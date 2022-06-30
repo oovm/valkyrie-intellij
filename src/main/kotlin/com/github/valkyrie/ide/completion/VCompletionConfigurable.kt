@@ -5,11 +5,11 @@ import com.github.valkyrie.settings.VCodeInsightSettings
 import com.intellij.application.options.CodeCompletionOptionsCustomSection
 import com.intellij.openapi.options.ConfigurableBuilder
 
-class VCompletionConfigurable : ConfigurableBuilder(ValkyrieBundle.message("settings.rust.completion.title")),
+class VCompletionConfigurable : ConfigurableBuilder(ValkyrieBundle.message("settings.completion.title")),
     CodeCompletionOptionsCustomSection {
     init {
         checkBox(
-            ValkyrieBundle.message("settings.rust.completion.suggest.out.of.scope.items"),
+            ValkyrieBundle.message("settings.completion.suggest_out_of_scope_items"),
             VCodeInsightSettings.getInstance()::suggestOutOfScopeItems
         )
     }
