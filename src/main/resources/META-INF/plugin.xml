@@ -26,7 +26,7 @@
 			language="Valkyrie"
 			implementationClass="com.github.valkyrie.ide.view.VStructureViewFactory"/>
 		<!-- Highlight -->
-		<colorSettingsPage implementation="com.github.valkyrie.ide.highlight.ValkyrieHighlightSetting"/>
+		<colorSettingsPage implementation="com.github.valkyrie.settings.VHighlightSetting"/>
 		<highlightVisitor implementation="com.github.valkyrie.ide.highlight.ValkyrieHighlightVisitor"/>
 		<lang.syntaxHighlighter
 			language="Valkyrie"
@@ -64,7 +64,7 @@
 		<vcs.codeVisionLanguageContext
 			language="Valkyrie"
 			implementationClass="com.github.valkyrie.ide.hint.ValkyrieInlayVSCProvider"/>
-		<psi.fileReferenceHelper implementation="com.github.valkyrie.ide.reference.ValkyrieFileReference"/>
+<!--		<psi.fileReferenceHelper implementation="com.github.valkyrie.ide.reference.ValkyrieFileReference"/>-->
 		<psi.referenceContributor implementation="com.github.valkyrie.ide.reference.ValkyrieReferenceContributor"/>
 		<psi.symbolReferenceProvider
 			anyReferenceClass="true"
