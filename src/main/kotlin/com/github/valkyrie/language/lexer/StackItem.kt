@@ -45,25 +45,12 @@ class StackItem {
     }
 
     fun setPlainText() {
-        this.token = NoteTypes.PLAIN_TEXT;
-        this.paired = null;
+//        this.token = NoteTypes.PLAIN_TEXT;
+//        this.paired = null;
     }
 
     fun tokenIs(vararg token: IElementType): Boolean {
         return token.firstOrNull { it == this.token } != null
-    }
-
-    fun isSoftLeftMark(): Boolean? = when {
-        softLeftMark.contains(this.token) -> true
-        softRightMark.contains(this.token) -> false
-        else -> null
-    }
-
-
-    fun isSoftRightMark(): Boolean? = when {
-        softLeftMark.contains(this.token) -> false
-        softRightMark.contains(this.token) -> true
-        else -> null
     }
 
     fun IElementType.isHardLeftMark(): Boolean? = when (this) {
@@ -71,14 +58,6 @@ class StackItem {
     }
 
     companion object {
-        // 会被强制断行的元素
-        val softLeftMark = setOf(
-            NoteTypes.ITALIC_L, NoteTypes.BOLD_L, NoteTypes.STRONG_L,
-            NoteTypes.UNDER_L, NoteTypes.WAVE_L, NoteTypes.STRIKE_L
-        )
-        val softRightMark = setOf(
-            NoteTypes.ITALIC_R, NoteTypes.BOLD_R, NoteTypes.STRONG_R,
-            NoteTypes.UNDER_R, NoteTypes.WAVE_R, NoteTypes.STRIKE_R
-        )
+
     }
 }

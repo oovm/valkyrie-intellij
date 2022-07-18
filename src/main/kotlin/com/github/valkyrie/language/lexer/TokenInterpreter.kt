@@ -17,6 +17,10 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     var stack: MutableList<StackItem> = mutableListOf()
 
+    var typeContext = false
+
+    var shadowKeyword = false;
+
     fun interpreter(): Array<StackItem> {
         while (startOffset < endOffset) {
             if (matchesWhitespace()) continue
@@ -54,6 +58,10 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | using[!*]?
         """.toRegex()
         val r = patterns.matchAt(buffer, startOffset) ?: return false
+        if (shadowKeyword) {
+            shadowKeyword = false
+            return addOffset(r)
+        }
         when (r.value) {
             "extension" -> stack.add(StackItem(ValkyrieTypes.KW_EXTENSION, r, context))
             "namespace!", "namespace*", "namespace" -> stack.add(StackItem(ValkyrieTypes.KW_NAMESPACE, r, context))
@@ -90,6 +98,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | !! | !
             | != | ≠
             | === | == | =
+            # in
+            | ∈
         """.toRegex()
         val r = patterns.matchAt(buffer, startOffset) ?: return false
         when (r.value) {
@@ -114,8 +124,16 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "&" -> stack.add(StackItem(ValkyrieTypes.OP_AND, r, context))
             //
             "::", "∷" -> stack.add(StackItem(ValkyrieTypes.OP_PROPORTION, r, context))
-            ":=", "≔" -> stack.add(StackItem(ValkyrieTypes.OP_ASSIGN, r, context))
+            ":=", "≔" -> stack.add(StackItem(ValkyrieTypes.OP_BIND, r, context))
             ":", "∶" -> stack.add(StackItem(ValkyrieTypes.OP_COLON, r, context))
+            // start with !
+            "!!" -> stack.add(StackItem(ValkyrieTypes.OP_NE, r, context))
+            "!=" -> stack.add(StackItem(ValkyrieTypes.OP_NE, r, context))
+            "!" -> stack.add(StackItem(ValkyrieTypes.OP_NOT, r, context))
+            // start with =
+            "∈" -> {
+                stack.add(StackItem(ValkyrieTypes.OP_IN, r, context))
+            }
             // start with >
             ">>>", "⋙" -> stack.add(StackItem(ValkyrieTypes.OP_GGG, r, context))
             ">>", "≫" -> stack.add(StackItem(ValkyrieTypes.OP_GG, r, context))
@@ -124,21 +142,46 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 stack.add(StackItem(ValkyrieTypes.OP_GS, r, context))
             }
             ">" -> {
+                if (typeContext) {
+                    typeContext = false
+                }
                 stack.add(StackItem(ValkyrieTypes.OP_GT, r, context))
             }
             // start with <
             "<<<", "⋘" -> stack.add(StackItem(ValkyrieTypes.OP_LLL, r, context))
             "<<", "≪" -> stack.add(StackItem(ValkyrieTypes.OP_LL, r, context))
-            "</" -> stack.add(StackItem(ValkyrieTypes.OP_LS, r, context))
             "<=", "≤", "⩽" -> stack.add(StackItem(ValkyrieTypes.OP_LEQ, r, context))
-            "<" -> {
-                stack.add(StackItem(ValkyrieTypes.OP_LT, r, context))
+            "</" -> {
+                stack.add(StackItem(ValkyrieTypes.OP_LS, r, context))
             }
-            // start with !
-            "!!" -> stack.add(StackItem(ValkyrieTypes.OP_NOT, r, context))
-            "!=" -> stack.add(StackItem(ValkyrieTypes.OP_NOT, r, context))
-            "!" -> stack.add(StackItem(ValkyrieTypes.OP_NOT, r, context))
-            // start with =
+            "<:", "⊑" -> {
+                typeContext = true
+                stack.add(StackItem(ValkyrieTypes.OP_IS_A, r, context))
+            }
+            "!<:", "⋢", "!⊑" -> {
+                typeContext = true
+                stack.add(StackItem(ValkyrieTypes.OP_NOT_A, r, context))
+            }
+            // surround with ( )
+            "(" -> {
+                if (shadowKeyword) {
+                    shadowKeyword = false
+                }
+                stack.add(StackItem(ValkyrieTypes.L_PAREN, r, context))
+            }
+            ")" -> {
+                stack.add(StackItem(ValkyrieTypes.R_PAREN, r, context))
+            }
+            "[" -> {
+                if (shadowKeyword) {
+                    shadowKeyword = false
+                }
+                stack.add(StackItem(ValkyrieTypes.L_BRACK, r, context))
+            }
+            "]" -> {
+                stack.add(StackItem(ValkyrieTypes.R_BRACK, r, context))
+            }
+
             else -> TODO("unreachable ${r.value}")
         }
         return addOffset(r)

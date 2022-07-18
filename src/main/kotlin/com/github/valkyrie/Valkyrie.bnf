@@ -37,16 +37,6 @@
         KW_EXTENSION = "extension"
         KW_IMPORT = "using"
 
-        PARENTHESIS_L = '('
-        PARENTHESIS_R = ')'
-        BRACKET_L = '['
-        BRACKET_R = ']'
-        BRACE_L = '{'
-        BRACE_R = '}'
-        ANGLE_L = '<'
-        ANGLE_R = '>'
-        LESS = "<<"
-        GREATER = ">>"
         ACCENT = '^'
         BIND = '='
         EQ = '=='
@@ -90,9 +80,17 @@
         OP_MOD_ASSIGN = "%="
         OP_MOD = "%"
 
+        OP_AND_ASSIGN = "&="
+        OP_AND = "&"
+        OP_OR_ASSIGN = "|="
+        OP_OR = "|"
+
         OP_PROPORTION = "::"
         OP_COLON = ":"
         OP_EQ = "="
+        OP_NE = "!="
+        OP_BIND = ":="
+        OP_NOT = "!"
         //
         OP_GT = ">"
         OP_GS = "/>"
@@ -106,6 +104,19 @@
         OP_LEQ = "<="
         OP_LLL = "<<<"
 
+        OP_IS_A = "is"
+        OP_NOT_A = "is not"
+
+        OP_IN = "in"
+
+        L_PAREN = '('
+        R_PAREN = ')'
+        L_BRACK = '['
+        R_PAREN = ']'
+        L_BRACE = '{'
+        R_BRACE = '}'
+        L_ANGLE = '::<'
+        R_ANGLE = '>::'
 
         IF = "if"
         ELSE = "else"
@@ -311,10 +322,10 @@ string_literal ::= STRING_EMPTY | STRING_START STRING_CHAR+ STRING_END;
 // ---------------------------------------------------------------------------------------------------------------------
 private meta sequence      ::= <<item>> (<<sp>> <<item>>)* [<<sp>>];
 // parenthesis ( )
-private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;
+private meta parenthesis   ::= L_PAREN [<<item>> (<<sp>> <<item>>)* [<<sp>>]] R_PAREN;
 // bracket [ ]
-private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
+private meta bracket_block ::= L_BRACK [<<item>> (<<sp>> <<item>>)* [<<sp>>]] R_BRACK;
 // brace { }
-private meta brace_block   ::= BRACE_L (<<item>>|<<sp>>)* BRACE_R;
+private meta brace_block   ::= L_BRACE (<<item>>|<<sp>>)* R_BRACE;
 // angle < >
-private meta angle_block   ::= ANGLE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] ANGLE_R;
+private meta angle_block   ::= L_ANGLE [<<item>> (<<sp>> <<item>>)* [<<sp>>]] R_ANGLE;
