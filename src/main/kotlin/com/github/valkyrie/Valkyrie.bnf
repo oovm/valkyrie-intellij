@@ -165,10 +165,10 @@ private normal_statements ::=
   ;
 // ---------------------------------------------------------------------------------------------------------------------
 namespace_statement ::= KW_NAMESPACE identifier {
-    mixin="com.github.valkyrie.language.mixin.ValkyrieModuleMixin"
+    mixin="com.github.valkyrie.language.mixin.MixinExtension"
 };
 extension_statement ::= EXTENSION identifier {
-    mixin="com.github.valkyrie.language.mixin.ValkyrieModuleMixin"
+    mixin="com.github.valkyrie.language.mixin.MixinExtension"
 };
 // ---------------------------------------------------------------------------------------------------------------------
 import_statement ::= IMPORT import_block;

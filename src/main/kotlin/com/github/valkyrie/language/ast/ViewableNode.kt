@@ -11,16 +11,11 @@ import javax.swing.Icon
 
 abstract class ViewableNode(node: ASTNode) : ValkyrieElement(node),
     NavigatablePsiElement {
-    abstract val viewIcon: Icon?
+    abstract override fun getIcon(flags: Int): Icon;
     abstract override fun getNavigationElement(): PsiElement;
-
-    override fun getPresentation() = ValkyriePresentationItem(this.getViewName(), viewIcon)
-    open fun getViewName(): String = this.navigationElement.text
+    override fun getPresentation() = ValkyriePresentationItem(navigationElement.text, this.getIcon(0))
     open fun getChildrenView(): Array<TreeElement> {
-        val children = mutableSetOf<ValkyrieViewElement>()
-        this.addChildrenView(children)
-        return children.toTypedArray()
+       return  arrayOf()
     }
-    open fun addChildrenView(childrenView: MutableSet<ValkyrieViewElement>) {}
 }
 
