@@ -30,14 +30,8 @@ public class ValkyrieTypeAngleNode extends ValkyrieElement implements ValkyrieTy
 
   @Override
   @NotNull
-  public List<ValkyrieIdentifier> getIdentifierList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ValkyrieTypeExpression> getTypeExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieTypeExpression.class);
+  public ValkyrieGenericBlock getGenericBlock() {
+    return findNotNullChildByClass(ValkyrieGenericBlock.class);
   }
 
 }

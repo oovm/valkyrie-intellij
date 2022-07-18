@@ -35,9 +35,9 @@ public class ValkyrieMacroItemNode extends ValkyrieElement implements ValkyrieMa
   }
 
   @Override
-  @NotNull
-  public List<ValkyrieExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExpression.class);
+  @Nullable
+  public ValkyrieParenthesis getParenthesis() {
+    return findChildByClass(ValkyrieParenthesis.class);
   }
 
 }

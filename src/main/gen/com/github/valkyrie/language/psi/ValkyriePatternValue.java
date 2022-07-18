@@ -11,9 +11,12 @@ public interface ValkyriePatternValue extends PsiElement {
   ValkyrieBraceBlock getBraceBlock();
 
   @Nullable
+  ValkyrieBracketBlock getBracketBlock();
+
+  @Nullable
   ValkyrieIdentifier getIdentifier();
 
-  @NotNull
-  List<ValkyriePatternPair> getPatternPairList();
+  @Nullable
+  ValkyrieParenthesis getParenthesis();
 
 }

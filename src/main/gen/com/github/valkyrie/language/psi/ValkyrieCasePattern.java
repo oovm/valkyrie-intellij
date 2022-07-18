@@ -10,13 +10,16 @@ public interface ValkyrieCasePattern extends PsiElement {
   @Nullable
   ValkyrieBraceBlock getBraceBlock();
 
+  @Nullable
+  ValkyrieBracketBlock getBracketBlock();
+
   @NotNull
   List<ValkyrieIdentifier> getIdentifierList();
 
   @Nullable
   ValkyrieNamespace getNamespace();
 
-  @NotNull
-  List<ValkyriePatternPair> getPatternPairList();
+  @Nullable
+  ValkyrieParenthesis getParenthesis();
 
 }

@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieSliceSuffix extends PsiElement {
 
   @NotNull
-  List<ValkyrieSliceExpression> getSliceExpressionList();
+  ValkyrieBracketBlock getBracketBlock();
 
 }

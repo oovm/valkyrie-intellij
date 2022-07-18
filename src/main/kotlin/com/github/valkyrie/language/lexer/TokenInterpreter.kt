@@ -3,7 +3,9 @@
 package com.github.valkyrie.language.lexer
 
 import com.github.valkyrie.language.psi.ValkyrieTypes
+import com.intellij.psi.TokenType.BAD_CHARACTER
 import com.intellij.psi.TokenType.WHITE_SPACE
+
 import com.intellij.psi.tree.IElementType
 
 class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int, var context: StackContext) {
@@ -28,6 +30,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
         val PUNCTUATIONS = """(?x)
             [.]{1,3}
+            | [{}\[\]()]
+            | [,@;]
             # start with < >
             | >>> | >> | >= | /> | >
             | <<< | << | <= | </ | < | ≤ 
@@ -53,9 +57,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | === | == | =
             # in
             | ∈
-            # 
-            | ; | ,
-            | @
+            #
         """.toRegex()
     }
 
@@ -127,6 +129,9 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "is" -> {
                 pushToken(ValkyrieTypes.OP_IS_A, r)
             }
+            else -> {
+                pushToken(BAD_CHARACTER, r)
+            }
         }
         return true
     }
@@ -143,12 +148,6 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         }
         return true
     }
-    private fun codeDots(): Boolean  {
-        assert(context == StackContext.CODE)
-        val r = tryMatch(DOTS) ?: return false
-        pushToken(ValkyrieTypes.DOT, r)
-        return true
-    }
 
     private fun codePunctuations(): Boolean {
         assert(context == StackContext.CODE)
@@ -161,9 +160,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "." -> pushToken(ValkyrieTypes.DOT, r)
             ".." -> pushToken(ValkyrieTypes.DOT, r)
             "..." -> pushToken(ValkyrieTypes.DOT, r)
-            ";" -> {
-                pushToken(ValkyrieTypes.SEMICOLON, r)
-            }
+            ";" -> pushToken(ValkyrieTypes.SEMICOLON, r)
             "@" -> pushToken(ValkyrieTypes.AT, r)
             "," -> pushToken(ValkyrieTypes.COMMA, r)
             // start with +
@@ -249,7 +246,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "}" -> {
                 pushToken(ValkyrieTypes.BRACE_R, r)
             }
-            else -> TODO("unreachable ${r.value}")
+            else -> pushToken(BAD_CHARACTER, r)
         }
         return true
     }

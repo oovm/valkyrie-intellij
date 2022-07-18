@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieDefTuple extends PsiElement {
-
-  @NotNull
-  ValkyrieParenthesis getParenthesis();
+public interface ValkyrieParenthesis extends PsiElement {
 
 }

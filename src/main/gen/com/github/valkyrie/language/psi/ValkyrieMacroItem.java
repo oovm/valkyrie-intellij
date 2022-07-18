@@ -10,7 +10,7 @@ public interface ValkyrieMacroItem extends PsiElement {
   @Nullable
   ValkyrieBraceBlock getBraceBlock();
 
-  @NotNull
-  List<ValkyrieExpression> getExpressionList();
+  @Nullable
+  ValkyrieParenthesis getParenthesis();
 
 }

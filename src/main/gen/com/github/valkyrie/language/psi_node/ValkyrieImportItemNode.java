@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieElement;
+import com.github.valkyrie.language.mixin.MixinImportItem;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieImportItemNode extends ValkyrieElement implements ValkyrieImportItem {
+public class ValkyrieImportItemNode extends MixinImportItem implements ValkyrieImportItem {
 
   public ValkyrieImportItemNode(@NotNull ASTNode node) {
     super(node);
@@ -30,14 +30,14 @@ public class ValkyrieImportItemNode extends ValkyrieElement implements ValkyrieI
 
   @Override
   @Nullable
-  public ValkyrieIdentifier getIdentifier() {
-    return findChildByClass(ValkyrieIdentifier.class);
+  public ValkyrieBraceBlock getBraceBlock() {
+    return findChildByClass(ValkyrieBraceBlock.class);
   }
 
   @Override
   @Nullable
-  public ValkyrieImportBlock getImportBlock() {
-    return findChildByClass(ValkyrieImportBlock.class);
+  public ValkyrieIdentifier getIdentifier() {
+    return findChildByClass(ValkyrieIdentifier.class);
   }
 
   @Override

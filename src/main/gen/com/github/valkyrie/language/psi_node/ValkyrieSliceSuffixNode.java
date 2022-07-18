@@ -30,8 +30,8 @@ public class ValkyrieSliceSuffixNode extends ValkyrieElement implements Valkyrie
 
   @Override
   @NotNull
-  public List<ValkyrieSliceExpression> getSliceExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieSliceExpression.class);
+  public ValkyrieBracketBlock getBracketBlock() {
+    return findNotNullChildByClass(ValkyrieBracketBlock.class);
   }
 
 }

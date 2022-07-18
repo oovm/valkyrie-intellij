@@ -9,8 +9,7 @@ import com.intellij.psi.NavigatablePsiElement
 import com.intellij.psi.PsiElement
 import javax.swing.Icon
 
-abstract class ViewableNode(node: ASTNode) : ValkyrieElement(node),
-    NavigatablePsiElement {
+abstract class ViewableNode(node: ASTNode) : ValkyrieElement(node) {
     abstract override fun getOriginalElement(): PsiElement;
     abstract override fun getIcon(flags: Int): Icon;
     abstract override fun getNavigationElement(): PsiElement;

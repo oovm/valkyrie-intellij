@@ -44,11 +44,11 @@ abstract class MixinNormalPattern(node: ASTNode) : ValkyrieElement(node),
 
     override fun getOwnDeclarations(): MutableCollection<out PsiSymbolDeclaration> {
         val out = mutableListOf<PsiSymbolDeclaration>()
-        for (child in patternItemList) {
-            if (child is ValkyriePatternPair) {
-                out.add(Pattern(child))
-            }
-        }
+//        for (child in patternItemList) {
+//            if (child is ValkyriePatternPair) {
+//                out.add(Pattern(child))
+//            }
+//        }
         return out
     }
 

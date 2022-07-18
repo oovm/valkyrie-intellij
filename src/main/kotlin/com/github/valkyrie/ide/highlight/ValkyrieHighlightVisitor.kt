@@ -26,12 +26,12 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
         val mut = o.isMutable();
         val mode = ValkyrieVariableHighlightMode.Local;
         highlightSymbolList(o.identifierList, Color.KEYWORD)
-        o.patternItemList.forEach {
-            mode.highlightPatternItem(this, it, mut)
-        }
-        o.patternPairList.forEach {
-            mode.highlightPatternPair(this, it, mut)
-        }
+//        o.patternItemList.forEach {
+//            mode.highlightPatternItem(this, it, mut)
+//        }
+//        o.patternPairList.forEach {
+//            mode.highlightPatternPair(this, it, mut)
+//        }
     }
 
     override fun visitCasePattern(o: ValkyrieCasePattern) {
@@ -59,10 +59,10 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
     }
 
     override fun visitForallStatement(o: ValkyrieForallStatement) {
-        o.identifierList.forEach {
-            highlight(it, Color.SYM_GENERIC)
-        }
-        super.visitForallStatement(o)
+//        o.identifierList.forEach {
+//            highlight(it, Color.SYM_GENERIC)
+//        }
+//        super.visitForallStatement(o)
     }
 
 

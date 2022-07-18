@@ -36,8 +36,8 @@ public class ValkyrieForallStatementNode extends ValkyrieElement implements Valk
 
   @Override
   @NotNull
-  public List<ValkyrieIdentifier> getIdentifierList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
+  public ValkyrieSequence getSequence() {
+    return findNotNullChildByClass(ValkyrieSequence.class);
   }
 
 }

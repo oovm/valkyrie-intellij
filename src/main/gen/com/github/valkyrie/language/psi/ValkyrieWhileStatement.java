@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieWhileStatement extends PsiElement {
 
   @NotNull
-  ValkyrieBlock getBlock();
+  ValkyrieBraceBlock getBraceBlock();
 
   @NotNull
   ValkyrieCondition getCondition();

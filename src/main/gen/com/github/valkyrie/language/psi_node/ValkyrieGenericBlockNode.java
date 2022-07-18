@@ -12,32 +12,20 @@ import com.github.valkyrie.language.ast.ValkyrieElement;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieWhileStatementNode extends ValkyrieElement implements ValkyrieWhileStatement {
+public class ValkyrieGenericBlockNode extends ValkyrieElement implements ValkyrieGenericBlock {
 
-  public ValkyrieWhileStatementNode(@NotNull ASTNode node) {
+  public ValkyrieGenericBlockNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitWhileStatement(this);
+    visitor.visitGenericBlock(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ValkyrieVisitor) accept((ValkyrieVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieBraceBlock getBraceBlock() {
-    return findNotNullChildByClass(ValkyrieBraceBlock.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieCondition getCondition() {
-    return findNotNullChildByClass(ValkyrieCondition.class);
   }
 
 }

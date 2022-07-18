@@ -30,8 +30,8 @@ public class ValkyrieDefTupleNode extends ValkyrieElement implements ValkyrieDef
 
   @Override
   @NotNull
-  public List<ValkyrieDefItem> getDefItemList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieDefItem.class);
+  public ValkyrieParenthesis getParenthesis() {
+    return findNotNullChildByClass(ValkyrieParenthesis.class);
   }
 
 }

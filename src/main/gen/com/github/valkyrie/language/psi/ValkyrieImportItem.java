@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieImportItem extends PsiElement {
 
   @Nullable
-  ValkyrieIdentifier getIdentifier();
+  ValkyrieBraceBlock getBraceBlock();
 
   @Nullable
-  ValkyrieImportBlock getImportBlock();
+  ValkyrieIdentifier getIdentifier();
 
   @NotNull
   ValkyrieNamespaceDot getNamespaceDot();

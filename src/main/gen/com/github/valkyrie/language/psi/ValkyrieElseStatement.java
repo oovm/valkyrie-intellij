@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieElseStatement extends PsiElement {
 
   @NotNull
-  ValkyrieBlock getBlock();
+  ValkyrieBraceBlock getBraceBlock();
 
 }

@@ -12,9 +12,9 @@ public interface ValkyrieTypes {
   IElementType BITFLAG_ITEM = new ValkyrieTokenType("BITFLAG_ITEM");
   IElementType BITFLAG_LAYOUT = new ValkyrieTokenType("BITFLAG_LAYOUT");
   IElementType BITFLAG_STATEMENT = new ValkyrieTokenType("BITFLAG_STATEMENT");
-  IElementType BLOCK = new ValkyrieTokenType("BLOCK");
   IElementType BOOLEAN = new ValkyrieTokenType("BOOLEAN");
   IElementType BRACE_BLOCK = new ValkyrieTokenType("BRACE_BLOCK");
+  IElementType BRACKET_BLOCK = new ValkyrieTokenType("BRACKET_BLOCK");
   IElementType CALL_SUFFIX = new ValkyrieTokenType("CALL_SUFFIX");
   IElementType CASE_PATTERN = new ValkyrieTokenType("CASE_PATTERN");
   IElementType CLASS_BRACE = new ValkyrieTokenType("CLASS_BRACE");
@@ -37,10 +37,10 @@ public interface ValkyrieTypes {
   IElementType FORALL_BLOCK = new ValkyrieTokenType("FORALL_BLOCK");
   IElementType FORALL_STATEMENT = new ValkyrieTokenType("FORALL_STATEMENT");
   IElementType FOR_STATEMENT = new ValkyrieTokenType("FOR_STATEMENT");
+  IElementType GENERIC_BLOCK = new ValkyrieTokenType("GENERIC_BLOCK");
   IElementType IDENTIFIER = new ValkyrieTokenType("IDENTIFIER");
   IElementType IF_GUARD = new ValkyrieTokenType("IF_GUARD");
   IElementType IF_STATEMENT = new ValkyrieTokenType("IF_STATEMENT");
-  IElementType IMPORT_BLOCK = new ValkyrieTokenType("IMPORT_BLOCK");
   IElementType IMPORT_ITEM = new ValkyrieTokenType("IMPORT_ITEM");
   IElementType IMPORT_STATEMENT = new ValkyrieTokenType("IMPORT_STATEMENT");
   IElementType LET_STATEMENT = new ValkyrieTokenType("LET_STATEMENT");
@@ -62,9 +62,11 @@ public interface ValkyrieTypes {
   IElementType NUMBER = new ValkyrieTokenType("NUMBER");
   IElementType NUMBER_LITERAL = new ValkyrieTokenType("NUMBER_LITERAL");
   IElementType PAIR = new ValkyrieTokenType("PAIR");
+  IElementType PARENTHESIS = new ValkyrieTokenType("PARENTHESIS");
   IElementType PATTERN_ITEM = new ValkyrieTokenType("PATTERN_ITEM");
   IElementType PATTERN_PAIR = new ValkyrieTokenType("PATTERN_PAIR");
   IElementType PATTERN_VALUE = new ValkyrieTokenType("PATTERN_VALUE");
+  IElementType SEQUENCE = new ValkyrieTokenType("SEQUENCE");
   IElementType SLICE_EXPRESSION = new ValkyrieTokenType("SLICE_EXPRESSION");
   IElementType SLICE_SUFFIX = new ValkyrieTokenType("SLICE_SUFFIX");
   IElementType STRING = new ValkyrieTokenType("STRING");
@@ -204,14 +206,14 @@ public interface ValkyrieTypes {
       else if (type == BITFLAG_STATEMENT) {
         return new ValkyrieBitflagStatementNode(node);
       }
-      else if (type == BLOCK) {
-        return new ValkyrieBlockNode(node);
-      }
       else if (type == BOOLEAN) {
         return new ValkyrieBooleanNode(node);
       }
       else if (type == BRACE_BLOCK) {
         return new ValkyrieBraceBlockNode(node);
+      }
+      else if (type == BRACKET_BLOCK) {
+        return new ValkyrieBracketBlockNode(node);
       }
       else if (type == CALL_SUFFIX) {
         return new ValkyrieCallSuffixNode(node);
@@ -279,6 +281,9 @@ public interface ValkyrieTypes {
       else if (type == FOR_STATEMENT) {
         return new ValkyrieForStatementNode(node);
       }
+      else if (type == GENERIC_BLOCK) {
+        return new ValkyrieGenericBlockNode(node);
+      }
       else if (type == IDENTIFIER) {
         return new ValkyrieIdentifierNode(node);
       }
@@ -287,9 +292,6 @@ public interface ValkyrieTypes {
       }
       else if (type == IF_STATEMENT) {
         return new ValkyrieIfStatementNode(node);
-      }
-      else if (type == IMPORT_BLOCK) {
-        return new ValkyrieImportBlockNode(node);
       }
       else if (type == IMPORT_ITEM) {
         return new ValkyrieImportItemNode(node);
@@ -354,6 +356,9 @@ public interface ValkyrieTypes {
       else if (type == PAIR) {
         return new ValkyriePairNode(node);
       }
+      else if (type == PARENTHESIS) {
+        return new ValkyrieParenthesisNode(node);
+      }
       else if (type == PATTERN_ITEM) {
         return new ValkyriePatternItemNode(node);
       }
@@ -362,6 +367,9 @@ public interface ValkyrieTypes {
       }
       else if (type == PATTERN_VALUE) {
         return new ValkyriePatternValueNode(node);
+      }
+      else if (type == SEQUENCE) {
+        return new ValkyrieSequenceNode(node);
       }
       else if (type == SLICE_EXPRESSION) {
         return new ValkyrieSliceExpressionNode(node);

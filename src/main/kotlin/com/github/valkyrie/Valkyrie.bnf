@@ -176,8 +176,10 @@ namespace_dot    ::= identifier (may_dot identifier)*;
 private may_dot  ::= DOT | PROPORTION;
 // ---------------------------------------------------------------------------------------------------------------------
 import_statement ::= KW_IMPORT (import_block|import_item)
-import_block     ::= <<brace_block import_item COMMA>>;
-import_item      ::= namespace_dot [KW_AS identifier|may_dot import_block]
+import_item      ::= namespace_dot [KW_AS identifier|may_dot import_block] {
+    mixin="com.github.valkyrie.language.mixin.MixinImportItem"
+}
+private import_block ::= <<brace_block import_item COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
 extension_statement ::= KW_EXTENSION identifier COLON namespace_dot <<brace_block normal_statements COMMA>> {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
@@ -187,7 +189,7 @@ if_statement     ::= (IF condition block) [ef_statement* [else_statement]]
 ef_statement     ::= else_if condition block;
 private else_if  ::= ELSE IF
 else_statement   ::= ELSE block;
-block            ::= <<brace_block expression SEMICOLON>>;
+private block    ::= <<brace_block expression SEMICOLON>>;
 condition        ::= case_pattern BIND expression | expression;
 case_pattern     ::= CASE [identifier* [namespace]] pattern;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -324,12 +326,12 @@ identifier     ::= SYMBOL_XID | SYMBOL_RAW {
 number_literal ::= BYTE | INTEGER | DECIMAL;
 string_literal ::= STRING_EMPTY | STRING_START STRING_CHAR+ STRING_END;
 // ---------------------------------------------------------------------------------------------------------------------
-private meta sequence      ::= <<item>> (<<sp>> <<item>>)* [<<sp>>];
+meta sequence      ::= <<item>> (<<sp>> <<item>>)* [<<sp>>];
 // parenthesis ( )
-private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;
+meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;
 // bracket [ ]
-private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
+meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
 // brace { }
 meta brace_block   ::= BRACE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACE_R;
 // angle ::< >::
-private meta generic_block ::= OP_PROPORTION? GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R OP_PROPORTION?;
+meta generic_block ::= OP_PROPORTION? GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R OP_PROPORTION?;

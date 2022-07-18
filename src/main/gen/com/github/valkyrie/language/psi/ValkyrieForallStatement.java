@@ -11,6 +11,6 @@ public interface ValkyrieForallStatement extends PsiElement {
   ValkyrieForallBlock getForallBlock();
 
   @NotNull
-  List<ValkyrieIdentifier> getIdentifierList();
+  ValkyrieSequence getSequence();
 
 }

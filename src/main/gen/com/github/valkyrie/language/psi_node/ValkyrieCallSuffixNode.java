@@ -30,8 +30,8 @@ public class ValkyrieCallSuffixNode extends ValkyrieElement implements ValkyrieC
 
   @Override
   @NotNull
-  public List<ValkyrieExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExpression.class);
+  public ValkyrieParenthesis getParenthesis() {
+    return findNotNullChildByClass(ValkyrieParenthesis.class);
   }
 
 }
