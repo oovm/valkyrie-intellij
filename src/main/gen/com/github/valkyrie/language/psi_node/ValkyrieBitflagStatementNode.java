@@ -46,16 +46,4 @@ public class ValkyrieBitflagStatementNode extends MixinBitflag implements Valkyr
     return findNotNullChildByClass(ValkyrieModifierSymbols.class);
   }
 
-  @Override
-  @NotNull
-  public ValkyrieIdentifier getSymbol() {
-    return ASTMethods.getSymbol(this);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieIdentifier[] getModifiers() {
-    return ASTMethods.getModifiers(this);
-  }
-
 }

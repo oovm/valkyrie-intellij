@@ -32,8 +32,8 @@ data class ValkyrieFormatSpace(
             BRACKET_L,
             DOT,
             DOLLAR,
-            STAR,
-            HYPHEN,
+            OP_MUL,
+            OP_SUB,
             PROPORTION,
             AT,
         )

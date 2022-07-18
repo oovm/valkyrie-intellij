@@ -19,10 +19,12 @@ public interface ValkyrieExtendsStatement extends PsiElement {
   @Nullable
   ValkyrieTypeExpression getTypeExpression();
 
-  @NotNull
-  ValkyrieIdentifier getSymbol();
+  //WARNING: getSymbol(...) is skipped
+  //matching getSymbol(ValkyrieExtendsStatement, ...)
+  //methods are not found in ASTMethods
 
-  @NotNull
-  ValkyrieIdentifier[] getModifiers();
+  //WARNING: getModifiers(...) is skipped
+  //matching getModifiers(ValkyrieExtendsStatement, ...)
+  //methods are not found in ASTMethods
 
 }

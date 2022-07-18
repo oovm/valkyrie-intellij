@@ -75,9 +75,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         assert(context == StackContext.CODE)
         val patterns = """(?x)
             # start with < >
-            | >>> | >> | >= | > 
-            | <<< | << | < 
-            | <= | ≤
+            | >>> | >> | >= | /> | >
+            | <<< | << | <= | </ | < | ≤ 
             # start with +
             | \+\+ | \+=?
             # start with -
@@ -86,17 +85,17 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | \*=?
             # start with / or % or ÷
             | /=?
-            | ÷
+            | ÷=?
             | %=?
             # start with &
             | &&=? | &=?
             | \|\|=? | \|=?
             | ⊻ | ⊼ | ⊽
             # start with :
-            | ::<
             | ::
-            | !! | !
+            | !
             | != | ≠
+            | \?
             | === | == | =
             # in
             | ∈
@@ -196,7 +195,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         val r = patterns.matchAt(buffer, startOffset) ?: return false
         when (r.value) {
             "extension" -> stack.add(StackItem(ValkyrieTypes.KW_EXTENSION, r, context))
-            ";", "namespace*", "namespace" -> stack.add(StackItem(ValkyrieTypes.KW_NAMESPACE, r, context))
+            "namespace*", "namespace" -> stack.add(StackItem(ValkyrieTypes.KW_NAMESPACE, r, context))
             "using!" -> stack.add(StackItem(ValkyrieTypes.KW_IMPORT, r, context))
             else -> TODO("unreachable ${r.value}")
         }
@@ -206,7 +205,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     private fun checkRest() {
         if (startOffset < endOffset) {
-            stack.add(StackItem(NoteTypes.PLAIN_TEXT, startOffset, endOffset, context))
+            stack.add(StackItem(ValkyrieTypes.COMMENT_BLOCK, startOffset, endOffset, context))
         }
     }
 

@@ -285,7 +285,7 @@ call_suffix         ::= <<parenthesis expression COMMA>>;
 type_expression     ::= type_expr (type_binary type_expr)*;
 private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
 private type_binary ::= VERTICAL | EQ | NE | PLUS | MINUS | TO;
-type_angle          ::= <<angle_block ([identifier COLON] type_expression) COMMA>>;
+type_angle          ::= <<generic_block ([identifier COLON] type_expression) COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
 slice_suffix        ::= <<bracket_block slice_expression COMMA>>;
 slice_expression    ::=
@@ -322,10 +322,10 @@ string_literal ::= STRING_EMPTY | STRING_START STRING_CHAR+ STRING_END;
 // ---------------------------------------------------------------------------------------------------------------------
 private meta sequence      ::= <<item>> (<<sp>> <<item>>)* [<<sp>>];
 // parenthesis ( )
-private meta parenthesis   ::= L_PAREN [<<item>> (<<sp>> <<item>>)* [<<sp>>]] R_PAREN;
+private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;
 // bracket [ ]
-private meta bracket_block ::= L_BRACK [<<item>> (<<sp>> <<item>>)* [<<sp>>]] R_BRACK;
+private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
 // brace { }
-private meta brace_block   ::= L_BRACE (<<item>>|<<sp>>)* R_BRACE;
+private meta brace_block   ::= BRACE_L (<<item>>|<<sp>>)* BRACE_R;
 // angle < >
-private meta angle_block   ::= L_ANGLE [<<item>> (<<sp>> <<item>>)* [<<sp>>]] R_ANGLE;
+private meta generic_block   ::= GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R;

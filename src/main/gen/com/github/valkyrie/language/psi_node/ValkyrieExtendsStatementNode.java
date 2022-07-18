@@ -52,16 +52,4 @@ public class ValkyrieExtendsStatementNode extends MixinExtends implements Valkyr
     return findChildByClass(ValkyrieTypeExpression.class);
   }
 
-  @Override
-  @NotNull
-  public ValkyrieIdentifier getSymbol() {
-    return ASTMethods.getSymbol(this);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieIdentifier[] getModifiers() {
-    return ASTMethods.getModifiers(this);
-  }
-
 }

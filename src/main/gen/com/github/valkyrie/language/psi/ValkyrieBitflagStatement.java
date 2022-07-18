@@ -16,10 +16,12 @@ public interface ValkyrieBitflagStatement extends PsiElement {
   @NotNull
   ValkyrieModifierSymbols getModifierSymbols();
 
-  @NotNull
-  ValkyrieIdentifier getSymbol();
+  //WARNING: getSymbol(...) is skipped
+  //matching getSymbol(ValkyrieBitflagStatement, ...)
+  //methods are not found in ASTMethods
 
-  @NotNull
-  ValkyrieIdentifier[] getModifiers();
+  //WARNING: getModifiers(...) is skipped
+  //matching getModifiers(ValkyrieBitflagStatement, ...)
+  //methods are not found in ASTMethods
 
 }

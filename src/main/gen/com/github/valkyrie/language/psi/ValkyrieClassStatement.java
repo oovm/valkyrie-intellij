@@ -22,18 +22,24 @@ public interface ValkyrieClassStatement extends PsiElement {
   @Nullable
   ValkyrieTypeAngle getTypeAngle();
 
-  @NotNull
-  ValkyrieIdentifier getSymbol();
+  //WARNING: getSymbol(...) is skipped
+  //matching getSymbol(ValkyrieClassStatement, ...)
+  //methods are not found in ASTMethods
 
-  @NotNull
-  ValkyrieIdentifier[] getModifiers();
+  //WARNING: getModifiers(...) is skipped
+  //matching getModifiers(ValkyrieClassStatement, ...)
+  //methods are not found in ASTMethods
 
-  @NotNull
-  ValkyrieClassBraceItem[] getBraceItemList();
+  //WARNING: getBraceItemList(...) is skipped
+  //matching getBraceItemList(ValkyrieClassStatement, ...)
+  //methods are not found in ASTMethods
 
-  @NotNull
-  ValkyrieClassTupleItem[] getTupleItemList();
+  //WARNING: getTupleItemList(...) is skipped
+  //matching getTupleItemList(ValkyrieClassStatement, ...)
+  //methods are not found in ASTMethods
 
-  boolean isEmpty();
+  //WARNING: isEmpty(...) is skipped
+  //matching isEmpty(ValkyrieClassStatement, ...)
+  //methods are not found in ASTMethods
 
 }
