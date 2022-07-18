@@ -67,17 +67,32 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     private fun codeKeywords(): Boolean {
         assert(context == StackContext.CODE)
-        val keywords = "namespace[!*]?".toRegex()
+        val keywords = """(?x)
+            let
+          | def
+          | namespace[!*]?
+          | using[!*]?
+          | is
+          | as[?!*]?
+          | class
+          | trait
+        """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
         val r = keywords.matchAt(buffer, startOffset) ?: return false
-        when (shadowKeyword) {
-            null -> {
-                castKeywords(r)
+        when (r.value) {
+            "namespace", "namespace!", "namespace*" -> {
+                pushToken(ValkyrieTypes.KW_NAMESPACE, r)
             }
-            "namespace" -> {
-                when {
-                    lastNot(ValkyrieTypes.DOT, ValkyrieTypes.PROPORTION) -> castKeywords(r)
-                    else -> pushToken(ValkyrieTypes.SYMBOL_XID, r)
-                }
+            "using", "using!", "using*" -> {
+                pushToken(ValkyrieTypes.KW_IMPORT, r)
+            }
+            "class" -> {
+                pushToken(ValkyrieTypes.KW_CLASS, r)
+            }
+            "as", "as?", "as!", "as*" -> {
+                pushToken(ValkyrieTypes.KW_AS, r)
+            }
+            "is" -> {
+                pushToken(ValkyrieTypes.OP_IS_A, r)
             }
         }
         return true
@@ -141,7 +156,6 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             ":", "∶" -> pushToken(ValkyrieTypes.COLON, r)
             "." -> pushToken(ValkyrieTypes.DOT, r)
             ";" -> {
-                shadowKeyword = null
                 pushToken(ValkyrieTypes.SEMICOLON, r)
             }
             "@" -> pushToken(ValkyrieTypes.AT, r)
@@ -210,21 +224,20 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             }
             // surround with ( )
             "(" -> {
-                shadowKeyword = null
+
                 pushToken(ValkyrieTypes.PARENTHESIS_L, r)
             }
             ")" -> {
                 pushToken(ValkyrieTypes.PARENTHESIS_R, r)
             }
             "[" -> {
-                shadowKeyword = null
+
                 pushToken(ValkyrieTypes.BRACKET_L, r)
             }
             "]" -> {
                 pushToken(ValkyrieTypes.BRACKET_R, r)
             }
             "{" -> {
-                shadowKeyword = null
                 pushToken(ValkyrieTypes.BRACE_L, r)
             }
             "}" -> {
@@ -310,17 +323,7 @@ fun TokenInterpreter.lastNot(vararg token: IElementType, skipWS: Boolean = true)
 }
 
 
-
 fun TokenInterpreter.castKeywords(keyword: MatchResult) {
-    when (keyword.value) {
-        "namespace", "namespace!", "namespace*" -> {
-            shadowKeyword = "namespace"
-            pushToken(ValkyrieTypes.KW_NAMESPACE, keyword)
-        }
-        "using", "using!", "using*" -> {
-            shadowKeyword = "using"
-            pushToken(ValkyrieTypes.KW_IMPORT, keyword)
-        }
-    }
+
 }
 

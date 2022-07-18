@@ -29,9 +29,9 @@ public class ValkyrieImportStatementNode extends ValkyrieElement implements Valk
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ValkyrieImportBlock getImportBlock() {
-    return findNotNullChildByClass(ValkyrieImportBlock.class);
+    return findChildByClass(ValkyrieImportBlock.class);
   }
 
   @Override

@@ -12,20 +12,26 @@ import com.github.valkyrie.language.ast.ValkyrieElement;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieImportDotNode extends ValkyrieElement implements ValkyrieImportDot {
+public class ValkyrieMacroNode extends ValkyrieElement implements ValkyrieMacro {
 
-  public ValkyrieImportDotNode(@NotNull ASTNode node) {
+  public ValkyrieMacroNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitImportDot(this);
+    visitor.visitMacro(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ValkyrieVisitor) accept((ValkyrieVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieIdentifier getIdentifier() {
+    return findNotNullChildByClass(ValkyrieIdentifier.class);
   }
 
 }

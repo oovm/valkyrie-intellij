@@ -85,7 +85,6 @@ public interface ValkyrieTypes {
   IElementType AMP = new ValkyrieTokenType("AMP");
   IElementType ANGLE_L = new ValkyrieTokenType("ANGLE_L");
   IElementType ANGLE_R = new ValkyrieTokenType("ANGLE_R");
-  IElementType AS = new ValkyrieTokenType("AS");
   IElementType AT = new ValkyrieTokenType("@");
   IElementType BACKSLASH = new ValkyrieTokenType("\\\\");
   IElementType BANG = new ValkyrieTokenType("BANG");
@@ -98,7 +97,6 @@ public interface ValkyrieTypes {
   IElementType BYTE = new ValkyrieTokenType("Byte");
   IElementType CASE = new ValkyrieTokenType("CASE");
   IElementType CATCH = new ValkyrieTokenType("catch");
-  IElementType CLASS = new ValkyrieTokenType("class");
   IElementType COLON = new ValkyrieTokenType(":");
   IElementType COMMA = new ValkyrieTokenType(",");
   IElementType COMMENT = new ValkyrieTokenType("Comment");
@@ -125,6 +123,8 @@ public interface ValkyrieTypes {
   IElementType IF = new ValkyrieTokenType("if");
   IElementType IN = new ValkyrieTokenType("IN");
   IElementType INTEGER = new ValkyrieTokenType("INTEGER");
+  IElementType KW_AS = new ValkyrieTokenType("as");
+  IElementType KW_CLASS = new ValkyrieTokenType("class");
   IElementType KW_EXTENSION = new ValkyrieTokenType("extension");
   IElementType KW_IMPORT = new ValkyrieTokenType("using");
   IElementType KW_NAMESPACE = new ValkyrieTokenType("namespace");

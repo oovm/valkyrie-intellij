@@ -33,9 +33,7 @@
         STRING_EMPTY = "String Empty"
         COMMENT_LINE = "Comment Line"
 
-        KW_NAMESPACE = "namespace"
-        KW_EXTENSION = "extension"
-        KW_IMPORT = "using"
+
 
         ACCENT = '^'
         BIND = '='
@@ -119,6 +117,12 @@
         GENERIC_L = '::<'
         GENERIC_R = '>::'
 
+        KW_NAMESPACE = "namespace"
+        KW_IMPORT = "using"
+        KW_EXTENSION = "extension"
+        KW_CLASS = 'class'
+        KW_AS = "as"
+
         IF = "if"
         ELSE = "else"
         FOR = "for"
@@ -130,7 +134,7 @@
         LET = "let"
         NEW = 'new'
         DEFINE = "def"
-        CLASS = 'class'
+
         TRAIT = 'trait'
         TAGGED = 'tagged'
         BITFLAG = 'bitset'
@@ -141,8 +145,8 @@
 valkyrie ::= ((normal_statements|top_statements) [SEMICOLON])*
 private top_statements ::=
     namespace_statement
-  | extension_statement
   | import_statement
+  | extension_statement
   | class_statement
   | trait_statement
   | tagged_statement
@@ -171,10 +175,13 @@ namespace_statement ::= KW_NAMESPACE namespace_dot {
 namespace_dot       ::= identifier (maybe_dot identifier)*;
 private maybe_dot   ::= DOT|PROPORTION;
 // ---------------------------------------------------------------------------------------------------------------------
-import_statement ::= KW_IMPORT [namespace_dot] import_block;
+import_statement ::=
+    KW_IMPORT import_block
+  | KW_IMPORT namespace_dot maybe_dot import_block
+  | KW_IMPORT namespace_dot
 import_block     ::= <<brace_block import_item COMMA>>;
 import_item      ::= (identifier maybe_dot)* import_block | import_rename;
-import_rename    ::= identifier (maybe_dot identifier)* [AS identifier];
+import_rename    ::= identifier (maybe_dot identifier)* [KW_AS identifier];
 // ---------------------------------------------------------------------------------------------------------------------
 extension_statement ::= KW_EXTENSION identifier COLON namespace_dot <<brace_block normal_statements COMMA>> {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
@@ -233,7 +240,7 @@ type_statement   ::= TYPE identifier [[PROPORTION] type_angle] [BIND type_expr] 
 forall_statement ::= FORALL <<sequence identifier COMMA>> [forall_block];
 forall_block     ::= <<brace_block (type_expression COLON type_expression) (COMMA|SEMICOLON)>>;
 // ---------------------------------------------------------------------------------------------------------------------
-class_statement     ::= CLASS modifier_symbols [[PROPORTION] type_angle] [COLON identifier] [class_tuple|class_brace] {
+class_statement     ::= KW_CLASS modifier_symbols [[PROPORTION] type_angle] [COLON identifier] [class_tuple|class_brace] {
     mixin="com.github.valkyrie.language.mixin.MixinClass"
     methods=[getSymbol getModifiers getBraceItemList getTupleItemList isEmpty]
 };
