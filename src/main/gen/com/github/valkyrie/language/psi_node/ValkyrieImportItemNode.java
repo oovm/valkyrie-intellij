@@ -29,9 +29,9 @@ public class ValkyrieImportItemNode extends ValkyrieElement implements ValkyrieI
   }
 
   @Override
-  @NotNull
-  public List<ValkyrieIdentifier> getIdentifierList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
+  @Nullable
+  public ValkyrieIdentifier getIdentifier() {
+    return findChildByClass(ValkyrieIdentifier.class);
   }
 
   @Override
@@ -41,9 +41,9 @@ public class ValkyrieImportItemNode extends ValkyrieElement implements ValkyrieI
   }
 
   @Override
-  @Nullable
-  public ValkyrieImportRename getImportRename() {
-    return findChildByClass(ValkyrieImportRename.class);
+  @NotNull
+  public ValkyrieNamespaceDot getNamespaceDot() {
+    return findNotNullChildByClass(ValkyrieNamespaceDot.class);
   }
 
 }

@@ -143,10 +143,6 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitImportRename(@NotNull ValkyrieImportRename o) {
-    visitPsiElement(o);
-  }
-
   public void visitImportStatement(@NotNull ValkyrieImportStatement o) {
     visitPsiElement(o);
   }

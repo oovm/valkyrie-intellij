@@ -42,7 +42,6 @@ public interface ValkyrieTypes {
   IElementType IF_STATEMENT = new ValkyrieTokenType("IF_STATEMENT");
   IElementType IMPORT_BLOCK = new ValkyrieTokenType("IMPORT_BLOCK");
   IElementType IMPORT_ITEM = new ValkyrieTokenType("IMPORT_ITEM");
-  IElementType IMPORT_RENAME = new ValkyrieTokenType("IMPORT_RENAME");
   IElementType IMPORT_STATEMENT = new ValkyrieTokenType("IMPORT_STATEMENT");
   IElementType LET_STATEMENT = new ValkyrieTokenType("LET_STATEMENT");
   IElementType LET_TYPE_HINT = new ValkyrieTokenType("LET_TYPE_HINT");
@@ -294,9 +293,6 @@ public interface ValkyrieTypes {
       }
       else if (type == IMPORT_ITEM) {
         return new ValkyrieImportItemNode(node);
-      }
-      else if (type == IMPORT_RENAME) {
-        return new ValkyrieImportRenameNode(node);
       }
       else if (type == IMPORT_STATEMENT) {
         return new ValkyrieImportStatementNode(node);

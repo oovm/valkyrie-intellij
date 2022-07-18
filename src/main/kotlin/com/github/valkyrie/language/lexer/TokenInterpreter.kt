@@ -12,62 +12,11 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         val ROL = "[^\\r\\n]+".toRegex()
         val WS = "\\s+".toRegex()
         val NL = "\\r\\n|\\r|\\n".toRegex()
-        val ASTERISK = "[*]+".toRegex()
-    }
-
-    var stack: MutableList<StackItem> = mutableListOf()
-
-    var typeContext = false
-
-    var shadowKeyword: String? = null;
-
-    fun interpreter(): Array<StackItem> {
-        while (startOffset < endOffset) {
-//            matchesWhitespace() ?: continue
-            if (matchesWhitespace()) continue
-            when (context) {
-                StackContext.CODE -> {
-                    if (codeComment()) continue
-                    if (codeKeywords()) continue
-                    if (codeIdentifier()) continue
-                    if (codeIdentifierRaw()) continue
-                    if (codePunctuations()) continue
-                }
-                StackContext.TEXT -> {
-
-                }
-                StackContext.COMMENT -> {
-
-                }
-            }
-            break
-        }
-        checkRest()
-        return stack.toTypedArray()
-    }
-
-    private fun matchesWhitespace(): Boolean {
-        val r = tryMatch("\\s+".toRegex()) ?: return false
-        when (context) {
-            StackContext.CODE, StackContext.COMMENT -> {
-                pushToken(WHITE_SPACE, r)
-            }
-            StackContext.TEXT -> {
-                pushToken(ValkyrieTypes.STRING_LITERAL, r)
-            }
-        }
-        return true
-    }
-
-    private fun codeComment(): Boolean {
-        val r = tryMatch("//[^\\n\\r]*".toRegex()) ?: return false
-        pushToken(ValkyrieTypes.COMMENT_LINE, r)
-        return true
-    }
-
-    private fun codeKeywords(): Boolean {
-        assert(context == StackContext.CODE)
-        val keywords = """(?x)
+        val COMMENT_LINE = "//[^\\n\\r]*".toRegex()
+        val SYMBOL_XID = "[a-zA-Z_][a-zA-Z0-9_]*".toRegex()
+        val SYMBOL_RAW = "(`)((?:[^`\\\\]|\\\\.)*)(`)".toRegex()
+        val DOTS = "\\.{1,3}".toRegex()
+        val KEYWORDS = """(?x)
             let
           | def
           | namespace[!*]?
@@ -77,47 +26,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
           | class
           | trait
         """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
-        val r = keywords.matchAt(buffer, startOffset) ?: return false
-        when (r.value) {
-            "namespace", "namespace!", "namespace*" -> {
-                pushToken(ValkyrieTypes.KW_NAMESPACE, r)
-            }
-            "using", "using!", "using*" -> {
-                pushToken(ValkyrieTypes.KW_IMPORT, r)
-            }
-            "class" -> {
-                pushToken(ValkyrieTypes.KW_CLASS, r)
-            }
-            "as", "as?", "as!", "as*" -> {
-                pushToken(ValkyrieTypes.KW_AS, r)
-            }
-            "is" -> {
-                pushToken(ValkyrieTypes.OP_IS_A, r)
-            }
-        }
-        return true
-    }
-
-    private fun codeIdentifier(): Boolean {
-        assert(context == StackContext.CODE)
-        val identifier = "[a-zA-Z_][a-zA-Z0-9_]*".toRegex()
-        val r = identifier.matchAt(buffer, startOffset) ?: return false
-        pushToken(ValkyrieTypes.SYMBOL_XID, r)
-        return true
-    }
-
-    private fun codeIdentifierRaw(): Boolean {
-        assert(context == StackContext.CODE)
-        val identifier = "(`)((?:[^`\\\\]|\\\\.)*)(`)".toRegex()
-        val r = identifier.matchAt(buffer, startOffset) ?: return false
-        pushToken(ValkyrieTypes.SYMBOL_RAW, r)
-        return true
-    }
-
-
-    private fun codePunctuations(): Boolean {
-        assert(context == StackContext.CODE)
-        val patterns = """(?x)
+        val PUNCTUATIONS = """(?x)
             [.]{1,3}
             # start with < >
             | >>> | >> | >= | /> | >
@@ -144,17 +53,114 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | === | == | =
             # in
             | ∈
-            | ;
-            | ,
+            # 
+            | ; | ,
             | @
-        """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
-        val r = tryMatch(patterns) ?: return false
+        """.toRegex()
+    }
+
+    var stack: MutableList<StackItem> = mutableListOf()
+
+    var typeContext = false
+
+    var shadowKeyword: String? = null;
+
+    fun interpreter(): Array<StackItem> {
+        while (startOffset < endOffset) {
+//            matchesWhitespace() ?: continue
+            if (matchesWhitespace()) continue
+            when (context) {
+                StackContext.CODE -> {
+                    if (codeComment()) continue
+                    if (codeKeywords()) continue
+                    if (codeIdentifier()) continue
+                    if (codePunctuations()) continue
+                }
+                StackContext.TEXT -> {
+
+                }
+                StackContext.COMMENT -> {
+
+                }
+            }
+            break
+        }
+        checkRest()
+        return stack.toTypedArray()
+    }
+
+    private fun matchesWhitespace(): Boolean {
+        val r = tryMatch(WS) ?: return false
+        when (context) {
+            StackContext.CODE, StackContext.COMMENT -> {
+                pushToken(WHITE_SPACE, r)
+            }
+            StackContext.TEXT -> {
+                pushToken(ValkyrieTypes.STRING_LITERAL, r)
+            }
+        }
+        return true
+    }
+
+    private fun codeComment(): Boolean {
+        val r = tryMatch(COMMENT_LINE) ?: return false
+        pushToken(ValkyrieTypes.COMMENT_LINE, r)
+        return true
+    }
+
+    private fun codeKeywords(): Boolean {
+        assert(context == StackContext.CODE)
+        val r = tryMatch(KEYWORDS) ?: return false
+        when (r.value) {
+            "namespace", "namespace!", "namespace*" -> {
+                pushToken(ValkyrieTypes.KW_NAMESPACE, r)
+            }
+            "using", "using!", "using*" -> {
+                pushToken(ValkyrieTypes.KW_IMPORT, r)
+            }
+            "class" -> {
+                pushToken(ValkyrieTypes.KW_CLASS, r)
+            }
+            "as", "as?", "as!", "as*" -> {
+                pushToken(ValkyrieTypes.KW_AS, r)
+            }
+            "is" -> {
+                pushToken(ValkyrieTypes.OP_IS_A, r)
+            }
+        }
+        return true
+    }
+
+    private fun codeIdentifier(): Boolean {
+        assert(context == StackContext.CODE)
+        var r = tryMatch(SYMBOL_XID)
+        if (r == null) {
+            r = tryMatch(SYMBOL_RAW) ?: return false
+            pushToken(ValkyrieTypes.SYMBOL_RAW, r)
+        }
+        else {
+            pushToken(ValkyrieTypes.SYMBOL_XID, r)
+        }
+        return true
+    }
+    private fun codeDots(): Boolean  {
+        assert(context == StackContext.CODE)
+        val r = tryMatch(DOTS) ?: return false
+        pushToken(ValkyrieTypes.DOT, r)
+        return true
+    }
+
+    private fun codePunctuations(): Boolean {
+        assert(context == StackContext.CODE)
+        val r = tryMatch(PUNCTUATIONS) ?: return false
         when (r.value) {
             // DOT
             "::", "∷" -> pushToken(ValkyrieTypes.PROPORTION, r)
             ":=", "≔" -> pushToken(ValkyrieTypes.OP_BIND, r)
             ":", "∶" -> pushToken(ValkyrieTypes.COLON, r)
             "." -> pushToken(ValkyrieTypes.DOT, r)
+            ".." -> pushToken(ValkyrieTypes.DOT, r)
+            "..." -> pushToken(ValkyrieTypes.DOT, r)
             ";" -> {
                 pushToken(ValkyrieTypes.SEMICOLON, r)
             }
@@ -322,8 +328,4 @@ fun TokenInterpreter.lastNot(vararg token: IElementType, skipWS: Boolean = true)
     return true
 }
 
-
-fun TokenInterpreter.castKeywords(keyword: MatchResult) {
-
-}
 

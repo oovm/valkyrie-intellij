@@ -172,16 +172,12 @@ private normal_statements ::=
 namespace_statement ::= KW_NAMESPACE namespace_dot {
     mixin="com.github.valkyrie.language.mixin.MixinNamespace"
 };
-namespace_dot       ::= identifier (maybe_dot identifier)*;
-private maybe_dot   ::= DOT|PROPORTION;
+namespace_dot    ::= identifier (may_dot identifier)*;
+private may_dot  ::= DOT | PROPORTION;
 // ---------------------------------------------------------------------------------------------------------------------
-import_statement ::=
-    KW_IMPORT import_block
-  | KW_IMPORT namespace_dot maybe_dot import_block
-  | KW_IMPORT namespace_dot
+import_statement ::= KW_IMPORT (import_block|import_item)
 import_block     ::= <<brace_block import_item COMMA>>;
-import_item      ::= (identifier maybe_dot)* import_block | import_rename;
-import_rename    ::= identifier (maybe_dot identifier)* [KW_AS identifier];
+import_item      ::= namespace_dot [KW_AS identifier|may_dot import_block]
 // ---------------------------------------------------------------------------------------------------------------------
 extension_statement ::= KW_EXTENSION identifier COLON namespace_dot <<brace_block normal_statements COMMA>> {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
