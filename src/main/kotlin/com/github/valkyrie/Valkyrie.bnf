@@ -10,10 +10,11 @@
     psiImplPackage = "com.github.valkyrie.language.psi_node"
 
     elementTypeHolderClass = "com.github.valkyrie.language.psi.ValkyrieTypes"
-    elementTypeClass = "com.github.valkyrie.language.psi.ValkyrieElementType"
+    elementTypeClass = "com.github.valkyrie.language.psi.ValkyrieTokenType"
     tokenTypeClass = "com.github.valkyrie.language.psi.ValkyrieTokenType"
 
     psiImplUtilClass = "com.github.valkyrie.language.ast.ASTMethods"
+    generateTokenAccessors = false
 
     tokens = [
         // comment
@@ -31,6 +32,10 @@
         STRING_CHAR = "String Character"
         STRING_EMPTY = "String Empty"
         COMMENT_LINE = "Comment Line"
+
+        KW_NAMESPACE = "namespace"
+        KW_EXTENSION = "extension"
+        KW_IMPORT = "using"
 
         PARENTHESIS_L = '('
         PARENTHESIS_R = ')'
@@ -71,10 +76,37 @@
         BACKSLASH = "\\"
         PERCENT = "%"
         PIPE = "|"
-        IMPORT = "using"
-        EXPORT = "export"
-        MODULE = "crate"
-        EXTENSION = "extension"
+
+        OP_INC = "++"
+        OP_ADD_ASSIGN = "+="
+        OP_ADD = "+"
+        OP_DEC = "--"
+        OP_SUB_ASSIGN = "-="
+        OP_SUB = "-"
+        OP_MUL_ASSIGN = "*="
+        OP_MUL = "*"
+        OP_DIV_ASSIGN = "/="
+        OP_DIV = "/"
+        OP_MOD_ASSIGN = "%="
+        OP_MOD = "%"
+
+        OP_PROPORTION = "::"
+        OP_COLON = ":"
+        OP_EQ = "="
+        //
+        OP_GT = ">"
+        OP_GS = "/>"
+        OP_GG = ">>"
+        OP_GEQ = ">="
+        OP_GGG = ">>>"
+        //
+        OP_LT = "<"
+        OP_LS = "</"
+        OP_LL = "<<"
+        OP_LEQ = "<="
+        OP_LLL = "<<<"
+
+
         IF = "if"
         ELSE = "else"
         FOR = "for"
@@ -96,7 +128,7 @@
 
 valkyrie ::= ((normal_statements|top_statements) [SEMICOLON])*
 private top_statements ::=
-    module_statement
+    namespace_statement
   | extension_statement
   | import_statement
   | class_statement
@@ -121,7 +153,7 @@ private normal_statements ::=
   | expression
   ;
 // ---------------------------------------------------------------------------------------------------------------------
-module_statement    ::= MODULE identifier {
+namespace_statement ::= KW_NAMESPACE identifier {
     mixin="com.github.valkyrie.language.mixin.ValkyrieModuleMixin"
 };
 extension_statement ::= EXTENSION identifier {

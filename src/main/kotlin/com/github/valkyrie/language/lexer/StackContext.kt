@@ -1,9 +1,9 @@
 package com.github.valkyrie.language.lexer
 
 enum class StackContext(val id: Int) {
-    TEXT(0),
-    CODE(1),
-    STRING(2),
+    CODE(0),
+    STRING(1),
+    TEXT(2),
     ;
 
     fun intoID() = this.id

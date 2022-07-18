@@ -1619,19 +1619,6 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MODULE identifier
-  public static boolean module_statement(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "module_statement")) return false;
-    if (!nextTokenIs(b, MODULE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, MODULE);
-    r = r && identifier(b, l + 1);
-    exit_section_(b, m, MODULE_STATEMENT, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // identifier (PROPORTION identifier)*
   public static boolean namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace")) return false;
@@ -1662,6 +1649,19 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, PROPORTION);
     r = r && identifier(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // KW_NAMESPACE identifier
+  public static boolean namespace_statement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namespace_statement")) return false;
+    if (!nextTokenIs(b, KW_NAMESPACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, KW_NAMESPACE);
+    r = r && identifier(b, l + 1);
+    exit_section_(b, m, NAMESPACE_STATEMENT, r);
     return r;
   }
 
@@ -2422,7 +2422,7 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // module_statement
+  // namespace_statement
   //   | extension_statement
   //   | import_statement
   //   | class_statement
@@ -2435,7 +2435,7 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   static boolean top_statements(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "top_statements")) return false;
     boolean r;
-    r = module_statement(b, l + 1);
+    r = namespace_statement(b, l + 1);
     if (!r) r = extension_statement(b, l + 1);
     if (!r) r = import_statement(b, l + 1);
     if (!r) r = class_statement(b, l + 1);
