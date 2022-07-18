@@ -3,6 +3,8 @@
 package com.github.valkyrie.language.lexer
 
 import com.github.valkyrie.language.psi.ValkyrieTypes
+import com.intellij.psi.TokenType.WHITE_SPACE
+import com.intellij.psi.tree.IElementType
 
 class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int, var context: StackContext) {
     companion object {
@@ -22,12 +24,12 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     fun interpreter(): Array<StackItem> {
         while (startOffset < endOffset) {
             if (matchesWhitespace()) continue
-            if (matchesNewline()) continue
             when (context) {
                 StackContext.CODE -> {
-                    if (matchesSettable()) continue
+                    if (codeNamespace()) continue
+                    if (codePunctuations()) continue
                 }
-                StackContext.STRING -> {
+                StackContext.TEXT -> {
 
                 }
                 StackContext.TEXT -> {}
@@ -42,37 +44,34 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun matchesWhitespace(): Boolean {
-        val r = WS.matchAt(buffer, startOffset) ?: return false
-        return false
+        val token = "\\s+".toRegex();
+        val r = token.matchAt(buffer, startOffset) ?: return false
+        when (context) {
+            StackContext.CODE, StackContext.COMMENT -> {
+                pushToken(WHITE_SPACE, r)
+            }
+            StackContext.TEXT -> {
+                pushToken(ValkyrieTypes.STRING_LITERAL, r)
+            }
+        }
         return addOffset(r)
     }
 
-    private fun matchesNewline(): Boolean {
-        return false
-    }
-
-    private fun matchesTopLevelKeywords(): Boolean {
+    private fun codeNamespace(): Boolean {
         assert(context == StackContext.CODE)
-        val patterns = """(?x)
-            | extension
-            | namespace[!*]?
-            | using[!*]?
-        """.toRegex()
-        val r = patterns.matchAt(buffer, startOffset) ?: return false
+        val namespace = "namespace[!*]?".toRegex()
+        val r = namespace.matchAt(buffer, startOffset) ?: return false
         if (shadowKeyword) {
             shadowKeyword = false
-            return addOffset(r)
+            pushToken(ValkyrieTypes.KW_NAMESPACE, r)
         }
-        when (r.value) {
-            "extension" -> stack.add(StackItem(ValkyrieTypes.KW_EXTENSION, r, context))
-            "namespace!", "namespace*", "namespace" -> stack.add(StackItem(ValkyrieTypes.KW_NAMESPACE, r, context))
-            "using!" -> stack.add(StackItem(ValkyrieTypes.KW_IMPORT, r, context))
-            else -> TODO("unreachable ${r.value}")
+        else {
+            pushToken(ValkyrieTypes.KW_NAMESPACE, r)
         }
         return addOffset(r)
     }
 
-    private fun matchesSettable(): Boolean {
+    private fun codePunctuations(): Boolean {
         assert(context == StackContext.CODE)
         val patterns = """(?x)
             # start with < >
@@ -102,102 +101,102 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | ∈
             | ;
             | , 
-        """.toRegex()
+        """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
         val r = patterns.matchAt(buffer, startOffset) ?: return false
         when (r.value) {
             // start with +
-            "++" -> stack.add(StackItem(ValkyrieTypes.OP_INC, r, context))
-            "+=" -> stack.add(StackItem(ValkyrieTypes.OP_ADD_ASSIGN, r, context))
-            "+" -> stack.add(StackItem(ValkyrieTypes.OP_ADD, r, context))
+            "++" -> pushToken(ValkyrieTypes.OP_INC, r)
+            "+=" -> pushToken(ValkyrieTypes.OP_ADD_ASSIGN, r)
+            "+" -> pushToken(ValkyrieTypes.OP_ADD, r)
             // start with -
-            "--" -> stack.add(StackItem(ValkyrieTypes.OP_DEC, r, context))
-            "-=" -> stack.add(StackItem(ValkyrieTypes.OP_SUB_ASSIGN, r, context))
-            "-" -> stack.add(StackItem(ValkyrieTypes.OP_SUB, r, context))
+            "--" -> pushToken(ValkyrieTypes.OP_DEC, r)
+            "-=" -> pushToken(ValkyrieTypes.OP_SUB_ASSIGN, r)
+            "-" -> pushToken(ValkyrieTypes.OP_SUB, r)
             // start with *
-            "*=" -> stack.add(StackItem(ValkyrieTypes.OP_MUL_ASSIGN, r, context))
-            "*" -> stack.add(StackItem(ValkyrieTypes.OP_MUL, r, context))
+            "*=" -> pushToken(ValkyrieTypes.OP_MUL_ASSIGN, r)
+            "*" -> pushToken(ValkyrieTypes.OP_MUL, r)
             // start with /
-            "/=" -> stack.add(StackItem(ValkyrieTypes.OP_DIV_ASSIGN, r, context))
-            "/" -> stack.add(StackItem(ValkyrieTypes.OP_DIV, r, context))
+            "/=" -> pushToken(ValkyrieTypes.OP_DIV_ASSIGN, r)
+            "/" -> pushToken(ValkyrieTypes.OP_DIV, r)
             // start with &
-            "&&=" -> stack.add(StackItem(ValkyrieTypes.OP_AND_ASSIGN, r, context))
-            "&&" -> stack.add(StackItem(ValkyrieTypes.OP_AND, r, context))
-            "&=" -> stack.add(StackItem(ValkyrieTypes.OP_AND_ASSIGN, r, context))
-            "&" -> stack.add(StackItem(ValkyrieTypes.OP_AND, r, context))
+            "&&=" -> pushToken(ValkyrieTypes.OP_AND_ASSIGN, r)
+            "&&" -> pushToken(ValkyrieTypes.OP_AND, r)
+            "&=" -> pushToken(ValkyrieTypes.OP_AND_ASSIGN, r)
+            "&" -> pushToken(ValkyrieTypes.OP_AND, r)
             //
-            "::", "∷" -> stack.add(StackItem(ValkyrieTypes.OP_PROPORTION, r, context))
-            ":=", "≔" -> stack.add(StackItem(ValkyrieTypes.OP_BIND, r, context))
-            ":", "∶" -> stack.add(StackItem(ValkyrieTypes.OP_COLON, r, context))
+            "::", "∷" -> pushToken(ValkyrieTypes.OP_PROPORTION, r)
+            ":=", "≔" -> pushToken(ValkyrieTypes.OP_BIND, r)
+            ":", "∶" -> pushToken(ValkyrieTypes.OP_COLON, r)
             // start with !
-            "!!" -> stack.add(StackItem(ValkyrieTypes.OP_NE, r, context))
-            "!=" -> stack.add(StackItem(ValkyrieTypes.OP_NE, r, context))
-            "!" -> stack.add(StackItem(ValkyrieTypes.OP_NOT, r, context))
+            "!!" -> pushToken(ValkyrieTypes.OP_NE, r)
+            "!=" -> pushToken(ValkyrieTypes.OP_NE, r)
+            "!" -> pushToken(ValkyrieTypes.OP_NOT, r)
             // start with =
             "∈" -> {
-                stack.add(StackItem(ValkyrieTypes.OP_IN, r, context))
+                pushToken(ValkyrieTypes.OP_IN, r)
             }
             // start with >
-            ">>>", "⋙" -> stack.add(StackItem(ValkyrieTypes.OP_GGG, r, context))
-            ">>", "≫" -> stack.add(StackItem(ValkyrieTypes.OP_GG, r, context))
-            ">=", "≥", "⩾" -> stack.add(StackItem(ValkyrieTypes.OP_GEQ, r, context))
+            ">>>", "⋙" -> pushToken(ValkyrieTypes.OP_GGG, r)
+            ">>", "≫" -> pushToken(ValkyrieTypes.OP_GG, r)
+            ">=", "≥", "⩾" -> pushToken(ValkyrieTypes.OP_GEQ, r)
             "/>" -> {
-                stack.add(StackItem(ValkyrieTypes.OP_GS, r, context))
+                pushToken(ValkyrieTypes.OP_GS, r)
             }
             ">" -> {
                 if (typeContext) {
                     typeContext = false
                 }
-                stack.add(StackItem(ValkyrieTypes.OP_GT, r, context))
+                pushToken(ValkyrieTypes.OP_GT, r)
             }
             // start with <
-            "<<<", "⋘" -> stack.add(StackItem(ValkyrieTypes.OP_LLL, r, context))
-            "<<", "≪" -> stack.add(StackItem(ValkyrieTypes.OP_LL, r, context))
-            "<=", "≤", "⩽" -> stack.add(StackItem(ValkyrieTypes.OP_LEQ, r, context))
+            "<<<", "⋘" -> pushToken(ValkyrieTypes.OP_LLL, r)
+            "<<", "≪" -> pushToken(ValkyrieTypes.OP_LL, r)
+            "<=", "≤", "⩽" -> pushToken(ValkyrieTypes.OP_LEQ, r)
             "</" -> {
-                stack.add(StackItem(ValkyrieTypes.OP_LS, r, context))
+                pushToken(ValkyrieTypes.OP_LS, r)
             }
             "<:", "⊑" -> {
                 typeContext = true
-                stack.add(StackItem(ValkyrieTypes.OP_IS_A, r, context))
+                pushToken(ValkyrieTypes.OP_IS_A, r)
             }
             "!<:", "⋢", "!⊑" -> {
                 typeContext = true
-                stack.add(StackItem(ValkyrieTypes.OP_NOT_A, r, context))
+                pushToken(ValkyrieTypes.OP_NOT_A, r)
             }
             // surround with ( )
             "(" -> {
                 shadowKeyword = false
-                stack.add(StackItem(ValkyrieTypes.PARENTHESIS_L, r, context))
+                pushToken(ValkyrieTypes.PARENTHESIS_L, r)
             }
             ")" -> {
-                stack.add(StackItem(ValkyrieTypes.PARENTHESIS_R, r, context))
+                pushToken(ValkyrieTypes.PARENTHESIS_R, r)
             }
             "[" -> {
                 shadowKeyword = false
-                stack.add(StackItem(ValkyrieTypes.BRACKET_L, r, context))
+                pushToken(ValkyrieTypes.BRACKET_L, r)
             }
             "]" -> {
-                stack.add(StackItem(ValkyrieTypes.BRACKET_R, r, context))
+                pushToken(ValkyrieTypes.BRACKET_R, r)
             }
             "{" -> {
                 shadowKeyword = false
-                stack.add(StackItem(ValkyrieTypes.BRACE_L, r, context))
+                pushToken(ValkyrieTypes.BRACE_L, r)
             }
             "}" -> {
-                stack.add(StackItem(ValkyrieTypes.BRACE_R, r, context))
+                pushToken(ValkyrieTypes.BRACE_R, r)
             }
             ";" -> {
-                stack.add(StackItem(ValkyrieTypes.SEMICOLON, r, context))
+                pushToken(ValkyrieTypes.SEMICOLON, r)
             }
             "," -> {
-                stack.add(StackItem(ValkyrieTypes.COMMA, r, context))
+                pushToken(ValkyrieTypes.COMMA, r)
             }
-            else -> TODO("unreachable ${r.value}")
+            else -> TODO("unreachable ${r}")
         }
         return addOffset(r)
     }
 
-    private fun matchesPunctuations(): Boolean {
+    private fun matchesK(): Boolean {
         assert(context == StackContext.CODE)
         val patterns = """(?x)
             | 
@@ -205,9 +204,9 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         """.toRegex()
         val r = patterns.matchAt(buffer, startOffset) ?: return false
         when (r.value) {
-            "extension" -> stack.add(StackItem(ValkyrieTypes.KW_EXTENSION, r, context))
-            "namespace*", "namespace" -> stack.add(StackItem(ValkyrieTypes.KW_NAMESPACE, r, context))
-            "using!" -> stack.add(StackItem(ValkyrieTypes.KW_IMPORT, r, context))
+            "extension" -> pushToken(ValkyrieTypes.KW_EXTENSION, r)
+            "namespace*", "namespace" -> pushToken(ValkyrieTypes.KW_NAMESPACE, r)
+            "using!" -> pushToken(ValkyrieTypes.KW_IMPORT, r)
             else -> TODO("unreachable ${r.value}")
         }
         return addOffset(r)
@@ -216,12 +215,16 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     private fun checkRest() {
         if (startOffset < endOffset) {
-            stack.add(StackItem(ValkyrieTypes.COMMENT_BLOCK, startOffset, endOffset, context))
+            pushToken(ValkyrieTypes.COMMENT_BLOCK, startOffset, endOffset)
         }
     }
 
-    fun addOffset(r: MatchResult): Boolean {
-        startOffset = r.range.last + 1
-        return true
+    fun pushToken(token: IElementType, startOffset: Int, endOffset: Int) {
+        pushToken(token, startOffset, endOffset)
+        this.startOffset = endOffset + 1
+    }
+    fun pushToken(token: IElementType, match: MatchResult) {
+        pushToken(token, match);
+        startOffset = match.range.last + 1
     }
 }
