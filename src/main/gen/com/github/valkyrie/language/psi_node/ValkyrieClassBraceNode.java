@@ -30,8 +30,8 @@ public class ValkyrieClassBraceNode extends ValkyrieElement implements ValkyrieC
 
   @Override
   @NotNull
-  public List<ValkyrieClassBraceItem> getClassBraceItemList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieClassBraceItem.class);
+  public ValkyrieBraceBlock getBraceBlock() {
+    return findNotNullChildByClass(ValkyrieBraceBlock.class);
   }
 
 }

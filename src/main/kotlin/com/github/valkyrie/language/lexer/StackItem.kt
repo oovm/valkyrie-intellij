@@ -17,14 +17,6 @@ class StackItem {
         this.context = context
     }
 
-    constructor(token: IElementType, match: MatchResult, context: StackContext, paired: Boolean? = null) {
-        this.token = token
-        this.startOffset = match.range.first
-        this.endOffset = match.range.last + 1
-        this.context = context
-        this.paired = paired
-    }
-
     constructor(token: IElementType, match: MatchGroup, context: StackContext) {
         this.token = token
         this.startOffset = match.range.first

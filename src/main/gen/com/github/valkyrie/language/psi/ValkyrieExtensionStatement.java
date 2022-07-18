@@ -8,6 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieExtensionStatement extends PsiElement {
 
   @NotNull
+  ValkyrieBraceBlock getBraceBlock();
+
+  @NotNull
   ValkyrieIdentifier getIdentifier();
+
+  @NotNull
+  ValkyrieNamespaceDot getNamespaceDot();
 
 }

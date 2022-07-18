@@ -30,8 +30,8 @@ public class ValkyrieMatchBlockNode extends ValkyrieElement implements ValkyrieM
 
   @Override
   @NotNull
-  public List<ValkyrieMatchExpression> getMatchExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieMatchExpression.class);
+  public ValkyrieBraceBlock getBraceBlock() {
+    return findNotNullChildByClass(ValkyrieBraceBlock.class);
   }
 
 }

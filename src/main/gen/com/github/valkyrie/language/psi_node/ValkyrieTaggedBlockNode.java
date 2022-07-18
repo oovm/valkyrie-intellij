@@ -30,8 +30,8 @@ public class ValkyrieTaggedBlockNode extends ValkyrieElement implements Valkyrie
 
   @Override
   @NotNull
-  public List<ValkyrieTaggedItem> getTaggedItemList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieTaggedItem.class);
+  public ValkyrieBraceBlock getBraceBlock() {
+    return findNotNullChildByClass(ValkyrieBraceBlock.class);
   }
 
 }

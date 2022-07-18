@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieImportBlock extends PsiElement {
 
   @NotNull
-  List<ValkyrieImportItem> getImportItemList();
+  ValkyrieBraceBlock getBraceBlock();
 
 }

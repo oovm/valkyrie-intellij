@@ -35,6 +35,10 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitBraceBlock(@NotNull ValkyrieBraceBlock o) {
+    visitPsiElement(o);
+  }
+
   public void visitCallSuffix(@NotNull ValkyrieCallSuffix o) {
     visitPsiElement(o);
   }
@@ -196,6 +200,10 @@ public class ValkyrieVisitor extends PsiElementVisitor {
   }
 
   public void visitNamespace(@NotNull ValkyrieNamespace o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNamespaceDot(@NotNull ValkyrieNamespaceDot o) {
     visitPsiElement(o);
   }
 

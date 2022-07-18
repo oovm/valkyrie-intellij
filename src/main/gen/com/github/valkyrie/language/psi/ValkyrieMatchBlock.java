@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieMatchBlock extends PsiElement {
 
   @NotNull
-  List<ValkyrieMatchExpression> getMatchExpressionList();
+  ValkyrieBraceBlock getBraceBlock();
 
 }

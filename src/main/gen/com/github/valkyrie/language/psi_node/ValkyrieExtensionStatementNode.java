@@ -30,8 +30,20 @@ public class ValkyrieExtensionStatementNode extends MixinExtension implements Va
 
   @Override
   @NotNull
+  public ValkyrieBraceBlock getBraceBlock() {
+    return findNotNullChildByClass(ValkyrieBraceBlock.class);
+  }
+
+  @Override
+  @NotNull
   public ValkyrieIdentifier getIdentifier() {
     return findNotNullChildByClass(ValkyrieIdentifier.class);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieNamespaceDot getNamespaceDot() {
+    return findNotNullChildByClass(ValkyrieNamespaceDot.class);
   }
 
 }

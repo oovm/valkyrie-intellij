@@ -15,6 +15,7 @@ public interface ValkyrieTypes {
   IElementType BITFLAG_STATEMENT = new ValkyrieTokenType("BITFLAG_STATEMENT");
   IElementType BLOCK = new ValkyrieTokenType("BLOCK");
   IElementType BOOLEAN = new ValkyrieTokenType("BOOLEAN");
+  IElementType BRACE_BLOCK = new ValkyrieTokenType("BRACE_BLOCK");
   IElementType CALL_SUFFIX = new ValkyrieTokenType("CALL_SUFFIX");
   IElementType CASE_PATTERN = new ValkyrieTokenType("CASE_PATTERN");
   IElementType CLASS_BRACE = new ValkyrieTokenType("CLASS_BRACE");
@@ -56,6 +57,7 @@ public interface ValkyrieTypes {
   IElementType MATCH_STATEMENT = new ValkyrieTokenType("MATCH_STATEMENT");
   IElementType MODIFIER_SYMBOLS = new ValkyrieTokenType("MODIFIER_SYMBOLS");
   IElementType NAMESPACE = new ValkyrieTokenType("NAMESPACE");
+  IElementType NAMESPACE_DOT = new ValkyrieTokenType("NAMESPACE_DOT");
   IElementType NAMESPACE_STATEMENT = new ValkyrieTokenType("NAMESPACE_STATEMENT");
   IElementType NEW_STATEMENT = new ValkyrieTokenType("NEW_STATEMENT");
   IElementType NORMAL_PATTERN = new ValkyrieTokenType("NORMAL_PATTERN");
@@ -106,7 +108,7 @@ public interface ValkyrieTypes {
   IElementType DECIMAL = new ValkyrieTokenType("DECIMAL");
   IElementType DEFINE = new ValkyrieTokenType("def");
   IElementType DOLLAR = new ValkyrieTokenType("$");
-  IElementType DOT = new ValkyrieTokenType(".");
+  IElementType DOT = new ValkyrieTokenType("DOT");
   IElementType DOT2 = new ValkyrieTokenType("..");
   IElementType DOT3 = new ValkyrieTokenType("...");
   IElementType DOT_EQ = new ValkyrieTokenType("..=");
@@ -143,6 +145,7 @@ public interface ValkyrieTypes {
   IElementType OP_DEC = new ValkyrieTokenType("--");
   IElementType OP_DIV = new ValkyrieTokenType("/");
   IElementType OP_DIV_ASSIGN = new ValkyrieTokenType("/=");
+  IElementType OP_DOT = new ValkyrieTokenType(".");
   IElementType OP_EQ = new ValkyrieTokenType("=");
   IElementType OP_GEQ = new ValkyrieTokenType(">=");
   IElementType OP_GG = new ValkyrieTokenType(">>");
@@ -213,6 +216,9 @@ public interface ValkyrieTypes {
       }
       else if (type == BOOLEAN) {
         return new ValkyrieBooleanNode(node);
+      }
+      else if (type == BRACE_BLOCK) {
+        return new ValkyrieBraceBlockNode(node);
       }
       else if (type == CALL_SUFFIX) {
         return new ValkyrieCallSuffixNode(node);
@@ -336,6 +342,9 @@ public interface ValkyrieTypes {
       }
       else if (type == NAMESPACE) {
         return new ValkyrieNamespaceNode(node);
+      }
+      else if (type == NAMESPACE_DOT) {
+        return new ValkyrieNamespaceDotNode(node);
       }
       else if (type == NAMESPACE_STATEMENT) {
         return new ValkyrieNamespaceStatementNode(node);

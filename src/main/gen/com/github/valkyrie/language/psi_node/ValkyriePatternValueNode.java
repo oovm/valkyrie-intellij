@@ -30,6 +30,12 @@ public class ValkyriePatternValueNode extends ValkyrieElement implements Valkyri
 
   @Override
   @Nullable
+  public ValkyrieBraceBlock getBraceBlock() {
+    return findChildByClass(ValkyrieBraceBlock.class);
+  }
+
+  @Override
+  @Nullable
   public ValkyrieIdentifier getIdentifier() {
     return findChildByClass(ValkyrieIdentifier.class);
   }

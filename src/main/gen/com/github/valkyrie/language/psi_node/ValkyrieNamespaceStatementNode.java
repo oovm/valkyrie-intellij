@@ -30,8 +30,8 @@ public class ValkyrieNamespaceStatementNode extends MixinNamespace implements Va
 
   @Override
   @NotNull
-  public ValkyrieIdentifier getIdentifier() {
-    return findNotNullChildByClass(ValkyrieIdentifier.class);
+  public ValkyrieNamespaceDot getNamespaceDot() {
+    return findNotNullChildByClass(ValkyrieNamespaceDot.class);
   }
 
 }

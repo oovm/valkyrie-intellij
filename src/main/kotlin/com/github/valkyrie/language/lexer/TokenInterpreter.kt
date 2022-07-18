@@ -23,16 +23,18 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     fun interpreter(): Array<StackItem> {
         while (startOffset < endOffset) {
-            if (matchesWhitespace()) continue
+            matchesWhitespace() ?: continue
             when (context) {
                 StackContext.CODE -> {
+                    codeComment() ?: continue
                     if (codeNamespace()) continue
+                    if (codeIdentifier()) continue
+                    if (codeIdentifierRaw()) continue
                     if (codePunctuations()) continue
                 }
                 StackContext.TEXT -> {
 
                 }
-                StackContext.TEXT -> {}
                 StackContext.COMMENT -> {
 
                 }
@@ -43,9 +45,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         return stack.toTypedArray()
     }
 
-    private fun matchesWhitespace(): Boolean {
-        val token = "\\s+".toRegex();
-        val r = token.matchAt(buffer, startOffset) ?: return false
+    private fun matchesWhitespace(): Unit? {
+        val r = tryMatch("\\s+".toRegex()) ?: return null
         when (context) {
             StackContext.CODE, StackContext.COMMENT -> {
                 pushToken(WHITE_SPACE, r)
@@ -54,7 +55,13 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.STRING_LITERAL, r)
             }
         }
-        return addOffset(r)
+        return Unit
+    }
+
+    private fun codeComment(): Unit? {
+        val r = tryMatch("//[^\\n\\r]*".toRegex()) ?: return null
+        pushToken(ValkyrieTypes.COMMENT, r)
+        return Unit
     }
 
     private fun codeNamespace(): Boolean {
@@ -68,12 +75,30 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         else {
             pushToken(ValkyrieTypes.KW_NAMESPACE, r)
         }
-        return addOffset(r)
+        return true
     }
+
+    private fun codeIdentifier(): Boolean {
+        assert(context == StackContext.CODE)
+        val identifier = "[a-zA-Z_][a-zA-Z0-9_]*".toRegex()
+        val r = identifier.matchAt(buffer, startOffset) ?: return false
+        pushToken(ValkyrieTypes.SYMBOL_XID, r)
+        return true
+    }
+
+    private fun codeIdentifierRaw(): Boolean {
+        assert(context == StackContext.CODE)
+        val identifier = "(`)((?:[^`\\\\]|\\\\.)*)(`)".toRegex()
+        val r = identifier.matchAt(buffer, startOffset) ?: return false
+        pushToken(ValkyrieTypes.SYMBOL_RAW, r)
+        return true
+    }
+
 
     private fun codePunctuations(): Boolean {
         assert(context == StackContext.CODE)
         val patterns = """(?x)
+            [.]{1,3}
             # start with < >
             | >>> | >> | >= | /> | >
             | <<< | << | <= | </ | < | ≤ 
@@ -100,9 +125,9 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             # in
             | ∈
             | ;
-            | , 
+            | ,
         """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
-        val r = patterns.matchAt(buffer, startOffset) ?: return false
+        val r = tryMatch(patterns) ?: return false
         when (r.value) {
             // start with +
             "++" -> pushToken(ValkyrieTypes.OP_INC, r)
@@ -127,6 +152,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "::", "∷" -> pushToken(ValkyrieTypes.OP_PROPORTION, r)
             ":=", "≔" -> pushToken(ValkyrieTypes.OP_BIND, r)
             ":", "∶" -> pushToken(ValkyrieTypes.OP_COLON, r)
+            // DOT
+            "." -> pushToken(ValkyrieTypes.OP_DOT, r)
             // start with !
             "!!" -> pushToken(ValkyrieTypes.OP_NE, r)
             "!=" -> pushToken(ValkyrieTypes.OP_NE, r)
@@ -191,9 +218,9 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "," -> {
                 pushToken(ValkyrieTypes.COMMA, r)
             }
-            else -> TODO("unreachable ${r}")
+            else -> TODO("unreachable ${r.value}")
         }
-        return addOffset(r)
+        return true
     }
 
     private fun matchesK(): Boolean {
@@ -209,7 +236,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "using!" -> pushToken(ValkyrieTypes.KW_IMPORT, r)
             else -> TODO("unreachable ${r.value}")
         }
-        return addOffset(r)
+        return true
     }
 
 
@@ -219,12 +246,27 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         }
     }
 
-    fun pushToken(token: IElementType, startOffset: Int, endOffset: Int) {
-        pushToken(token, startOffset, endOffset)
+    private fun tryMatch(pattern: Regex): MatchResult? {
+        val r = pattern.matchAt(buffer, startOffset)
+        return when {
+            r == null -> null
+            r.value.isEmpty() -> null
+            else -> r
+        }
+    }
+
+    private fun pushToken(token: IElementType, startOffset: Int, endOffset: Int) {
+        stack.add(StackItem(token, startOffset, endOffset, context))
         this.startOffset = endOffset + 1
     }
-    fun pushToken(token: IElementType, match: MatchResult) {
-        pushToken(token, match);
+
+    private fun pushToken(token: IElementType, match: MatchResult) {
+        stack.add(StackItem(token, match.range.first, match.range.last + 1, context))
+        startOffset = match.range.last + 1
+    }
+
+    private fun pushToken(token: IElementType, match: MatchGroup) {
+        stack.add(StackItem(token, match.range.first, match.range.last + 1, context))
         startOffset = match.range.last + 1
     }
 }

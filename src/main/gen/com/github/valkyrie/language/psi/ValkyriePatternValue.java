@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ValkyriePatternValue extends PsiElement {
 
   @Nullable
+  ValkyrieBraceBlock getBraceBlock();
+
+  @Nullable
   ValkyrieIdentifier getIdentifier();
 
   @NotNull

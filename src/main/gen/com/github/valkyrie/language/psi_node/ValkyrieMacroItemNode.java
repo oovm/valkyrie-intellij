@@ -29,15 +29,15 @@ public class ValkyrieMacroItemNode extends ValkyrieElement implements ValkyrieMa
   }
 
   @Override
-  @NotNull
-  public List<ValkyrieExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExpression.class);
+  @Nullable
+  public ValkyrieBraceBlock getBraceBlock() {
+    return findChildByClass(ValkyrieBraceBlock.class);
   }
 
   @Override
   @NotNull
-  public List<ValkyriePair> getPairList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyriePair.class);
+  public List<ValkyrieExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExpression.class);
   }
 
 }

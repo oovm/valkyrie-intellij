@@ -12,44 +12,20 @@ import com.github.valkyrie.language.ast.ValkyrieElement;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieCasePatternNode extends ValkyrieElement implements ValkyrieCasePattern {
+public class ValkyrieBraceBlockNode extends ValkyrieElement implements ValkyrieBraceBlock {
 
-  public ValkyrieCasePatternNode(@NotNull ASTNode node) {
+  public ValkyrieBraceBlockNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitCasePattern(this);
+    visitor.visitBraceBlock(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ValkyrieVisitor) accept((ValkyrieVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieBraceBlock getBraceBlock() {
-    return findChildByClass(ValkyrieBraceBlock.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ValkyrieIdentifier> getIdentifierList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieNamespace getNamespace() {
-    return findChildByClass(ValkyrieNamespace.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ValkyriePatternPair> getPatternPairList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyriePatternPair.class);
   }
 
 }

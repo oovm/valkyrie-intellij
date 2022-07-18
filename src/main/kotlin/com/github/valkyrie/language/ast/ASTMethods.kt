@@ -93,10 +93,11 @@ class ASTMethods {
         /// ----------------------------------------------------------------------------
         @JvmStatic
         fun getBraceItemList(node: ValkyrieClassStatement): Array<ValkyrieClassBraceItem> {
-            return when (val brace = node.classBrace) {
-                null -> arrayOf()
-                else -> brace.classBraceItemList.toTypedArray()
-            }
+//            return when (val brace = node.classBrace) {
+//                null -> arrayOf()
+//                else -> brace.classBraceItemList.toTypedArray()
+//            }
+            return arrayOf()
         }
 
         @JvmStatic

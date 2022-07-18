@@ -44,7 +44,7 @@
         COLON = ':'
         PROPORTION = "::"
         SEMICOLON = ';'
-        DOT = '.'
+
         DOT2 = '..'
         DOT3 = '...'
         DOT_LESS = '..<'
@@ -84,6 +84,8 @@
         OP_AND = "&"
         OP_OR_ASSIGN = "|="
         OP_OR = "|"
+        // DOTS
+        OP_DOT = '.'
 
         OP_PROPORTION = "::"
         OP_COLON = ":"
@@ -167,6 +169,7 @@ private normal_statements ::=
 namespace_statement ::= KW_NAMESPACE namespace_dot {
     mixin="com.github.valkyrie.language.mixin.MixinNamespace"
 };
+namespace_dot       ::= identifier ((OP_DOT|OP_PROPORTION) identifier)*;
 // ---------------------------------------------------------------------------------------------------------------------
 extension_statement ::= KW_EXTENSION identifier COLON namespace_dot <<brace_block normal_statements COMMA>> {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
@@ -298,7 +301,6 @@ slice_expression    ::=
 // ---------------------------------------------------------------------------------------------------------------------
 //name     ::= PROPORTION namespace
 namespace        ::= identifier (PROPORTION identifier)*
-namespace_dot    ::= identifier ((DOT|PROPORTION) identifier)*;
 modifier_symbols ::= identifier+;
 // ---------------------------------------------------------------------------------------------------------------------
 macro_call ::= macro [macro_item];
@@ -315,7 +317,7 @@ private atoms  ::= number | string | boolean | namespace;
 boolean        ::= "true" | "false";
 number         ::= number_literal [identifier];
 string         ::= [identifier] string_literal
-identifier     ::= [AT|HASH](SYMBOL_XID | SYMBOL_RAW) {
+identifier     ::= SYMBOL_XID | SYMBOL_RAW {
     mixin="com.github.valkyrie.language.mixin.MixinIdentifier"
 }
 number_literal ::= BYTE | INTEGER | DECIMAL;

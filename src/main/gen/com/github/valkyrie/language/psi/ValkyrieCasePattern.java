@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement;
 
 public interface ValkyrieCasePattern extends PsiElement {
 
+  @Nullable
+  ValkyrieBraceBlock getBraceBlock();
+
   @NotNull
   List<ValkyrieIdentifier> getIdentifierList();
 
