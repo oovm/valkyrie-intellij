@@ -19,15 +19,16 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     var typeContext = false
 
-    var shadowKeyword = false;
+    var shadowKeyword: String? = null;
 
     fun interpreter(): Array<StackItem> {
         while (startOffset < endOffset) {
-            matchesWhitespace() ?: continue
+//            matchesWhitespace() ?: continue
+            if (matchesWhitespace()) continue
             when (context) {
                 StackContext.CODE -> {
-                    codeComment() ?: continue
-                    if (codeNamespace()) continue
+                    if (codeComment()) continue
+                    if (codeKeywords()) continue
                     if (codeIdentifier()) continue
                     if (codeIdentifierRaw()) continue
                     if (codePunctuations()) continue
@@ -45,8 +46,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         return stack.toTypedArray()
     }
 
-    private fun matchesWhitespace(): Unit? {
-        val r = tryMatch("\\s+".toRegex()) ?: return null
+    private fun matchesWhitespace(): Boolean {
+        val r = tryMatch("\\s+".toRegex()) ?: return false
         when (context) {
             StackContext.CODE, StackContext.COMMENT -> {
                 pushToken(WHITE_SPACE, r)
@@ -55,25 +56,29 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.STRING_LITERAL, r)
             }
         }
-        return Unit
+        return true
     }
 
-    private fun codeComment(): Unit? {
-        val r = tryMatch("//[^\\n\\r]*".toRegex()) ?: return null
-        pushToken(ValkyrieTypes.COMMENT, r)
-        return Unit
+    private fun codeComment(): Boolean {
+        val r = tryMatch("//[^\\n\\r]*".toRegex()) ?: return false
+        pushToken(ValkyrieTypes.COMMENT_LINE, r)
+        return true
     }
 
-    private fun codeNamespace(): Boolean {
+    private fun codeKeywords(): Boolean {
         assert(context == StackContext.CODE)
-        val namespace = "namespace[!*]?".toRegex()
-        val r = namespace.matchAt(buffer, startOffset) ?: return false
-        if (shadowKeyword) {
-            shadowKeyword = false
-            pushToken(ValkyrieTypes.KW_NAMESPACE, r)
-        }
-        else {
-            pushToken(ValkyrieTypes.KW_NAMESPACE, r)
+        val keywords = "namespace[!*]?".toRegex()
+        val r = keywords.matchAt(buffer, startOffset) ?: return false
+        when (shadowKeyword) {
+            null -> {
+                castKeywords(r)
+            }
+            "namespace" -> {
+                when {
+                    lastNot(ValkyrieTypes.DOT, ValkyrieTypes.PROPORTION) -> castKeywords(r)
+                    else -> pushToken(ValkyrieTypes.SYMBOL_XID, r)
+                }
+            }
         }
         return true
     }
@@ -126,9 +131,21 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | ∈
             | ;
             | ,
+            | @
         """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
         val r = tryMatch(patterns) ?: return false
         when (r.value) {
+            // DOT
+            "::", "∷" -> pushToken(ValkyrieTypes.PROPORTION, r)
+            ":=", "≔" -> pushToken(ValkyrieTypes.OP_BIND, r)
+            ":", "∶" -> pushToken(ValkyrieTypes.COLON, r)
+            "." -> pushToken(ValkyrieTypes.DOT, r)
+            ";" -> {
+                shadowKeyword = null
+                pushToken(ValkyrieTypes.SEMICOLON, r)
+            }
+            "@" -> pushToken(ValkyrieTypes.AT, r)
+            "," -> pushToken(ValkyrieTypes.COMMA, r)
             // start with +
             "++" -> pushToken(ValkyrieTypes.OP_INC, r)
             "+=" -> pushToken(ValkyrieTypes.OP_ADD_ASSIGN, r)
@@ -149,11 +166,6 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "&=" -> pushToken(ValkyrieTypes.OP_AND_ASSIGN, r)
             "&" -> pushToken(ValkyrieTypes.OP_AND, r)
             //
-            "::", "∷" -> pushToken(ValkyrieTypes.OP_PROPORTION, r)
-            ":=", "≔" -> pushToken(ValkyrieTypes.OP_BIND, r)
-            ":", "∶" -> pushToken(ValkyrieTypes.OP_COLON, r)
-            // DOT
-            "." -> pushToken(ValkyrieTypes.OP_DOT, r)
             // start with !
             "!!" -> pushToken(ValkyrieTypes.OP_NE, r)
             "!=" -> pushToken(ValkyrieTypes.OP_NE, r)
@@ -190,33 +202,33 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 typeContext = true
                 pushToken(ValkyrieTypes.OP_NOT_A, r)
             }
+            "<" -> {
+                if (typeContext) {
+                    typeContext = false
+                }
+                pushToken(ValkyrieTypes.OP_LT, r)
+            }
             // surround with ( )
             "(" -> {
-                shadowKeyword = false
+                shadowKeyword = null
                 pushToken(ValkyrieTypes.PARENTHESIS_L, r)
             }
             ")" -> {
                 pushToken(ValkyrieTypes.PARENTHESIS_R, r)
             }
             "[" -> {
-                shadowKeyword = false
+                shadowKeyword = null
                 pushToken(ValkyrieTypes.BRACKET_L, r)
             }
             "]" -> {
                 pushToken(ValkyrieTypes.BRACKET_R, r)
             }
             "{" -> {
-                shadowKeyword = false
+                shadowKeyword = null
                 pushToken(ValkyrieTypes.BRACE_L, r)
             }
             "}" -> {
                 pushToken(ValkyrieTypes.BRACE_R, r)
-            }
-            ";" -> {
-                pushToken(ValkyrieTypes.SEMICOLON, r)
-            }
-            "," -> {
-                pushToken(ValkyrieTypes.COMMA, r)
             }
             else -> TODO("unreachable ${r.value}")
         }
@@ -255,18 +267,60 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         }
     }
 
-    private fun pushToken(token: IElementType, startOffset: Int, endOffset: Int) {
+    fun pushToken(token: IElementType, startOffset: Int, endOffset: Int) {
         stack.add(StackItem(token, startOffset, endOffset, context))
         this.startOffset = endOffset + 1
     }
 
-    private fun pushToken(token: IElementType, match: MatchResult) {
+    fun pushToken(token: IElementType, match: MatchResult) {
         stack.add(StackItem(token, match.range.first, match.range.last + 1, context))
         startOffset = match.range.last + 1
     }
 
-    private fun pushToken(token: IElementType, match: MatchGroup) {
+    fun pushToken(token: IElementType, match: MatchGroup) {
         stack.add(StackItem(token, match.range.first, match.range.last + 1, context))
         startOffset = match.range.last + 1
     }
 }
+
+fun TokenInterpreter.lastIs(vararg token: IElementType, skipWS: Boolean = true): Boolean {
+    for (item in stack.reversed()) {
+        if (item.tokenIs(WHITE_SPACE, ValkyrieTypes.COMMENT_LINE, ValkyrieTypes.COMMENT_BLOCK)) {
+            when {
+                skipWS -> continue
+                else -> return false
+            }
+        }
+        if (item.tokenIs(*token)) return true
+    }
+    return false
+}
+
+fun TokenInterpreter.lastNot(vararg token: IElementType, skipWS: Boolean = true): Boolean {
+    for (item in stack.reversed()) {
+        if (item.tokenIs(WHITE_SPACE, ValkyrieTypes.COMMENT_LINE, ValkyrieTypes.COMMENT_BLOCK)) {
+            when {
+                skipWS -> continue
+                else -> return false
+            }
+        }
+        if (item.tokenIs(*token)) return false
+    }
+    return true
+}
+
+
+
+fun TokenInterpreter.castKeywords(keyword: MatchResult) {
+    when (keyword.value) {
+        "namespace", "namespace!", "namespace*" -> {
+            shadowKeyword = "namespace"
+            pushToken(ValkyrieTypes.KW_NAMESPACE, keyword)
+        }
+        "using", "using!", "using*" -> {
+            shadowKeyword = "using"
+            pushToken(ValkyrieTypes.KW_IMPORT, keyword)
+        }
+    }
+}
+

@@ -15,9 +15,6 @@ import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor as Color
 class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
     private var infoHolder: HighlightInfoHolder? = null
 
-    override fun visitAs(o: ValkyrieAs) {
-        highlight(o, Color.KEYWORD)
-    }
 
 //    override fun visitExportName(o: ValkyrieExportName) {
 //        if (o.text.startsWith('@') || o.text.startsWith('#')) {

@@ -41,9 +41,7 @@
         BIND = '='
         EQ = '=='
         NE = '!='
-        COLON = ':'
-        PROPORTION = "::"
-        SEMICOLON = ';'
+
 
         DOT2 = '..'
         DOT3 = '...'
@@ -85,10 +83,11 @@
         OP_OR_ASSIGN = "|="
         OP_OR = "|"
         // DOTS
-        OP_DOT = '.'
-
-        OP_PROPORTION = "::"
-        OP_COLON = ":"
+        DOT = '.'
+        SEMICOLON = ';'
+        COLON = ':'
+        PROPORTION = "::"
+        //
         OP_EQ = "="
         OP_NE = "!="
         OP_BIND = ":="
@@ -169,18 +168,17 @@ private normal_statements ::=
 namespace_statement ::= KW_NAMESPACE namespace_dot {
     mixin="com.github.valkyrie.language.mixin.MixinNamespace"
 };
-namespace_dot       ::= identifier ((OP_DOT|OP_PROPORTION) identifier)*;
+namespace_dot       ::= identifier (maybe_dot identifier)*;
+private maybe_dot   ::= DOT|PROPORTION;
+// ---------------------------------------------------------------------------------------------------------------------
+import_statement ::= KW_IMPORT [namespace_dot] import_block;
+import_block     ::= <<brace_block import_item COMMA>>;
+import_item      ::= (identifier maybe_dot)* import_block | import_rename;
+import_rename    ::= identifier (maybe_dot identifier)* [AS identifier];
 // ---------------------------------------------------------------------------------------------------------------------
 extension_statement ::= KW_EXTENSION identifier COLON namespace_dot <<brace_block normal_statements COMMA>> {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
 };
-// ---------------------------------------------------------------------------------------------------------------------
-import_statement ::= KW_IMPORT import_block;
-import_block     ::= <<brace_block import_item COMMA>>;
-import_item      ::= (identifier import_dot)* import_block | import_rename;
-import_rename    ::= identifier (import_dot identifier)* [AS identifier];
-import_dot       ::= PROPORTION | DOT;
-AS               ::= "as"
 // ---------------------------------------------------------------------------------------------------------------------
 if_statement     ::= (IF condition block) [ef_statement* [else_statement]]
 ef_statement     ::= else_if condition block;
@@ -299,8 +297,8 @@ slice_expression    ::=
   | [expression] PROPORTION [expression]
   | expression;
 // ---------------------------------------------------------------------------------------------------------------------
-//name     ::= PROPORTION namespace
-namespace        ::= identifier (PROPORTION identifier)*
+namespace        ::= (macro|identifier) (PROPORTION (macro|identifier))*
+macro            ::= AT identifier;
 modifier_symbols ::= identifier+;
 // ---------------------------------------------------------------------------------------------------------------------
 macro_call ::= macro [macro_item];
@@ -329,6 +327,6 @@ private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>
 // bracket [ ]
 private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
 // brace { }
-meta brace_block   ::= BRACE_L (<<item>>|<<sp>>)* BRACE_R;
+meta brace_block   ::= BRACE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACE_R;
 // angle ::< >::
 private meta generic_block ::= OP_PROPORTION? GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R OP_PROPORTION?;

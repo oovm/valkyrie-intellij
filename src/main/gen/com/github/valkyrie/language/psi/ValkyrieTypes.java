@@ -8,7 +8,6 @@ import com.github.valkyrie.language.psi_node.*;
 
 public interface ValkyrieTypes {
 
-  IElementType AS = new ValkyrieTokenType("AS");
   IElementType BITFLAG_BLOCK = new ValkyrieTokenType("BITFLAG_BLOCK");
   IElementType BITFLAG_ITEM = new ValkyrieTokenType("BITFLAG_ITEM");
   IElementType BITFLAG_LAYOUT = new ValkyrieTokenType("BITFLAG_LAYOUT");
@@ -42,13 +41,13 @@ public interface ValkyrieTypes {
   IElementType IF_GUARD = new ValkyrieTokenType("IF_GUARD");
   IElementType IF_STATEMENT = new ValkyrieTokenType("IF_STATEMENT");
   IElementType IMPORT_BLOCK = new ValkyrieTokenType("IMPORT_BLOCK");
-  IElementType IMPORT_DOT = new ValkyrieTokenType("IMPORT_DOT");
   IElementType IMPORT_ITEM = new ValkyrieTokenType("IMPORT_ITEM");
   IElementType IMPORT_RENAME = new ValkyrieTokenType("IMPORT_RENAME");
   IElementType IMPORT_STATEMENT = new ValkyrieTokenType("IMPORT_STATEMENT");
   IElementType LET_STATEMENT = new ValkyrieTokenType("LET_STATEMENT");
   IElementType LET_TYPE_HINT = new ValkyrieTokenType("LET_TYPE_HINT");
   IElementType LIST = new ValkyrieTokenType("LIST");
+  IElementType MACRO = new ValkyrieTokenType("MACRO");
   IElementType MACRO_CALL = new ValkyrieTokenType("MACRO_CALL");
   IElementType MACRO_ITEM = new ValkyrieTokenType("MACRO_ITEM");
   IElementType MACRO_LIST = new ValkyrieTokenType("MACRO_LIST");
@@ -86,6 +85,7 @@ public interface ValkyrieTypes {
   IElementType AMP = new ValkyrieTokenType("AMP");
   IElementType ANGLE_L = new ValkyrieTokenType("ANGLE_L");
   IElementType ANGLE_R = new ValkyrieTokenType("ANGLE_R");
+  IElementType AS = new ValkyrieTokenType("AS");
   IElementType AT = new ValkyrieTokenType("@");
   IElementType BACKSLASH = new ValkyrieTokenType("\\\\");
   IElementType BANG = new ValkyrieTokenType("BANG");
@@ -99,7 +99,7 @@ public interface ValkyrieTypes {
   IElementType CASE = new ValkyrieTokenType("CASE");
   IElementType CATCH = new ValkyrieTokenType("catch");
   IElementType CLASS = new ValkyrieTokenType("class");
-  IElementType COLON = new ValkyrieTokenType("COLON");
+  IElementType COLON = new ValkyrieTokenType(":");
   IElementType COMMA = new ValkyrieTokenType(",");
   IElementType COMMENT = new ValkyrieTokenType("Comment");
   IElementType COMMENT_BLOCK = new ValkyrieTokenType("Comment Block");
@@ -108,7 +108,7 @@ public interface ValkyrieTypes {
   IElementType DECIMAL = new ValkyrieTokenType("DECIMAL");
   IElementType DEFINE = new ValkyrieTokenType("def");
   IElementType DOLLAR = new ValkyrieTokenType("$");
-  IElementType DOT = new ValkyrieTokenType("DOT");
+  IElementType DOT = new ValkyrieTokenType(".");
   IElementType DOT2 = new ValkyrieTokenType("..");
   IElementType DOT3 = new ValkyrieTokenType("...");
   IElementType DOT_EQ = new ValkyrieTokenType("..=");
@@ -130,7 +130,6 @@ public interface ValkyrieTypes {
   IElementType KW_NAMESPACE = new ValkyrieTokenType("namespace");
   IElementType LESS = new ValkyrieTokenType("LESS");
   IElementType LET = new ValkyrieTokenType("let");
-  IElementType MACRO = new ValkyrieTokenType("macro");
   IElementType MATCH = new ValkyrieTokenType("match");
   IElementType MINUS = new ValkyrieTokenType("MINUS");
   IElementType NE = new ValkyrieTokenType("NE");
@@ -141,11 +140,9 @@ public interface ValkyrieTypes {
   IElementType OP_AND = new ValkyrieTokenType("&");
   IElementType OP_AND_ASSIGN = new ValkyrieTokenType("&=");
   IElementType OP_BIND = new ValkyrieTokenType(":=");
-  IElementType OP_COLON = new ValkyrieTokenType(":");
   IElementType OP_DEC = new ValkyrieTokenType("--");
   IElementType OP_DIV = new ValkyrieTokenType("/");
   IElementType OP_DIV_ASSIGN = new ValkyrieTokenType("/=");
-  IElementType OP_DOT = new ValkyrieTokenType(".");
   IElementType OP_EQ = new ValkyrieTokenType("=");
   IElementType OP_GEQ = new ValkyrieTokenType(">=");
   IElementType OP_GG = new ValkyrieTokenType(">>");
@@ -169,13 +166,13 @@ public interface ValkyrieTypes {
   IElementType OP_NOT_A = new ValkyrieTokenType("is not");
   IElementType OP_OR = new ValkyrieTokenType("|");
   IElementType OP_OR_ASSIGN = new ValkyrieTokenType("|=");
-  IElementType OP_PROPORTION = new ValkyrieTokenType("::");
+  IElementType OP_PROPORTION = new ValkyrieTokenType("OP_PROPORTION");
   IElementType OP_SUB = new ValkyrieTokenType("-");
   IElementType OP_SUB_ASSIGN = new ValkyrieTokenType("-=");
   IElementType PARENTHESIS_L = new ValkyrieTokenType("(");
   IElementType PARENTHESIS_R = new ValkyrieTokenType(")");
   IElementType PLUS = new ValkyrieTokenType("PLUS");
-  IElementType PROPORTION = new ValkyrieTokenType("PROPORTION");
+  IElementType PROPORTION = new ValkyrieTokenType("::");
   IElementType QUESTION = new ValkyrieTokenType("?");
   IElementType SEMICOLON = new ValkyrieTokenType(";");
   IElementType STRING_CHAR = new ValkyrieTokenType("String Character");
@@ -196,10 +193,7 @@ public interface ValkyrieTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == AS) {
-        return new ValkyrieAsNode(node);
-      }
-      else if (type == BITFLAG_BLOCK) {
+      if (type == BITFLAG_BLOCK) {
         return new ValkyrieBitflagBlockNode(node);
       }
       else if (type == BITFLAG_ITEM) {
@@ -298,9 +292,6 @@ public interface ValkyrieTypes {
       else if (type == IMPORT_BLOCK) {
         return new ValkyrieImportBlockNode(node);
       }
-      else if (type == IMPORT_DOT) {
-        return new ValkyrieImportDotNode(node);
-      }
       else if (type == IMPORT_ITEM) {
         return new ValkyrieImportItemNode(node);
       }
@@ -318,6 +309,9 @@ public interface ValkyrieTypes {
       }
       else if (type == LIST) {
         return new ValkyrieListNode(node);
+      }
+      else if (type == MACRO) {
+        return new ValkyrieMacroNode(node);
       }
       else if (type == MACRO_CALL) {
         return new ValkyrieMacroCallNode(node);

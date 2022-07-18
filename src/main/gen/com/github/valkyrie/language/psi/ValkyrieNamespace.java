@@ -10,4 +10,7 @@ public interface ValkyrieNamespace extends PsiElement {
   @NotNull
   List<ValkyrieIdentifier> getIdentifierList();
 
+  @NotNull
+  List<ValkyrieMacro> getMacroList();
+
 }

@@ -7,10 +7,6 @@ import com.intellij.psi.PsiElement;
 
 public class ValkyrieVisitor extends PsiElementVisitor {
 
-  public void visitAs(@NotNull ValkyrieAs o) {
-    visitPsiElement(o);
-  }
-
   public void visitBitflagBlock(@NotNull ValkyrieBitflagBlock o) {
     visitPsiElement(o);
   }
@@ -143,10 +139,6 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitImportDot(@NotNull ValkyrieImportDot o) {
-    visitPsiElement(o);
-  }
-
   public void visitImportItem(@NotNull ValkyrieImportItem o) {
     visitPsiElement(o);
   }
@@ -168,6 +160,10 @@ public class ValkyrieVisitor extends PsiElementVisitor {
   }
 
   public void visitList(@NotNull ValkyrieList o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMacro(@NotNull ValkyrieMacro o) {
     visitPsiElement(o);
   }
 

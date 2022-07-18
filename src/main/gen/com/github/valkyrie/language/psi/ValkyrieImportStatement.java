@@ -10,4 +10,7 @@ public interface ValkyrieImportStatement extends PsiElement {
   @NotNull
   ValkyrieImportBlock getImportBlock();
 
+  @Nullable
+  ValkyrieNamespaceDot getNamespaceDot();
+
 }

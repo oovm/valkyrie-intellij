@@ -7,13 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ValkyrieImportRename extends PsiElement {
 
-  @Nullable
-  ValkyrieAs getAs();
-
   @NotNull
   List<ValkyrieIdentifier> getIdentifierList();
-
-  @NotNull
-  List<ValkyrieImportDot> getImportDotList();
 
 }

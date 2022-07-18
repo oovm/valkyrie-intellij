@@ -34,4 +34,10 @@ public class ValkyrieNamespaceNode extends ValkyrieElement implements ValkyrieNa
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
   }
 
+  @Override
+  @NotNull
+  public List<ValkyrieMacro> getMacroList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieMacro.class);
+  }
+
 }

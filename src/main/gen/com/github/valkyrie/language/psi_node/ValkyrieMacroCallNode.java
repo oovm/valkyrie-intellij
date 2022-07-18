@@ -29,6 +29,12 @@ public class ValkyrieMacroCallNode extends ValkyrieElement implements ValkyrieMa
   }
 
   @Override
+  @NotNull
+  public ValkyrieMacro getMacro() {
+    return findNotNullChildByClass(ValkyrieMacro.class);
+  }
+
+  @Override
   @Nullable
   public ValkyrieMacroItem getMacroItem() {
     return findChildByClass(ValkyrieMacroItem.class);

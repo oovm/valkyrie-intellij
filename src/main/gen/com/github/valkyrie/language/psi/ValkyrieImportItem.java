@@ -13,9 +13,6 @@ public interface ValkyrieImportItem extends PsiElement {
   @Nullable
   ValkyrieImportBlock getImportBlock();
 
-  @NotNull
-  List<ValkyrieImportDot> getImportDotList();
-
   @Nullable
   ValkyrieImportRename getImportRename();
 

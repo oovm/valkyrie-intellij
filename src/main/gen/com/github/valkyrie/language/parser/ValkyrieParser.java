@@ -36,17 +36,6 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "as"
-  public static boolean AS(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AS")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, AS, "<as>");
-    r = consumeToken(b, "as");
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
   // number | string | boolean | namespace
   static boolean atoms(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "atoms")) return false;
@@ -154,7 +143,7 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // BRACE_L (<<item>>|<<sp>>)* BRACE_R
+  // BRACE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACE_R
   public static boolean brace_block(PsiBuilder b, int l, Parser _item, Parser _sp) {
     if (!recursion_guard_(b, l, "brace_block")) return false;
     if (!nextTokenIs(b, BRACE_L)) return false;
@@ -167,26 +156,52 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (<<item>>|<<sp>>)*
+  // [<<item>> (<<sp>> <<item>>)* [<<sp>>]]
   private static boolean brace_block_1(PsiBuilder b, int l, Parser _item, Parser _sp) {
     if (!recursion_guard_(b, l, "brace_block_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!brace_block_1_0(b, l + 1, _item, _sp)) break;
-      if (!empty_element_parsed_guard_(b, "brace_block_1", c)) break;
-    }
+    brace_block_1_0(b, l + 1, _item, _sp);
     return true;
   }
 
-  // <<item>>|<<sp>>
+  // <<item>> (<<sp>> <<item>>)* [<<sp>>]
   private static boolean brace_block_1_0(PsiBuilder b, int l, Parser _item, Parser _sp) {
     if (!recursion_guard_(b, l, "brace_block_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = _item.parse(b, l);
-    if (!r) r = _sp.parse(b, l);
+    r = r && brace_block_1_0_1(b, l + 1, _sp, _item);
+    r = r && brace_block_1_0_2(b, l + 1, _sp);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // (<<sp>> <<item>>)*
+  private static boolean brace_block_1_0_1(PsiBuilder b, int l, Parser _sp, Parser _item) {
+    if (!recursion_guard_(b, l, "brace_block_1_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!brace_block_1_0_1_0(b, l + 1, _sp, _item)) break;
+      if (!empty_element_parsed_guard_(b, "brace_block_1_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // <<sp>> <<item>>
+  private static boolean brace_block_1_0_1_0(PsiBuilder b, int l, Parser _sp, Parser _item) {
+    if (!recursion_guard_(b, l, "brace_block_1_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = _sp.parse(b, l);
+    r = r && _item.parse(b, l);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // [<<sp>>]
+  private static boolean brace_block_1_0_2(PsiBuilder b, int l, Parser _sp) {
+    if (!recursion_guard_(b, l, "brace_block_1_0_2")) return false;
+    _sp.parse(b, l);
+    return true;
   }
 
   /* ********************************************************** */
@@ -1238,20 +1253,7 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PROPORTION | DOT
-  public static boolean import_dot(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "import_dot")) return false;
-    if (!nextTokenIs(b, "<import dot>", DOT, PROPORTION)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, IMPORT_DOT, "<import dot>");
-    r = consumeToken(b, PROPORTION);
-    if (!r) r = consumeToken(b, DOT);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // (identifier import_dot)* import_block | import_rename
+  // (identifier maybe_dot)* import_block | import_rename
   public static boolean import_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item")) return false;
     boolean r;
@@ -1262,7 +1264,7 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (identifier import_dot)* import_block
+  // (identifier maybe_dot)* import_block
   private static boolean import_item_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_0")) return false;
     boolean r;
@@ -1273,7 +1275,7 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (identifier import_dot)*
+  // (identifier maybe_dot)*
   private static boolean import_item_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_0_0")) return false;
     while (true) {
@@ -1284,19 +1286,19 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // identifier import_dot
+  // identifier maybe_dot
   private static boolean import_item_0_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_0_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = identifier(b, l + 1);
-    r = r && import_dot(b, l + 1);
+    r = r && maybe_dot(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // identifier (import_dot identifier)* [AS identifier]
+  // identifier (maybe_dot identifier)* [AS identifier]
   public static boolean import_rename(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_rename")) return false;
     if (!nextTokenIs(b, "<import rename>", SYMBOL_RAW, SYMBOL_XID)) return false;
@@ -1309,7 +1311,7 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (import_dot identifier)*
+  // (maybe_dot identifier)*
   private static boolean import_rename_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_rename_1")) return false;
     while (true) {
@@ -1320,12 +1322,12 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // import_dot identifier
+  // maybe_dot identifier
   private static boolean import_rename_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_rename_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = import_dot(b, l + 1);
+    r = maybe_dot(b, l + 1);
     r = r && identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1343,23 +1345,31 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "import_rename_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = AS(b, l + 1);
+    r = consumeToken(b, AS);
     r = r && identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // KW_IMPORT import_block
+  // KW_IMPORT [namespace_dot] import_block
   public static boolean import_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_statement")) return false;
     if (!nextTokenIs(b, KW_IMPORT)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, KW_IMPORT);
+    r = r && import_statement_1(b, l + 1);
     r = r && import_block(b, l + 1);
     exit_section_(b, m, IMPORT_STATEMENT, r);
     return r;
+  }
+
+  // [namespace_dot]
+  private static boolean import_statement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "import_statement_1")) return false;
+    namespace_dot(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -1453,13 +1463,26 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // AT identifier
+  public static boolean macro(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "macro")) return false;
+    if (!nextTokenIs(b, AT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, AT);
+    r = r && identifier(b, l + 1);
+    exit_section_(b, m, MACRO, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // macro [macro_item]
   public static boolean macro_call(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "macro_call")) return false;
-    if (!nextTokenIs(b, MACRO)) return false;
+    if (!nextTokenIs(b, AT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, MACRO);
+    r = macro(b, l + 1);
     r = r && macro_call_1(b, l + 1);
     exit_section_(b, m, MACRO_CALL, r);
     return r;
@@ -1612,6 +1635,17 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // DOT|PROPORTION
+  static boolean maybe_dot(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "maybe_dot")) return false;
+    if (!nextTokenIs(b, "", DOT, PROPORTION)) return false;
+    boolean r;
+    r = consumeToken(b, DOT);
+    if (!r) r = consumeToken(b, PROPORTION);
+    return r;
+  }
+
+  /* ********************************************************** */
   // identifier+
   public static boolean modifier_symbols(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "modifier_symbols")) return false;
@@ -1629,19 +1663,27 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier (PROPORTION identifier)*
+  // (macro|identifier) (PROPORTION (macro|identifier))*
   public static boolean namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace")) return false;
-    if (!nextTokenIs(b, "<namespace>", SYMBOL_RAW, SYMBOL_XID)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, NAMESPACE, "<namespace>");
-    r = identifier(b, l + 1);
+    r = namespace_0(b, l + 1);
     r = r && namespace_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // (PROPORTION identifier)*
+  // macro|identifier
+  private static boolean namespace_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namespace_0")) return false;
+    boolean r;
+    r = macro(b, l + 1);
+    if (!r) r = identifier(b, l + 1);
+    return r;
+  }
+
+  // (PROPORTION (macro|identifier))*
   private static boolean namespace_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace_1")) return false;
     while (true) {
@@ -1652,19 +1694,28 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // PROPORTION identifier
+  // PROPORTION (macro|identifier)
   private static boolean namespace_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, PROPORTION);
-    r = r && identifier(b, l + 1);
+    r = r && namespace_1_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
+  // macro|identifier
+  private static boolean namespace_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namespace_1_0_1")) return false;
+    boolean r;
+    r = macro(b, l + 1);
+    if (!r) r = identifier(b, l + 1);
+    return r;
+  }
+
   /* ********************************************************** */
-  // identifier ((OP_DOT|OP_PROPORTION) identifier)*
+  // identifier (maybe_dot identifier)*
   public static boolean namespace_dot(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace_dot")) return false;
     if (!nextTokenIs(b, "<namespace dot>", SYMBOL_RAW, SYMBOL_XID)) return false;
@@ -1676,7 +1727,7 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ((OP_DOT|OP_PROPORTION) identifier)*
+  // (maybe_dot identifier)*
   private static boolean namespace_dot_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace_dot_1")) return false;
     while (true) {
@@ -1687,23 +1738,14 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (OP_DOT|OP_PROPORTION) identifier
+  // maybe_dot identifier
   private static boolean namespace_dot_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace_dot_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = namespace_dot_1_0_0(b, l + 1);
+    r = maybe_dot(b, l + 1);
     r = r && identifier(b, l + 1);
     exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // OP_DOT|OP_PROPORTION
-  private static boolean namespace_dot_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "namespace_dot_1_0_0")) return false;
-    boolean r;
-    r = consumeToken(b, OP_DOT);
-    if (!r) r = consumeToken(b, OP_PROPORTION);
     return r;
   }
 

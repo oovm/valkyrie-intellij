@@ -34,4 +34,10 @@ public class ValkyrieImportStatementNode extends ValkyrieElement implements Valk
     return findNotNullChildByClass(ValkyrieImportBlock.class);
   }
 
+  @Override
+  @Nullable
+  public ValkyrieNamespaceDot getNamespaceDot() {
+    return findChildByClass(ValkyrieNamespaceDot.class);
+  }
+
 }
