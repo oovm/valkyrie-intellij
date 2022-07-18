@@ -97,7 +97,7 @@ class DocumentationRender(var element: PsiElement, private var original: PsiElem
         HtmlSyntaxInfoUtil.appendHighlightedByLexerAndEncodedAsHtmlCodeSnippet(
             doc,
             element.project,
-            ValkyrieLanguage.INSTANCE,
+            ValkyrieLanguage,
             code.trimIndent(),
             1.0f,
         )

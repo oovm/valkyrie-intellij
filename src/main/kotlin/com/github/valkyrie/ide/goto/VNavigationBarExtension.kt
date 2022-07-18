@@ -11,7 +11,7 @@ import com.intellij.util.Processor
 
 /// 重写导航栏
 class VNavigationBarExtension : StructureAwareNavBarModelExtension() {
-    override val language: Language = ValkyrieLanguage.INSTANCE
+    override val language: Language = ValkyrieLanguage
 
     override fun getPresentableText(`object`: Any?): String? {
         return null

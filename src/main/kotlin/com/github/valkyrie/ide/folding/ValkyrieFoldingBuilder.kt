@@ -1,6 +1,6 @@
 package com.github.valkyrie.ide.folding
 
-import com.github.valkyrie.ide.file.ValkyrieFile
+import com.github.valkyrie.ide.file.ValkyrieFileNode
 import com.github.valkyrie.language.psi.ValkyrieTypes
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.CustomFoldingBuilder
@@ -18,7 +18,7 @@ class ValkyrieFoldingBuilder : CustomFoldingBuilder(), DumbAware {
         document: Document,
         quick: Boolean
     ) {
-        if (root !is ValkyrieFile) return
+        if (root !is ValkyrieFileNode) return
         val visitor = ValkyrieFoldingVisitor(descriptors)
         PsiTreeUtil.processElements(root) {
             it.accept(visitor);

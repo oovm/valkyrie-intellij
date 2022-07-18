@@ -5,7 +5,7 @@ import com.intellij.application.options.SmartIndentOptionsEditor
 import com.intellij.psi.codeStyle.*
 
 class ValkyrieCodeStyleSetting : LanguageCodeStyleSettingsProvider() {
-    override fun getLanguage() = com.github.valkyrie.ValkyrieLanguage.INSTANCE
+    override fun getLanguage() = com.github.valkyrie.ValkyrieLanguage
 
     override fun getIndentOptionsEditor() = SmartIndentOptionsEditor()
 

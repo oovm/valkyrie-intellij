@@ -1,13 +1,13 @@
 package com.github.valkyrie.ide.actions
 
-import com.github.valkyrie.ide.file.ValkyrieIconProvider.Companion.IconSVG
+import com.github.valkyrie.ide.file.ValkyrieIconProvider.Companion.FILE
 import com.intellij.ide.actions.CreateFileFromTemplateAction
 import com.intellij.ide.actions.CreateFileFromTemplateDialog.Builder
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDirectory
 
 class ValkyrieCreateFile :
-    CreateFileFromTemplateAction(name, description, IconSVG) {
+    CreateFileFromTemplateAction(name, description, FILE) {
     companion object {
         private val name = com.github.valkyrie.ValkyrieBundle.message("action.create_file")
         private val description = com.github.valkyrie.ValkyrieBundle.message("action.create_file.description")
@@ -16,7 +16,7 @@ class ValkyrieCreateFile :
     }
 
     override fun buildDialog(project: Project, directory: PsiDirectory, builder: Builder) {
-        builder.setTitle(name).addKind("Empty file", IconSVG, templatePath)
+        builder.setTitle(name).addKind("Empty file", FILE, templatePath)
     }
 
     override fun getActionName(directory: PsiDirectory, newName: String, templateName: String): String = name

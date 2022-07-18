@@ -1,8 +1,7 @@
 package com.github.valkyrie.ide.view
 
 
-import com.github.valkyrie.ide.file.ValkyrieFile
-import com.intellij.ide.projectView.PresentationData
+import com.github.valkyrie.ide.file.ValkyrieFileNode
 import com.intellij.ide.projectView.SelectableTreeStructureProvider
 import com.intellij.ide.projectView.ViewSettings
 import com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode
@@ -34,7 +33,7 @@ class VStructureProvider : SelectableTreeStructureProvider, DumbAware {
         is PsiWhiteSpaceImpl, is PsiWhiteSpace, is LeafPsiElement -> {
             null
         }
-        is ValkyrieFile -> {
+        is ValkyrieFileNode -> {
             null
         }
         else -> null
@@ -48,7 +47,7 @@ class VStructureProvider : SelectableTreeStructureProvider, DumbAware {
                 file.name == "readme.md" -> {
                     -9
                 }
-                file is ValkyrieFile && file.isIndexFile() -> {
+                file is ValkyrieFileNode && file.isIndexFile() -> {
                     -8
                 }
                 else -> 0;

@@ -13,7 +13,7 @@ data class ValkyrieFormatSpace(
 ) {
     companion object {
         fun create(settings: CodeStyleSettings): ValkyrieFormatSpace {
-            val commonSettings = settings.getCommonSettings(ValkyrieLanguage.INSTANCE)
+            val commonSettings = settings.getCommonSettings(ValkyrieLanguage)
             return ValkyrieFormatSpace(commonSettings, createSpacingBuilder(commonSettings))
         }
 

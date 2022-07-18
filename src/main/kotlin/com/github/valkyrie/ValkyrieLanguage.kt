@@ -2,16 +2,13 @@ package com.github.valkyrie
 
 import com.intellij.lang.Language
 
-class ValkyrieLanguage private constructor() : Language(LanguageID) {
-    companion object {
-        @JvmStatic
-        val INSTANCE = ValkyrieLanguage()
+private const val LanguageID = "Valkyrie"
 
-        const val Bundle = "messages.ValkyrieBundle"
-
-        const val LanguageID = "Valkyrie"
-        const val Extensions = "vk;"
+object ValkyrieLanguage: Language(LanguageID) {
+    override fun getDisplayName(): String {
+        return super.getDisplayName()
+    }
+    override fun getMimeTypes(): Array<String> {
+        return arrayOf("text/x-valkyrie")
     }
 }
-
-

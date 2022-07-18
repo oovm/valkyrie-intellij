@@ -1,7 +1,7 @@
 package com.github.valkyrie.ide.highlight
 
 
-import com.github.valkyrie.ide.file.ValkyrieFile
+import com.github.valkyrie.ide.file.ValkyrieFileNode
 import com.github.valkyrie.language.ast.isMutable
 import com.github.valkyrie.language.psi.*
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
@@ -216,7 +216,7 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
 
     override fun clone(): HighlightVisitor = ValkyrieHighlightVisitor()
 
-    override fun suitableForFile(file: PsiFile): Boolean = file is ValkyrieFile
+    override fun suitableForFile(file: PsiFile): Boolean = file is ValkyrieFileNode
 
     override fun visit(element: PsiElement) = element.accept(this)
 }

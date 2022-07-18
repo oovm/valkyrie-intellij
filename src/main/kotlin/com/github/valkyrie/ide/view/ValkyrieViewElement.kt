@@ -1,6 +1,6 @@
 package com.github.valkyrie.ide.view
 
-import com.github.valkyrie.ide.file.ValkyrieFile
+import com.github.valkyrie.ide.file.ValkyrieFileNode
 import com.github.valkyrie.language.ast.ViewableNode
 import com.github.valkyrie.language.psi.ValkyriePresentationItem
 import com.intellij.ide.projectView.PresentationData
@@ -33,7 +33,7 @@ class ValkyrieViewElement(private val self: NavigatablePsiElement, var view: Val
 
     override fun getChildren(): Array<TreeElement> {
         return when (self) {
-            is ValkyrieFile -> self.getChildrenView()
+            is ValkyrieFileNode -> self.getChildrenView()
             is ViewableNode -> self.getChildrenView()
             else -> arrayOf()
         }

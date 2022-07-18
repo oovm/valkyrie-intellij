@@ -1,11 +1,10 @@
 package com.github.valkyrie
 
-import com.github.valkyrie.ValkyrieLanguage.Companion.Bundle
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.PropertyKey
 import java.util.function.Supplier
 
-
+private const val Bundle = "messages.ValkyrieBundle"
 object ValkyrieBundle : DynamicBundle(Bundle) {
 
     @Suppress("SpreadOperator")

@@ -1,18 +1,15 @@
 package com.github.valkyrie.ide.codeStyle
 
+import com.github.valkyrie.ValkyrieLanguage
 import com.intellij.application.options.GenerationCodeStylePanel
 import com.intellij.application.options.TabbedLanguageCodeStylePanel
 import com.intellij.psi.codeStyle.CodeStyleSettings
 
 class ValkyrieCodeStyleMainPanel(currentSettings: CodeStyleSettings?, settings: CodeStyleSettings) :
-    TabbedLanguageCodeStylePanel(
-        com.github.valkyrie.ValkyrieLanguage.INSTANCE,
-        currentSettings,
-        settings
-    ) {
+    TabbedLanguageCodeStylePanel(ValkyrieLanguage, currentSettings, settings) {
     override fun initTabs(settings: CodeStyleSettings) {
         addIndentOptionsTab(settings)
         addWrappingAndBracesTab(settings)
-        addTab(GenerationCodeStylePanel(settings, com.github.valkyrie.ValkyrieLanguage.INSTANCE))
+        addTab(GenerationCodeStylePanel(settings, ValkyrieLanguage))
     }
 }

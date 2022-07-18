@@ -1,7 +1,7 @@
 package com.github.valkyrie.ide.highlight
 
 
-import com.github.valkyrie.language.psi.ValkyrieLexerAdapter
+import com.github.valkyrie.language.lexer.ValkyrieLexerAdapter
 import com.github.valkyrie.language.psi.ValkyrieTypes.*
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.colors.TextAttributesKey
@@ -22,7 +22,7 @@ class ValkyrieSyntaxHighlighter : SyntaxHighlighterBase() {
     private fun getTokenColor(tokenType: IElementType): Color? {
         return when (tokenType) {
             // Keywords
-            IMPORT, KW_IMPORT, KW_EXTENSION, KW_NAMESPACE -> Color.KEYWORD
+            KW_IMPORT, KW_EXTENSION, KW_NAMESPACE -> Color.KEYWORD
             MATCH, CATCH, EXTENDS, CASE -> Color.KEYWORD
             IF, ELSE, FOR, IN, WHILE -> Color.KEYWORD
             LET, DEFINE, CLASS, TRAIT, TAGGED, BITFLAG, FORALL, TYPE -> Color.KEYWORD

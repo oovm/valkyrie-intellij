@@ -114,7 +114,6 @@ public interface ValkyrieTypes {
   IElementType ELSE = new ValkyrieTokenType("else");
   IElementType EQ = new ValkyrieTokenType("==");
   IElementType EXTENDS = new ValkyrieTokenType("extends");
-  IElementType EXTENSION = new ValkyrieTokenType("EXTENSION");
   IElementType FOR = new ValkyrieTokenType("for");
   IElementType FORALL = new ValkyrieTokenType("forall");
   IElementType GENERIC_L = new ValkyrieTokenType("::<");
@@ -122,7 +121,6 @@ public interface ValkyrieTypes {
   IElementType GREATER = new ValkyrieTokenType("GREATER");
   IElementType HASH = new ValkyrieTokenType("#");
   IElementType IF = new ValkyrieTokenType("if");
-  IElementType IMPORT = new ValkyrieTokenType("IMPORT");
   IElementType IN = new ValkyrieTokenType("IN");
   IElementType INTEGER = new ValkyrieTokenType("INTEGER");
   IElementType KW_EXTENSION = new ValkyrieTokenType("extension");

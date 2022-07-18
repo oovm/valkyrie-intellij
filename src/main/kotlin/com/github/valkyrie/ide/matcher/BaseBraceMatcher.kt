@@ -1,6 +1,6 @@
 package com.github.valkyrie.ide.matcher
 
-import com.github.valkyrie.language.psi.ValkyrieParserDefinition
+import com.github.valkyrie.language.lexer.ValkyrieParserDefinition
 import com.github.valkyrie.language.psi.ValkyrieTypes.*
 import com.intellij.lang.BracePair
 import com.intellij.lang.PairedBraceMatcher
@@ -27,7 +27,7 @@ class BaseBraceMatcher : PairedBraceMatcher {
         )
 
         private val InsertPairBraceBefore = TokenSet.orSet(
-            ValkyrieParserDefinition.COMMENTS,
+            ValkyrieParserDefinition.commentTokens,
             TokenSet.create(
                 TokenType.WHITE_SPACE,
                 COMMA,

@@ -5,17 +5,13 @@ import com.github.valkyrie.ValkyrieLanguage
 import com.intellij.openapi.fileTypes.LanguageFileType
 import javax.swing.Icon
 
-class ValkyrieFileType private constructor() : LanguageFileType(ValkyrieLanguage.INSTANCE) {
-    override fun getName(): String = ValkyrieLanguage.LanguageID
+object ValkyrieFileType : LanguageFileType(ValkyrieLanguage) {
+    override fun getName(): String = ValkyrieLanguage.id
 
     override fun getDescription(): String = ValkyrieBundle.message("filetype.description")
 
-    override fun getDefaultExtension(): String = ValkyrieLanguage.Extensions
+    override fun getDefaultExtension(): String = "vk;valkyrie;"
 
-    override fun getIcon(): Icon = ValkyrieIconProvider.IconSVG
+    override fun getIcon(): Icon = ValkyrieIconProvider.FILE
 
-    companion object {
-        @JvmStatic
-        val INSTANCE = ValkyrieFileType()
-    }
 }

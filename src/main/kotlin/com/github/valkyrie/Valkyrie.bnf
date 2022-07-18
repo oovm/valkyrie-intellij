@@ -164,14 +164,15 @@ private normal_statements ::=
   | expression
   ;
 // ---------------------------------------------------------------------------------------------------------------------
-namespace_statement ::= KW_NAMESPACE identifier {
-    mixin="com.github.valkyrie.language.mixin.MixinExtension"
+namespace_statement ::= KW_NAMESPACE namespace_dot {
+    mixin="com.github.valkyrie.language.mixin.MixinNamespace"
 };
-extension_statement ::= EXTENSION identifier {
+// ---------------------------------------------------------------------------------------------------------------------
+extension_statement ::= KW_EXTENSION identifier COLON namespace_dot <<brace_block normal_statements COMMA>> {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
 };
 // ---------------------------------------------------------------------------------------------------------------------
-import_statement ::= IMPORT import_block;
+import_statement ::= KW_IMPORT import_block;
 import_block     ::= <<brace_block import_item COMMA>>;
 import_item      ::= (identifier import_dot)* import_block | import_rename;
 import_rename    ::= identifier (import_dot identifier)* [AS identifier];
@@ -179,7 +180,8 @@ import_dot       ::= PROPORTION | DOT;
 AS               ::= "as"
 // ---------------------------------------------------------------------------------------------------------------------
 if_statement     ::= (IF condition block) [ef_statement* [else_statement]]
-ef_statement     ::= ELSE IF condition block;
+ef_statement     ::= else_if condition block;
+private else_if  ::= ELSE IF
 else_statement   ::= ELSE block;
 block            ::= <<brace_block expression SEMICOLON>>;
 condition        ::= case_pattern BIND expression | expression;
@@ -295,10 +297,9 @@ slice_expression    ::=
   | expression;
 // ---------------------------------------------------------------------------------------------------------------------
 //name     ::= PROPORTION namespace
-namespace  ::= identifier (PROPORTION identifier)* {
-    mixin="com.github.valkyrie.language.mixin.MixinNamespace"
-};
-modifier_symbols  ::= identifier+;
+namespace        ::= identifier (PROPORTION identifier)*
+namespace_dot    ::= identifier ((DOT|PROPORTION) identifier)*;
+modifier_symbols ::= identifier+;
 // ---------------------------------------------------------------------------------------------------------------------
 macro_call ::= macro [macro_item];
 macro_item ::=
@@ -326,6 +327,6 @@ private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>
 // bracket [ ]
 private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
 // brace { }
-private meta brace_block   ::= BRACE_L (<<item>>|<<sp>>)* BRACE_R;
+meta brace_block   ::= BRACE_L (<<item>>|<<sp>>)* BRACE_R;
 // angle ::< >::
 private meta generic_block ::= OP_PROPORTION? GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R OP_PROPORTION?;

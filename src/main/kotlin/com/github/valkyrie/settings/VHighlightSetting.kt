@@ -22,7 +22,7 @@ class VHighlightSetting : ColorSettingsPage {
 
     override fun getDisplayName() = ValkyrieBundle.message("filetype.name")
 
-    override fun getIcon() = ValkyrieIconProvider.IconSVG
+    override fun getIcon() = ValkyrieIconProvider.FILE
 
     override fun getHighlighter() = ValkyrieSyntaxHighlighter()
 

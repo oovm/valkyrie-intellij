@@ -937,13 +937,13 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EXTENSION identifier
+  // KW_EXTENSION identifier
   public static boolean extension_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "extension_statement")) return false;
-    if (!nextTokenIs(b, EXTENSION)) return false;
+    if (!nextTokenIs(b, KW_EXTENSION)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, EXTENSION);
+    r = consumeToken(b, KW_EXTENSION);
     r = r && identifier(b, l + 1);
     exit_section_(b, m, EXTENSION_STATEMENT, r);
     return r;
@@ -1357,13 +1357,13 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IMPORT import_block
+  // KW_IMPORT import_block
   public static boolean import_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_statement")) return false;
-    if (!nextTokenIs(b, IMPORT)) return false;
+    if (!nextTokenIs(b, KW_IMPORT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IMPORT);
+    r = consumeToken(b, KW_IMPORT);
     r = r && import_block(b, l + 1);
     exit_section_(b, m, IMPORT_STATEMENT, r);
     return r;

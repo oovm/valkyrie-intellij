@@ -15,7 +15,7 @@
 		/>
 		<lang.parserDefinition
 			language="Valkyrie"
-			implementationClass="com.github.valkyrie.language.psi.ValkyrieParserDefinition"
+			implementationClass="com.github.valkyrie.language.lexer.ValkyrieParserDefinition"
 		/>
 		<!-- StructureView -->
 		<iconProvider implementation="com.github.valkyrie.ide.file.ValkyrieIconProvider"/>

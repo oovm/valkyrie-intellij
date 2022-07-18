@@ -5,7 +5,7 @@ import com.intellij.lexer.LexerBase
 import com.intellij.psi.tree.IElementType
 
 // class NLexerAdapter : FlexAdapter(_NotedownLexer());
-class LexerAdapter : LexerBase() {
+class ValkyrieLexerAdapter : LexerBase() {
     private var buffer: CharSequence = ""
     private var startOffset: Int = 0
     private var endOffset: Int = 0

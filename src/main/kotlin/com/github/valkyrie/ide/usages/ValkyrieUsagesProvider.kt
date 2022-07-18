@@ -1,6 +1,6 @@
 package com.github.valkyrie.ide.usages
 
-import com.github.valkyrie.language.psi.ValkyrieLexerAdapter
+import com.github.valkyrie.language.lexer.ValkyrieLexerAdapter
 import com.github.valkyrie.language.psi.ValkyrieTypes
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner
 import com.intellij.lang.cacheBuilder.WordsScanner
