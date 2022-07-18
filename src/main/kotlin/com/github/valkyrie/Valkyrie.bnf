@@ -168,6 +168,8 @@ private normal_statements ::=
 //  | macro_call
   | expression
   ;
+private block_import ::= <<brace_block import_item COMMA>>;
+private block    ::= <<brace_block expression SEMICOLON>>;
 // ---------------------------------------------------------------------------------------------------------------------
 namespace_statement ::= KW_NAMESPACE namespace_dot {
     mixin="com.github.valkyrie.language.mixin.MixinNamespace"
@@ -175,11 +177,10 @@ namespace_statement ::= KW_NAMESPACE namespace_dot {
 namespace_dot    ::= identifier (may_dot identifier)*;
 private may_dot  ::= DOT | PROPORTION;
 // ---------------------------------------------------------------------------------------------------------------------
-import_statement ::= KW_IMPORT (import_block|import_item)
-import_item      ::= namespace_dot [KW_AS identifier|may_dot import_block] {
+import_statement ::= KW_IMPORT (block_import|import_item)
+import_item      ::= namespace_dot [KW_AS identifier|may_dot block_import] {
     mixin="com.github.valkyrie.language.mixin.MixinImportItem"
 }
-private import_block ::= <<brace_block import_item COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
 extension_statement ::= KW_EXTENSION identifier COLON namespace_dot <<brace_block normal_statements COMMA>> {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
@@ -189,7 +190,6 @@ if_statement     ::= (IF condition block) [ef_statement* [else_statement]]
 ef_statement     ::= else_if condition block;
 private else_if  ::= ELSE IF
 else_statement   ::= ELSE block;
-private block    ::= <<brace_block expression SEMICOLON>>;
 condition        ::= case_pattern BIND expression | expression;
 case_pattern     ::= CASE [identifier* [namespace]] pattern;
 // ---------------------------------------------------------------------------------------------------------------------

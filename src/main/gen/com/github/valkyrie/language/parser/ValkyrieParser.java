@@ -125,6 +125,12 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // <<brace_block import_item COMMA>>
+  static boolean block_import(PsiBuilder b, int l) {
+    return brace_block(b, l + 1, ValkyrieParser::import_item, COMMA_parser_);
+  }
+
+  /* ********************************************************** */
   // "true" | "false"
   public static boolean boolean_$(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "boolean_$")) return false;
@@ -1235,13 +1241,7 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<brace_block import_item COMMA>>
-  static boolean import_block(PsiBuilder b, int l) {
-    return brace_block(b, l + 1, ValkyrieParser::import_item, COMMA_parser_);
-  }
-
-  /* ********************************************************** */
-  // namespace_dot [KW_AS identifier|may_dot import_block]
+  // namespace_dot [KW_AS identifier|may_dot block_import]
   public static boolean import_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item")) return false;
     if (!nextTokenIs(b, "<import item>", SYMBOL_RAW, SYMBOL_XID)) return false;
@@ -1253,14 +1253,14 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [KW_AS identifier|may_dot import_block]
+  // [KW_AS identifier|may_dot block_import]
   private static boolean import_item_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_1")) return false;
     import_item_1_0(b, l + 1);
     return true;
   }
 
-  // KW_AS identifier|may_dot import_block
+  // KW_AS identifier|may_dot block_import
   private static boolean import_item_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_1_0")) return false;
     boolean r;
@@ -1282,19 +1282,19 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // may_dot import_block
+  // may_dot block_import
   private static boolean import_item_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_1_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = may_dot(b, l + 1);
-    r = r && import_block(b, l + 1);
+    r = r && block_import(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // KW_IMPORT (import_block|import_item)
+  // KW_IMPORT (block_import|import_item)
   public static boolean import_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_statement")) return false;
     if (!nextTokenIs(b, KW_IMPORT)) return false;
@@ -1306,11 +1306,11 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // import_block|import_item
+  // block_import|import_item
   private static boolean import_statement_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_statement_1")) return false;
     boolean r;
-    r = import_block(b, l + 1);
+    r = block_import(b, l + 1);
     if (!r) r = import_item(b, l + 1);
     return r;
   }

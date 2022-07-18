@@ -18,7 +18,7 @@ open class MixinImportItem(node: ASTNode) : ValkyrieElement(node), PsiNameIdenti
         return originalElement.identifier
     }
     override fun getTextOffset(): Int {
-        return navigationElement.textOffset
+        return nameIdentifier?.textOffset ?: super.getTextOffset()
     }
     override fun getNavigationElement(): PsiElement {
         return nameIdentifier ?: originalElement
