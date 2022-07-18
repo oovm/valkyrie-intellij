@@ -14,12 +14,12 @@ open class MixinBitflag(node: ASTNode) : DeclareNode(node) {
     override fun getOriginalElement(): ValkyrieBitflagStatementNode {
         return this as ValkyrieBitflagStatementNode
     }
-    override fun getNameIdentifier(): PsiElement = this.symbol
+    override fun getNameIdentifier(): PsiElement = originalElement.symbol
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Enum
-
     override fun setName(name: String): PsiElement {
         TODO("Not yet implemented")
     }
+
     override fun getChildrenView(): Array<TreeElement> {
         return super.getChildrenView()
     }

@@ -4,6 +4,11 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 
-abstract class ValkyrieElement(node: ASTNode) : ASTWrapperPsiElement(node) {
-    abstract override fun getOriginalElement(): PsiElement;
+open class ValkyrieElement(node: ASTNode) : ASTWrapperPsiElement(node) {
+    fun collectDocuments(): List<PsiElement> {
+        return listOf()
+    }
+    fun collectModifiers(): List<PsiElement> {
+        return listOf()
+    }
 }

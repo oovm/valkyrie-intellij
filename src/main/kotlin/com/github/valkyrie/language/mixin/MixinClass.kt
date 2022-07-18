@@ -4,6 +4,7 @@ import com.github.valkyrie.ide.view.ValkyrieViewElement
 import com.github.valkyrie.language.ast.DeclareNode
 import com.github.valkyrie.language.psi_node.ValkyrieClassStatementNode
 import com.intellij.icons.AllIcons
+import com.intellij.ide.util.treeView.smartTree.TreeElement
 import com.intellij.lang.ASTNode
 import com.intellij.psi.NavigatablePsiElement
 import com.intellij.psi.PsiElement
@@ -15,20 +16,23 @@ open class MixinClass(node: ASTNode) : DeclareNode(node) {
         return this as ValkyrieClassStatementNode
     }
 
-    override fun getNameIdentifier(): PsiElement = this.modifierSymbols.lastChild
+    override fun getNameIdentifier(): PsiElement = originalElement.modifierSymbols.lastChild
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Class
 
     override fun setName(name: String): PsiElement {
         return this.nameIdentifier
     }
 
-    override fun addChildrenView(childrenView: MutableSet<ValkyrieViewElement>) {
-        for (it in this.braceItemList) {
-            childrenView.add(ValkyrieViewElement(it as NavigatablePsiElement))
+    override fun getChildrenView(): Array<TreeElement> {
+        val view = mutableListOf<TreeElement>()
+        for (it in originalElement.braceItemList) {
+            view.add(ValkyrieViewElement(it as NavigatablePsiElement))
         }
-        for (it in this.tupleItemList) {
-            childrenView.add(ValkyrieViewElement(it as NavigatablePsiElement))
+        for (it in originalElement.tupleItemList) {
+            view.add(ValkyrieViewElement(it as NavigatablePsiElement))
         }
+        return view.toTypedArray()
     }
+
 }
 
