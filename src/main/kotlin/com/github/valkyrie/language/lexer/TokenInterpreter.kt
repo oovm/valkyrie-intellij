@@ -8,10 +8,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     companion object {
         val EOL = "\\R".toRegex()
         val ROL = "[^\\r\\n]+".toRegex()
-        val WS_ROL = "([^\\S\\r\\n]*)([^\\r\\n]*)".toRegex()
-        val WS = "[^\\S\\r\\n]+".toRegex()
+        val WS = "\\s+".toRegex()
         val NL = "\\r\\n|\\r|\\n".toRegex()
-        val NAMESPACE = "namespace[!]?".toRegex()
         val ASTERISK = "[*]+".toRegex()
     }
 
@@ -33,6 +31,9 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
                 }
                 StackContext.TEXT -> {}
+                StackContext.COMMENT -> {
+
+                }
             }
             break
         }
@@ -99,6 +100,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | === | == | =
             # in
             | ∈
+            | ;
+            | , 
         """.toRegex()
         val r = patterns.matchAt(buffer, startOffset) ?: return false
         when (r.value) {
@@ -163,24 +166,32 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             }
             // surround with ( )
             "(" -> {
-                if (shadowKeyword) {
-                    shadowKeyword = false
-                }
-                stack.add(StackItem(ValkyrieTypes.L_PAREN, r, context))
+                shadowKeyword = false
+                stack.add(StackItem(ValkyrieTypes.PARENTHESIS_L, r, context))
             }
             ")" -> {
-                stack.add(StackItem(ValkyrieTypes.R_PAREN, r, context))
+                stack.add(StackItem(ValkyrieTypes.PARENTHESIS_R, r, context))
             }
             "[" -> {
-                if (shadowKeyword) {
-                    shadowKeyword = false
-                }
-                stack.add(StackItem(ValkyrieTypes.L_BRACK, r, context))
+                shadowKeyword = false
+                stack.add(StackItem(ValkyrieTypes.BRACKET_L, r, context))
             }
             "]" -> {
-                stack.add(StackItem(ValkyrieTypes.R_BRACK, r, context))
+                stack.add(StackItem(ValkyrieTypes.BRACKET_R, r, context))
             }
-
+            "{" -> {
+                shadowKeyword = false
+                stack.add(StackItem(ValkyrieTypes.BRACE_L, r, context))
+            }
+            "}" -> {
+                stack.add(StackItem(ValkyrieTypes.BRACE_R, r, context))
+            }
+            ";" -> {
+                stack.add(StackItem(ValkyrieTypes.SEMICOLON, r, context))
+            }
+            "," -> {
+                stack.add(StackItem(ValkyrieTypes.COMMA, r, context))
+            }
             else -> TODO("unreachable ${r.value}")
         }
         return addOffset(r)

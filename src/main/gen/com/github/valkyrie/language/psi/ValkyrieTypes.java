@@ -89,6 +89,10 @@ public interface ValkyrieTypes {
   IElementType BANG = new ValkyrieTokenType("BANG");
   IElementType BIND = new ValkyrieTokenType("BIND");
   IElementType BITFLAG = new ValkyrieTokenType("bitset");
+  IElementType BRACE_L = new ValkyrieTokenType("{");
+  IElementType BRACE_R = new ValkyrieTokenType("}");
+  IElementType BRACKET_L = new ValkyrieTokenType("[");
+  IElementType BRACKET_R = new ValkyrieTokenType("]");
   IElementType BYTE = new ValkyrieTokenType("Byte");
   IElementType CASE = new ValkyrieTokenType("CASE");
   IElementType CATCH = new ValkyrieTokenType("catch");
@@ -113,6 +117,8 @@ public interface ValkyrieTypes {
   IElementType EXTENSION = new ValkyrieTokenType("EXTENSION");
   IElementType FOR = new ValkyrieTokenType("for");
   IElementType FORALL = new ValkyrieTokenType("forall");
+  IElementType GENERIC_L = new ValkyrieTokenType("::<");
+  IElementType GENERIC_R = new ValkyrieTokenType(">::");
   IElementType GREATER = new ValkyrieTokenType("GREATER");
   IElementType HASH = new ValkyrieTokenType("#");
   IElementType IF = new ValkyrieTokenType("if");
@@ -124,10 +130,6 @@ public interface ValkyrieTypes {
   IElementType KW_NAMESPACE = new ValkyrieTokenType("namespace");
   IElementType LESS = new ValkyrieTokenType("LESS");
   IElementType LET = new ValkyrieTokenType("let");
-  IElementType L_ANGLE = new ValkyrieTokenType("::<");
-  IElementType L_BRACE = new ValkyrieTokenType("{");
-  IElementType L_BRACK = new ValkyrieTokenType("[");
-  IElementType L_PAREN = new ValkyrieTokenType("(");
   IElementType MACRO = new ValkyrieTokenType("macro");
   IElementType MATCH = new ValkyrieTokenType("match");
   IElementType MINUS = new ValkyrieTokenType("MINUS");
@@ -169,15 +171,11 @@ public interface ValkyrieTypes {
   IElementType OP_PROPORTION = new ValkyrieTokenType("::");
   IElementType OP_SUB = new ValkyrieTokenType("-");
   IElementType OP_SUB_ASSIGN = new ValkyrieTokenType("-=");
-  IElementType PARENTHESIS_L = new ValkyrieTokenType("PARENTHESIS_L");
-  IElementType PARENTHESIS_R = new ValkyrieTokenType("PARENTHESIS_R");
+  IElementType PARENTHESIS_L = new ValkyrieTokenType("(");
+  IElementType PARENTHESIS_R = new ValkyrieTokenType(")");
   IElementType PLUS = new ValkyrieTokenType("PLUS");
   IElementType PROPORTION = new ValkyrieTokenType("PROPORTION");
   IElementType QUESTION = new ValkyrieTokenType("?");
-  IElementType R_ANGLE = new ValkyrieTokenType(">::");
-  IElementType R_BRACE = new ValkyrieTokenType("}");
-  IElementType R_BRACK = new ValkyrieTokenType("R_BRACK");
-  IElementType R_PAREN = new ValkyrieTokenType("]");
   IElementType SEMICOLON = new ValkyrieTokenType(";");
   IElementType STRING_CHAR = new ValkyrieTokenType("String Character");
   IElementType STRING_EMPTY = new ValkyrieTokenType("String Empty");

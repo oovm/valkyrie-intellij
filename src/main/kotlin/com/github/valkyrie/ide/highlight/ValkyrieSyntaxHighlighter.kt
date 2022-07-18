@@ -22,7 +22,7 @@ class ValkyrieSyntaxHighlighter : SyntaxHighlighterBase() {
     private fun getTokenColor(tokenType: IElementType): Color? {
         return when (tokenType) {
             // Keywords
-            IMPORT, EXPORT, MODULE -> Color.KEYWORD
+            IMPORT, KW_IMPORT, KW_EXTENSION, KW_NAMESPACE -> Color.KEYWORD
             MATCH, CATCH, EXTENDS, CASE -> Color.KEYWORD
             IF, ELSE, FOR, IN, WHILE -> Color.KEYWORD
             LET, DEFINE, CLASS, TRAIT, TAGGED, BITFLAG, FORALL, TYPE -> Color.KEYWORD
@@ -32,7 +32,7 @@ class ValkyrieSyntaxHighlighter : SyntaxHighlighterBase() {
             BRACKET_L, BRACKET_R -> Color.BRACKETS
             BRACE_L, BRACE_R -> Color.BRACES
             COLON, BIND -> Color.SET
-            STAR -> Color.STAR
+            // STAR -> Color.STAR
             COMMA -> Color.COMMA
             VERTICAL, LESS, GREATER, DOT3, DOT2, PLUS, MINUS, DOT_LESS, DOT_EQ -> Color.OPERATION_SIGN
             EQ, NE -> Color.OPERATION_SIGN

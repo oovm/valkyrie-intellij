@@ -4,6 +4,7 @@ package com.github.valkyrie.language.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor;
 
 public interface ValkyrieDefItem extends PsiElement {
 
@@ -22,16 +23,13 @@ public interface ValkyrieDefItem extends PsiElement {
   @Nullable
   ValkyrieTypeExpression getTypeExpression();
 
-  //WARNING: getSymbol(...) is skipped
-  //matching getSymbol(ValkyrieDefItem, ...)
-  //methods are not found in ASTMethods
+  @NotNull
+  ValkyrieIdentifier getSymbol();
 
-  //WARNING: getModifiers(...) is skipped
-  //matching getModifiers(ValkyrieDefItem, ...)
-  //methods are not found in ASTMethods
+  @NotNull
+  ValkyrieIdentifier[] getModifiers();
 
-  //WARNING: getSymbolColor(...) is skipped
-  //matching getSymbolColor(ValkyrieDefItem, ...)
-  //methods are not found in ASTMethods
+  @NotNull
+  ValkyrieHighlightColor getSymbolColor();
 
 }

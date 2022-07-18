@@ -64,4 +64,21 @@ public class ValkyrieDefStatementNode extends MixinDefine implements ValkyrieDef
     return findChildByClass(ValkyrieTypeExpression.class);
   }
 
+  @Override
+  @NotNull
+  public ValkyrieIdentifier getSymbol() {
+    return ASTMethods.getSymbol(this);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieIdentifier[] getModifiers() {
+    return ASTMethods.getModifiers(this);
+  }
+
+  @Override
+  public boolean isMethod() {
+    return ASTMethods.isMethod(this);
+  }
+
 }

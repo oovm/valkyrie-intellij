@@ -4,6 +4,7 @@ enum class StackContext(val id: Int) {
     CODE(0),
     STRING(1),
     TEXT(2),
+    COMMENT(9)
     ;
 
     fun intoID() = this.id

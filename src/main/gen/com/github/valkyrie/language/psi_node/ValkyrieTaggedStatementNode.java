@@ -46,4 +46,16 @@ public class ValkyrieTaggedStatementNode extends MixinTagged implements Valkyrie
     return findChildByClass(ValkyrieTypeAngle.class);
   }
 
+  @Override
+  @NotNull
+  public ValkyrieIdentifier getSymbol() {
+    return ASTMethods.getSymbol(this);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieIdentifier[] getModifiers() {
+    return ASTMethods.getModifiers(this);
+  }
+
 }

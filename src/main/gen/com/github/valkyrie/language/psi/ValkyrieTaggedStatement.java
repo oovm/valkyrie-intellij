@@ -16,12 +16,10 @@ public interface ValkyrieTaggedStatement extends PsiElement {
   @Nullable
   ValkyrieTypeAngle getTypeAngle();
 
-  //WARNING: getSymbol(...) is skipped
-  //matching getSymbol(ValkyrieTaggedStatement, ...)
-  //methods are not found in ASTMethods
+  @NotNull
+  ValkyrieIdentifier getSymbol();
 
-  //WARNING: getModifiers(...) is skipped
-  //matching getModifiers(ValkyrieTaggedStatement, ...)
-  //methods are not found in ASTMethods
+  @NotNull
+  ValkyrieIdentifier[] getModifiers();
 
 }

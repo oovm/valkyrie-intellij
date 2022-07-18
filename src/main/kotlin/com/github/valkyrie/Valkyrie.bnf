@@ -109,14 +109,14 @@
 
         OP_IN = "in"
 
-        L_PAREN = '('
-        R_PAREN = ')'
-        L_BRACK = '['
-        R_PAREN = ']'
-        L_BRACE = '{'
-        R_BRACE = '}'
-        L_ANGLE = '::<'
-        R_ANGLE = '>::'
+        PARENTHESIS_L = '('
+        PARENTHESIS_R = ')'
+        BRACKET_L = '['
+        BRACKET_R = ']'
+        BRACE_L = '{'
+        BRACE_R = '}'
+        GENERIC_L = '::<'
+        GENERIC_R = '>::'
 
         IF = "if"
         ELSE = "else"
@@ -327,5 +327,5 @@ private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>
 private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
 // brace { }
 private meta brace_block   ::= BRACE_L (<<item>>|<<sp>>)* BRACE_R;
-// angle < >
-private meta generic_block   ::= GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R;
+// angle ::< >::
+private meta generic_block ::= OP_PROPORTION? GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R OP_PROPORTION?;
