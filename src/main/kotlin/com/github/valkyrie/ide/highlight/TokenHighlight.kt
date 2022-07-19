@@ -28,7 +28,7 @@ class TokenHighlight : SyntaxHighlighterBase() {
             KW_TYPE -> Color.KEYWORD
             MATCH, CATCH, EXTENDS, CASE -> Color.KEYWORD
             IF, ELSE, FOR, IN, WHILE -> Color.KEYWORD
-            LET, KW_DEFINE, KW_CLASS, TRAIT, TAGGED, BITFLAG, FORALL -> Color.KEYWORD
+            LET, KW_DEFINE, KW_CLASS, KW_TRAIT, TAGGED, BITFLAG, FORALL -> Color.KEYWORD
             // ANNOTATION -> JssColor.ANNOTATION
             //
             PARENTHESIS_L, PARENTHESIS_R -> Color.PARENTHESES

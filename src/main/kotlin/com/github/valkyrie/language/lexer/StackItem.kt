@@ -54,10 +54,6 @@ class StackItem {
         return tokenIs(TokenType.WHITE_SPACE, ValkyrieTypes.COMMENT)
     }
 
-    fun IElementType.isHardLeftMark(): Boolean? = when (this) {
-        else -> null
-    }
-
     companion object {
 
     }

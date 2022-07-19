@@ -1,9 +1,13 @@
 package com.github.valkyrie.language.lexer
 
 enum class LexerContext(val id: Int) {
-    CODE(0),
+    //
+    TopCoding(0),
+    // Common coding scenarios where keywords are not detected
+    Coding(1),
     Let(1),
-    Define(2),
+    CatchModifier(2),
+    // DefineSymbol(2),
     Type(11),
 
     TEXT(98),

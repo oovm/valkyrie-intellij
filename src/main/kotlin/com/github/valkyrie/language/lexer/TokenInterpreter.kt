@@ -2,8 +2,7 @@
 
 package com.github.valkyrie.language.lexer
 
-import com.github.valkyrie.language.lexer.LexerContext.Define
-import com.github.valkyrie.language.lexer.LexerContext.Type
+import com.github.valkyrie.language.lexer.LexerContext.*
 import com.github.valkyrie.language.psi.ValkyrieTypes
 import com.intellij.psi.TokenType.BAD_CHARACTER
 import com.intellij.psi.TokenType.WHITE_SPACE
@@ -70,7 +69,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     var contextStack: MutableList<LexerContext> = mutableListOf();
 
     val context: LexerContext
-        get() = contextStack.lastOrNull() ?: LexerContext.CODE
+        get() = contextStack.lastOrNull() ?: LexerContext.TopCoding
 
     fun interpreter(): Array<StackItem> {
         while (startOffset < endOffset) {
@@ -104,6 +103,13 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     private fun codeKeywords(): Boolean {
         val r = tryMatch(KEYWORDS) ?: return false
+        when ( context) {
+            Coding -> {
+                pushToken(ValkyrieTypes.SYMBOL_XID, r);
+                return true
+            }
+            else -> {}
+        }
         when (r.value) {
             "namespace", "namespace!", "namespace*" -> {
                 pushToken(ValkyrieTypes.KW_NAMESPACE, r)
@@ -112,6 +118,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.KW_IMPORT, r)
             }
             "class", "struct" -> {
+                enterContext(CatchModifier)
                 pushToken(ValkyrieTypes.KW_CLASS, r)
             }
             "trait", "interface" -> {
@@ -129,7 +136,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.OP_NOT_A, r)
             }
             "def" -> {
-                enterContext(Define)
+                enterContext(CatchModifier)
                 pushToken(ValkyrieTypes.KW_DEFINE, r)
             }
             else -> {
@@ -145,8 +152,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         | (`)((?:[^`\\]|\\.)*)(\1)
         """.toRegex()
         val r = tryMatch(xid) ?: return false
-        when {
-            contextIs(Type) -> {
+        when (context) {
+            CatchModifier -> {
                 pushToken(ValkyrieTypes.KW_MODIFIER, r)
             }
             else -> {
@@ -166,10 +173,12 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "->", "⟶" -> pushToken(ValkyrieTypes.OP_ARROW, r)
             "=>", "⇒" -> pushToken(ValkyrieTypes.OP_ARROW2, r)
             "." -> {
-                when  {
-                    contextIs(Define) -> {
-                        reShadowWith(ValkyrieTypes.SYMBOL_XID, "args")
+                when (context) {
+                    CatchModifier -> {
+                        resetToken(ValkyrieTypes.SYMBOL_XID)
+                        resetContext(Coding)
                     }
+                    else -> {}
                 }
                 pushToken(ValkyrieTypes.DOT, r)
             }
@@ -229,8 +238,14 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "/>" -> {
                 pushToken(ValkyrieTypes.OP_GS, r)
             }
-            ">" -> {
-                pushToken(ValkyrieTypes.OP_GT, r)
+            ">" -> when (context) {
+                Type -> {
+                    pushToken(ValkyrieTypes.GENERIC_R, r)
+                    endContext()
+                }
+                else -> {
+                    pushToken(ValkyrieTypes.OP_GT, r)
+                }
             }
             // start with <
             "<<<", "⋘" -> pushToken(ValkyrieTypes.OP_LLL, r)
@@ -247,28 +262,36 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 enterContext(Type)
                 pushToken(ValkyrieTypes.OP_NOT_A, r)
             }
-            "<" -> {
-                when {
-                    contextIs(Define) -> {
-                        reShadowWith(ValkyrieTypes.SYMBOL_XID, "type")
-                    }
-                    contextIs(Type) -> {
-
-                    }
+            "<" -> when (context) {
+                CatchModifier, Coding -> {
+                    resetToken(ValkyrieTypes.SYMBOL_XID)
+                    pushToken(ValkyrieTypes.GENERIC_L, r)
+                    resetContext(Type)
                 }
-                pushToken(ValkyrieTypes.OP_LT, r)
+                Type -> {
+                    pushToken(ValkyrieTypes.GENERIC_L, r)
+                    enterContext(Type)
+                }
+                else -> {
+                    pushToken(ValkyrieTypes.OP_LT, r)
+                }
             }
             // surround with ( )
             "(" -> {
                 when (context) {
-                    Define -> {
-                        reShadowWith(ValkyrieTypes.SYMBOL_XID, "args")
+                    CatchModifier -> {
+                        resetToken(ValkyrieTypes.SYMBOL_XID)
+                        resetContext(Coding)
+                    }
+                    else -> {
+
                     }
                 }
                 pushToken(ValkyrieTypes.PARENTHESIS_L, r)
             }
             ")" -> {
                 pushToken(ValkyrieTypes.PARENTHESIS_R, r)
+                endContext()
             }
             "[" -> {
                 pushToken(ValkyrieTypes.BRACKET_L, r)
@@ -291,7 +314,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun matchesK(): Boolean {
-        
+
         val patterns = """(?x)
             | 
             | ;
@@ -341,8 +364,29 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 }
 
+private fun TokenInterpreter.resetToken(token: IElementType) {
+    for (item in stack.asReversed()) {
+        when {
+            item.canSkip() -> continue
+            else -> {
+                item.token = token
+                break
+            }
+        }
+    }
+}
+
+private fun TokenInterpreter.resetContext(context: LexerContext) {
+    contextStack.removeLastOrNull()
+    contextStack.add(context)
+}
+
 private fun TokenInterpreter.enterContext(context: LexerContext) {
     contextStack.add(context)
+}
+
+private fun TokenInterpreter.endContext() {
+    contextStack.removeLastOrNull()
 }
 
 private fun TokenInterpreter.contextIs(vararg check: LexerContext): Boolean {

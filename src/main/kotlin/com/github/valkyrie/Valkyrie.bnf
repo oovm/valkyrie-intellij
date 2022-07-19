@@ -287,7 +287,7 @@ call_suffix         ::= <<parenthesis expression COMMA>>;
 type_expression     ::= type_expr (type_binary type_expr)*;
 private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
 private type_binary ::= VERTICAL | EQ | NE | PLUS | MINUS | TO;
-type_angle          ::= OP_PROPORTION? <<angle_block ([identifier COLON] type_expression) COMMA>> OP_PROPORTION?;
+type_angle          ::= OP_PROPORTION? <<generic_block ([identifier COLON] type_expression) COMMA>> OP_PROPORTION?;
 // ---------------------------------------------------------------------------------------------------------------------
 slice_suffix        ::= <<bracket_block slice_expression COMMA>>;
 slice_expression    ::=
@@ -333,4 +333,4 @@ private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] 
 // brace { }
 private meta brace_block   ::= BRACE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACE_R;
 // angle ::< >::
-private meta angle_block ::= GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R;
+private meta generic_block ::= GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R;
