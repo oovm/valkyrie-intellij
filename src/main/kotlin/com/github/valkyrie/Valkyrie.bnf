@@ -18,10 +18,7 @@
 
     tokens = [
         // comment
-        COMMENT_DOCUMENT = "Comment Document"
         COMMENT = "Comment"
-        COMMENT_BLOCK = "Comment Block"
-
         // literal
         URL = "Url"
         SYMBOL_XID = "Symbol"
@@ -31,7 +28,6 @@
         STRING_END = "'"
         STRING_CHAR = "String Character"
         STRING_EMPTY = "String Empty"
-        COMMENT_LINE = "Comment Line"
 
 
 
@@ -50,7 +46,6 @@
         AT = '@'
         DOLLAR = '$'
         HASH = '#'
-        TO = "->"
         HYPHEN = "-"
         PLUS = "+"
         VERTICAL = "|"
@@ -85,6 +80,8 @@
         SEMICOLON = ';'
         COLON = ':'
         PROPORTION = "::"
+        OP_ARROW = "->"
+        OP_ARROW2 = "=>"
         //
         OP_EQ = "="
         OP_NE = "!="
@@ -102,6 +99,7 @@
         OP_LL = "<<"
         OP_LEQ = "<="
         OP_LLL = "<<<"
+        OP_EMPTY = "(!)"
 
         OP_IS_A = "is"
         OP_NOT_A = "is not"
@@ -184,9 +182,10 @@ import_item      ::= namespace_dot [KW_AS identifier|may_dot import_block] {
 }
 import_block ::= <<brace_block import_item COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
-extension_statement ::= KW_EXTENSION identifier COLON namespace_dot <<brace_block normal_statements COMMA>> {
+extension_statement ::= KW_EXTENSION identifier COLON namespace_dot top_block {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
 };
+top_block        ::= <<brace_block top_statements SEMICOLON>>
 // ---------------------------------------------------------------------------------------------------------------------
 if_statement     ::= (IF condition block) [ef_statement* [else_statement]]
 ef_statement     ::= else_if condition block;
@@ -217,10 +216,10 @@ match_statement  ::= MATCH identifier* match_block;
 match_block      ::= <<brace_block match_expression SEMICOLON>>;
 match_expression ::= case_pattern COLON (normal_statements [SEMICOLON])+
 // ---------------------------------------------------------------------------------------------------------------------
-define_statement ::= KW_DEFINE [modifiers] namespace_dot [type_angle] define_tuple [def_type] [define_block| BIND expression] {
+define_statement ::= KW_DEFINE [modifiers] namespace_dot [type_angle] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefine"
 };
-define_item      ::= ANGLE_L | ANGLE_R | [modifiers] identifier [(DOT2|DOT3) identifier] [COLON type_expression] [BIND expression] {
+define_item      ::= ANGLE_L | ANGLE_R | [modifiers] identifier [(DOT2|DOT3) identifier] [COLON type_expression] [OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefineItem"
 }
 modifiers        ::= KW_MODIFIER+ {
@@ -228,14 +227,13 @@ modifiers        ::= KW_MODIFIER+ {
 };
 define_tuple     ::= <<parenthesis define_item COMMA>>;
 define_block     ::= <<brace_block normal_statements SEMICOLON>>;
-private def_type ::= (COLON|TO) type_expression;
 // ---------------------------------------------------------------------------------------------------------------------
 let_statement    ::=
     LET normal_pattern [let_type_hint] [BIND expression]
   | LET case_pattern BIND expression;
 let_type_hint    ::= COLON <<sequence type_expression COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
-type_statement   ::= TYPE identifier [[PROPORTION] type_angle] [BIND type_expr] {
+type_statement   ::= KW_TYPE identifier [[PROPORTION] type_angle] [BIND type_expr] {
     mixin="com.github.valkyrie.language.mixin.MixinType"
 };
 // ---------------------------------------------------------------------------------------------------------------------

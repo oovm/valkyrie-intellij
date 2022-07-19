@@ -186,13 +186,6 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
         }
     }
 
-    private fun highlightModifiers(element: ValkyrieModifiers?) {
-        if (element == null) return
-        for (modifier in element.children) {
-            highlight(modifier, Color.KEYWORD)
-        }
-    }
-
     fun highlight(element: PsiElement?, color: Color) {
         if (element == null) return
         val builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION)

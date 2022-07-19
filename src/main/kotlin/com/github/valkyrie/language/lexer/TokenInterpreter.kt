@@ -8,13 +8,15 @@ import com.intellij.psi.TokenType.WHITE_SPACE
 
 import com.intellij.psi.tree.IElementType
 
+// @Suppress("MemberVisibilityCanBePrivate")
 class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int, var context: StackContext) {
     companion object {
         val EOL = "\\R".toRegex()
         val ROL = "[^\\r\\n]+".toRegex()
         val WS = "\\s+".toRegex()
         val NL = "\\r\\n|\\r|\\n".toRegex()
-        val COMMENT_LINE = "//[^\\n\\r]*".toRegex()
+        val COMMENT_LINE = "(#)([^\\n\\r]*)".toRegex()
+        val COMMENT_BLOCK = "(#{3,})(\\.*?)(\\1)".toRegex(RegexOption.DOT_MATCHES_ALL)
         val SYMBOL_XID = "[a-zA-Z_][a-zA-Z0-9_]*".toRegex()
         val SYMBOL_RAW = "(`)((?:[^`\\\\]|\\\\.)*)(`)".toRegex()
         val DOTS = "\\.{1,3}".toRegex()
@@ -31,33 +33,37 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         val PUNCTUATIONS = """(?x)
             [.]{1,3}
             | [{}\[\]()]
-            | [,@;]
+            | [,@;^]
             # start with < >
-            | >>> | >> | >= | /> | >
-            | <<< | << | <= | </ | < | ≤ 
+            | >= | /> | ≥ | ⩾ | >{1,3}
+            | <= | </ | ≤ | ⩽ | <{1,3}
             # start with +
-            | \+\+ | \+=?
+            | [+]= | [+]> | [+]{1,2}
             # start with -
-            | -- | -=?
+            | -= | -> | ⟶ | --{1,2}
             # start with *
-            | \*=?
+            | [*]=?
             # start with / or % or ÷
             | /=?
             | ÷=?
             | %=?
             # start with &
-            | &&=? | &=?
-            | \|\|=? | \|=?
-            | ⊻ | ⊼ | ⊽
+            | &> | &{1,2}=? | ≻
+            | [|]> | [|]{1,2}=? | ⊁
+            | ⊻=? | ⊼=? | ⊽=?
             # start with :
-            | ::
-            | :
-            | !
-            | != | ≠
-            | \?
+            | :: | :
+            # start with ~
+            | ~> | ~
+            # start with !
+            | != | ≠ | !
+            # start with ?
+            | [?]
+            # start with =
+            | => | ⇒
             | === | == | =
-            # in
-            | ∈
+            # unicode
+            | [∈∊∉⊑⋢]
             #
         """.toRegex()
     }
@@ -106,7 +112,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun codeComment(): Boolean {
-        val r = tryMatch(COMMENT_LINE) ?: return false
+        val r = tryMatch(COMMENT_LINE) ?: tryMatch(COMMENT_BLOCK) ?: return false
         pushToken(ValkyrieTypes.COMMENT_LINE, r)
         return true
     }
@@ -163,6 +169,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "::", "∷" -> pushToken(ValkyrieTypes.PROPORTION, r)
             ":=", "≔" -> pushToken(ValkyrieTypes.OP_BIND, r)
             ":", "∶" -> pushToken(ValkyrieTypes.COLON, r)
+            "->", "⟶" -> pushToken(ValkyrieTypes.OP_ARROW, r)
+            "=>", "⇒" -> pushToken(ValkyrieTypes.OP_ARROW2, r)
             "." -> {
                 when (shadowMode) {
                     "define" -> {
@@ -214,10 +222,10 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "∉" -> {
                 pushToken(ValkyrieTypes.OP_NOT_IN, r)
             }
-            "≻" -> {
+            "≻", "&>" -> {
                 pushToken(ValkyrieTypes.OP_AND_THEN, r)
             }
-            "⊁" -> {
+            "⊁", "|>" -> {
                 pushToken(ValkyrieTypes.OP_OR_ELSE, r)
             }
             // start with >
@@ -244,7 +252,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 typeContext = true
                 pushToken(ValkyrieTypes.OP_IS_A, r)
             }
-            "!<:", "⋢", "!⊑" -> {
+            "!<:", "⋢" -> {
                 typeContext = true
                 pushToken(ValkyrieTypes.OP_NOT_A, r)
             }
@@ -267,7 +275,6 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.PARENTHESIS_R, r)
             }
             "[" -> {
-
                 pushToken(ValkyrieTypes.BRACKET_L, r)
             }
             "]" -> {
@@ -278,6 +285,9 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             }
             "}" -> {
                 pushToken(ValkyrieTypes.BRACE_R, r)
+            }
+            "∅", "⤇", "|=>", "⤃", "!=>" -> {
+                pushToken(ValkyrieTypes.OP_EMPTY, r)
             }
             else -> pushToken(BAD_CHARACTER, r)
         }
@@ -316,19 +326,22 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         }
     }
 
-    fun pushToken(token: IElementType, startOffset: Int, endOffset: Int) {
+    fun pushToken(token: IElementType, startOffset: Int, endOffset: Int): Boolean {
         stack.add(StackItem(token, startOffset, endOffset, context))
         this.startOffset = endOffset + 1
+        return true
     }
 
-    fun pushToken(token: IElementType, match: MatchResult) {
+    fun pushToken(token: IElementType, match: MatchResult): Boolean {
         stack.add(StackItem(token, match.range.first, match.range.last + 1, context))
         startOffset = match.range.last + 1
+        return true
     }
 
-    fun pushToken(token: IElementType, match: MatchGroup) {
+    fun pushToken(token: IElementType, match: MatchGroup): Boolean {
         stack.add(StackItem(token, match.range.first, match.range.last + 1, context))
         startOffset = match.range.last + 1
+        return true
     }
 }
 

@@ -70,6 +70,7 @@ public interface ValkyrieTypes {
   IElementType TAGGED_BLOCK = new ValkyrieTokenType("TAGGED_BLOCK");
   IElementType TAGGED_ITEM = new ValkyrieTokenType("TAGGED_ITEM");
   IElementType TAGGED_STATEMENT = new ValkyrieTokenType("TAGGED_STATEMENT");
+  IElementType TOP_BLOCK = new ValkyrieTokenType("TOP_BLOCK");
   IElementType TRAIT_BLOCK = new ValkyrieTokenType("TRAIT_BLOCK");
   IElementType TRAIT_STATEMENT = new ValkyrieTokenType("TRAIT_STATEMENT");
   IElementType TUPLE = new ValkyrieTokenType("TUPLE");
@@ -97,9 +98,6 @@ public interface ValkyrieTypes {
   IElementType COLON = new ValkyrieTokenType(":");
   IElementType COMMA = new ValkyrieTokenType(",");
   IElementType COMMENT = new ValkyrieTokenType("Comment");
-  IElementType COMMENT_BLOCK = new ValkyrieTokenType("Comment Block");
-  IElementType COMMENT_DOCUMENT = new ValkyrieTokenType("Comment Document");
-  IElementType COMMENT_LINE = new ValkyrieTokenType("Comment Line");
   IElementType DECIMAL = new ValkyrieTokenType("DECIMAL");
   IElementType DOLLAR = new ValkyrieTokenType("$");
   IElementType DOT = new ValkyrieTokenType(".");
@@ -126,6 +124,7 @@ public interface ValkyrieTypes {
   IElementType KW_IMPORT = new ValkyrieTokenType("using");
   IElementType KW_MODIFIER = new ValkyrieTokenType("KW_MODIFIER");
   IElementType KW_NAMESPACE = new ValkyrieTokenType("namespace");
+  IElementType KW_TYPE = new ValkyrieTokenType("KW_TYPE");
   IElementType LESS = new ValkyrieTokenType("LESS");
   IElementType LET = new ValkyrieTokenType("let");
   IElementType MATCH = new ValkyrieTokenType("match");
@@ -138,10 +137,13 @@ public interface ValkyrieTypes {
   IElementType OP_AND = new ValkyrieTokenType("&");
   IElementType OP_AND_ASSIGN = new ValkyrieTokenType("&=");
   IElementType OP_AND_THEN = new ValkyrieTokenType("and_then");
+  IElementType OP_ARROW = new ValkyrieTokenType("->");
+  IElementType OP_ARROW2 = new ValkyrieTokenType("=>");
   IElementType OP_BIND = new ValkyrieTokenType(":=");
   IElementType OP_DEC = new ValkyrieTokenType("--");
   IElementType OP_DIV = new ValkyrieTokenType("/");
   IElementType OP_DIV_ASSIGN = new ValkyrieTokenType("/=");
+  IElementType OP_EMPTY = new ValkyrieTokenType("(!)");
   IElementType OP_EQ = new ValkyrieTokenType("=");
   IElementType OP_GEQ = new ValkyrieTokenType(">=");
   IElementType OP_GG = new ValkyrieTokenType(">>");
@@ -184,9 +186,8 @@ public interface ValkyrieTypes {
   IElementType SYMBOL_XID = new ValkyrieTokenType("SYMBOL_XID");
   IElementType TAGGED = new ValkyrieTokenType("tagged");
   IElementType TILDE = new ValkyrieTokenType("~");
-  IElementType TO = new ValkyrieTokenType("->");
+  IElementType TO = new ValkyrieTokenType("TO");
   IElementType TRAIT = new ValkyrieTokenType("trait");
-  IElementType TYPE = new ValkyrieTokenType("TYPE");
   IElementType URL = new ValkyrieTokenType("Url");
   IElementType VERTICAL = new ValkyrieTokenType("VERTICAL");
   IElementType WHILE = new ValkyrieTokenType("while");
@@ -379,6 +380,9 @@ public interface ValkyrieTypes {
       }
       else if (type == TAGGED_STATEMENT) {
         return new ValkyrieTaggedStatementNode(node);
+      }
+      else if (type == TOP_BLOCK) {
+        return new ValkyrieTopBlockNode(node);
       }
       else if (type == TRAIT_BLOCK) {
         return new ValkyrieTraitBlockNode(node);
