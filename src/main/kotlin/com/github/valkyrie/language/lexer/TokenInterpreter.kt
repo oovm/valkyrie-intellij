@@ -33,14 +33,14 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         val PUNCTUATIONS = """(?x)
             [.]{1,3}
             | [{}\[\]()]
-            | [,@;^]
+            | [,;$@^]
             # start with < >
             | >= | /> | ≥ | ⩾ | >{1,3}
             | <= | </ | ≤ | ⩽ | <{1,3}
             # start with +
             | [+]= | [+]> | [+]{1,2}
             # start with -
-            | -= | -> | ⟶ | --{1,2}
+            | -= | -> | ⟶ | -{1,2}
             # start with *
             | [*]=?
             # start with / or % or ÷
@@ -48,8 +48,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | ÷=?
             | %=?
             # start with &
-            | &> | &{1,2}=? | ≻
-            | [|]> | [|]{1,2}=? | ⊁
+            | &> | &{1,2} | ≻
+            | [|]> | [|]{1,2} | ⊁
             | ⊻=? | ⊼=? | ⊽=?
             # start with :
             | :: | :
@@ -63,7 +63,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | => | ⇒
             | === | == | =
             # unicode
-            | [∈∊∉⊑⋢]
+            | [∈∊∉⊑⋢⨳∀∁∂∃∄¬±√∛∜⊹⋗]
             #
         """.toRegex()
     }
@@ -112,8 +112,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun codeComment(): Boolean {
-        val r = tryMatch(COMMENT_LINE) ?: tryMatch(COMMENT_BLOCK) ?: return false
-        pushToken(ValkyrieTypes.COMMENT_LINE, r)
+        val r = tryMatch(COMMENT_BLOCK) ?: tryMatch(COMMENT_LINE) ?: return false
+        pushToken(ValkyrieTypes.COMMENT, r)
         return true
     }
 
@@ -313,7 +313,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     private fun checkRest() {
         if (startOffset < endOffset) {
-            pushToken(ValkyrieTypes.COMMENT_BLOCK, startOffset, endOffset)
+            pushToken(ValkyrieTypes.COMMENT, startOffset, endOffset)
         }
     }
 
@@ -361,7 +361,7 @@ private fun TokenInterpreter.lastIs(vararg token: IElementType, skipWS: Boolean 
 
 private fun TokenInterpreter.lastNot(vararg token: IElementType, skipWS: Boolean = true): Boolean {
     for (item in stack.reversed()) {
-        if (item.tokenIs(WHITE_SPACE, ValkyrieTypes.COMMENT_LINE, ValkyrieTypes.COMMENT_BLOCK)) {
+        if (item.tokenIs(WHITE_SPACE, ValkyrieTypes.COMMENT)) {
             when {
                 skipWS -> continue
                 else -> return false

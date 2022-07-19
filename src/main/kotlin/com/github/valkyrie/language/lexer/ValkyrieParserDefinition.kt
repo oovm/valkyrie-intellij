@@ -31,11 +31,7 @@ object ValkyrieParserDefinition : ParserDefinition {
         return super.getWhitespaceTokens()
     }
 
-    override fun getCommentTokens(): TokenSet = TokenSet.create(
-        ValkyrieTypes.COMMENT_LINE,
-        ValkyrieTypes.COMMENT_BLOCK,
-        ValkyrieTypes.COMMENT_DOCUMENT
-    )
+    override fun getCommentTokens(): TokenSet = TokenSet.create(ValkyrieTypes.COMMENT)
 
     override fun getStringLiteralElements(): TokenSet = TokenSet.create(ValkyrieTypes.STRING_LITERAL)
 

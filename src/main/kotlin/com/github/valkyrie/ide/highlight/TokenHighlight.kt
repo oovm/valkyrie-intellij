@@ -49,9 +49,7 @@ class TokenHighlight : SyntaxHighlighterBase() {
             STRING_START, STRING_END, STRING_CHAR, STRING_EMPTY -> Color.STRING
             SYMBOL_XID, SYMBOL_RAW -> Color.IDENTIFIER
             // 注释
-            COMMENT_LINE -> Color.LINE_COMMENT
-            COMMENT_BLOCK -> Color.BLOCK_COMMENT
-            COMMENT_DOCUMENT -> Color.DOC_COMMENT
+            COMMENT -> Color.BLOCK_COMMENT
             // 错误
             TokenType.BAD_CHARACTER -> Color.BAD_CHARACTER
             else -> null

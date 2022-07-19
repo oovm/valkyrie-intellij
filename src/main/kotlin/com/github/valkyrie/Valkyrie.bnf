@@ -17,8 +17,6 @@
     generateTokenAccessors = false
 
     tokens = [
-        // comment
-        COMMENT = "Comment"
         // literal
         URL = "Url"
         SYMBOL_XID = "Symbol"
@@ -323,6 +321,10 @@ identifier     ::= SYMBOL_XID | SYMBOL_RAW {
 number_literal ::= BYTE | INTEGER | DECIMAL;
 string_literal ::= STRING_EMPTY | STRING_START STRING_CHAR+ STRING_END;
 // ---------------------------------------------------------------------------------------------------------------------
+comment_part   ::= COMMENT {
+    mixin="com.github.valkyrie.language.mixin.ValkyrieDocumentMixin"
+}
+
 private meta sequence      ::= <<item>> (<<sp>> <<item>>)* [<<sp>>];
 // parenthesis ( )
 private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;

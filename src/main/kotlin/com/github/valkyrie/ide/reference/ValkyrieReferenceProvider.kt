@@ -8,7 +8,6 @@ import com.intellij.model.psi.PsiSymbolReferenceProvider
 import com.intellij.model.search.SearchRequest
 import com.intellij.openapi.project.Project
 
-
 @Suppress("UnstableApiUsage")
 class ValkyrieReferenceProvider : PsiSymbolReferenceProvider {
     override fun getReferences(element: PsiExternalReferenceHost, hints: PsiSymbolReferenceHints): MutableCollection<out PsiSymbolReference> {

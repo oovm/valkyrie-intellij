@@ -21,6 +21,7 @@ public interface ValkyrieTypes {
   IElementType CLASS_STATEMENT = new ValkyrieTokenType("CLASS_STATEMENT");
   IElementType CLASS_TUPLE = new ValkyrieTokenType("CLASS_TUPLE");
   IElementType CLASS_TUPLE_ITEM = new ValkyrieTokenType("CLASS_TUPLE_ITEM");
+  IElementType COMMENT_PART = new ValkyrieTokenType("COMMENT_PART");
   IElementType CONDITION = new ValkyrieTokenType("CONDITION");
   IElementType DEFINE_BLOCK = new ValkyrieTokenType("DEFINE_BLOCK");
   IElementType DEFINE_ITEM = new ValkyrieTokenType("DEFINE_ITEM");
@@ -97,7 +98,7 @@ public interface ValkyrieTypes {
   IElementType CATCH = new ValkyrieTokenType("catch");
   IElementType COLON = new ValkyrieTokenType(":");
   IElementType COMMA = new ValkyrieTokenType(",");
-  IElementType COMMENT = new ValkyrieTokenType("Comment");
+  IElementType COMMENT = new ValkyrieTokenType("COMMENT");
   IElementType DECIMAL = new ValkyrieTokenType("DECIMAL");
   IElementType DOLLAR = new ValkyrieTokenType("$");
   IElementType DOT = new ValkyrieTokenType(".");
@@ -233,6 +234,9 @@ public interface ValkyrieTypes {
       }
       else if (type == CLASS_TUPLE_ITEM) {
         return new ValkyrieClassTupleItemNode(node);
+      }
+      else if (type == COMMENT_PART) {
+        return new ValkyrieCommentPartNode(node);
       }
       else if (type == CONDITION) {
         return new ValkyrieConditionNode(node);
