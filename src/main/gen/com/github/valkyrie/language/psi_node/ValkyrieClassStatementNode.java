@@ -48,43 +48,14 @@ public class ValkyrieClassStatementNode extends MixinClass implements ValkyrieCl
 
   @Override
   @NotNull
-  public ValkyrieModifierSymbols getModifierSymbols() {
-    return findNotNullChildByClass(ValkyrieModifierSymbols.class);
+  public ValkyrieModifiers getModifiers() {
+    return findNotNullChildByClass(ValkyrieModifiers.class);
   }
 
   @Override
   @Nullable
   public ValkyrieTypeAngle getTypeAngle() {
     return findChildByClass(ValkyrieTypeAngle.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieIdentifier getSymbol() {
-    return ASTMethods.getSymbol(this);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieIdentifier[] getModifiers() {
-    return ASTMethods.getModifiers(this);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieClassBraceItem[] getBraceItemList() {
-    return ASTMethods.getBraceItemList(this);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieClassTupleItem[] getTupleItemList() {
-    return ASTMethods.getTupleItemList(this);
-  }
-
-  @Override
-  public boolean isEmpty() {
-    return ASTMethods.isEmpty(this);
   }
 
 }

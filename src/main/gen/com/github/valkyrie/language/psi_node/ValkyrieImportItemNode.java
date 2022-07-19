@@ -30,14 +30,14 @@ public class ValkyrieImportItemNode extends MixinImportItem implements ValkyrieI
 
   @Override
   @Nullable
-  public ValkyrieBraceBlock getBraceBlock() {
-    return findChildByClass(ValkyrieBraceBlock.class);
+  public ValkyrieIdentifier getIdentifier() {
+    return findChildByClass(ValkyrieIdentifier.class);
   }
 
   @Override
   @Nullable
-  public ValkyrieIdentifier getIdentifier() {
-    return findChildByClass(ValkyrieIdentifier.class);
+  public ValkyrieImportBlock getImportBlock() {
+    return findChildByClass(ValkyrieImportBlock.class);
   }
 
   @Override

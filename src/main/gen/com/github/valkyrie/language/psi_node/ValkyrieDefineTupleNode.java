@@ -12,14 +12,14 @@ import com.github.valkyrie.language.ast.ValkyrieElement;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieDefTupleNode extends ValkyrieElement implements ValkyrieDefTuple {
+public class ValkyrieDefineTupleNode extends ValkyrieElement implements ValkyrieDefineTuple {
 
-  public ValkyrieDefTupleNode(@NotNull ASTNode node) {
+  public ValkyrieDefineTupleNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitDefTuple(this);
+    visitor.visitDefineTuple(this);
   }
 
   @Override
@@ -30,8 +30,8 @@ public class ValkyrieDefTupleNode extends ValkyrieElement implements ValkyrieDef
 
   @Override
   @NotNull
-  public ValkyrieParenthesis getParenthesis() {
-    return findNotNullChildByClass(ValkyrieParenthesis.class);
+  public List<ValkyrieDefineItem> getDefineItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieDefineItem.class);
   }
 
 }

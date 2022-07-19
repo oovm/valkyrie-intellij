@@ -12,20 +12,26 @@ import com.github.valkyrie.language.ast.ValkyrieElement;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieBracketBlockNode extends ValkyrieElement implements ValkyrieBracketBlock {
+public class ValkyrieImportBlockNode extends ValkyrieElement implements ValkyrieImportBlock {
 
-  public ValkyrieBracketBlockNode(@NotNull ASTNode node) {
+  public ValkyrieImportBlockNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitBracketBlock(this);
+    visitor.visitImportBlock(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ValkyrieVisitor) accept((ValkyrieVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieImportItem> getImportItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieImportItem.class);
   }
 
 }

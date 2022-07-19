@@ -30,8 +30,8 @@ public class ValkyrieTaggedStatementNode extends MixinTagged implements Valkyrie
 
   @Override
   @NotNull
-  public ValkyrieModifierSymbols getModifierSymbols() {
-    return findNotNullChildByClass(ValkyrieModifierSymbols.class);
+  public ValkyrieModifiers getModifiers() {
+    return findNotNullChildByClass(ValkyrieModifiers.class);
   }
 
   @Override
@@ -44,18 +44,6 @@ public class ValkyrieTaggedStatementNode extends MixinTagged implements Valkyrie
   @Nullable
   public ValkyrieTypeAngle getTypeAngle() {
     return findChildByClass(ValkyrieTypeAngle.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieIdentifier getSymbol() {
-    return ASTMethods.getSymbol(this);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieIdentifier[] getModifiers() {
-    return ASTMethods.getModifiers(this);
   }
 
 }

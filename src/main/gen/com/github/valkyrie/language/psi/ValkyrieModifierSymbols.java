@@ -7,7 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface ValkyrieModifierSymbols extends PsiElement {
 
-  @NotNull
-  List<ValkyrieIdentifier> getIdentifierList();
-
 }

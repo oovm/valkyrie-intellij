@@ -12,26 +12,20 @@ import com.github.valkyrie.language.ast.ValkyrieElement;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieMatchExpressionNode extends ValkyrieElement implements ValkyrieMatchExpression {
+public class ValkyrieDefineBlockNode extends ValkyrieElement implements ValkyrieDefineBlock {
 
-  public ValkyrieMatchExpressionNode(@NotNull ASTNode node) {
+  public ValkyrieDefineBlockNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitMatchExpression(this);
+    visitor.visitDefineBlock(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ValkyrieVisitor) accept((ValkyrieVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieCasePattern getCasePattern() {
-    return findNotNullChildByClass(ValkyrieCasePattern.class);
   }
 
   @Override

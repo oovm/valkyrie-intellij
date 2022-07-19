@@ -30,8 +30,14 @@ public class ValkyrieBitflagBlockNode extends ValkyrieElement implements Valkyri
 
   @Override
   @NotNull
-  public ValkyrieBraceBlock getBraceBlock() {
-    return findNotNullChildByClass(ValkyrieBraceBlock.class);
+  public List<ValkyrieBitflagItem> getBitflagItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieBitflagItem.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieMacroCall> getMacroCallList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieMacroCall.class);
   }
 
 }

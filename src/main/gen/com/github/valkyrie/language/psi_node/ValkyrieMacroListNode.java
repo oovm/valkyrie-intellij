@@ -30,8 +30,14 @@ public class ValkyrieMacroListNode extends ValkyrieElement implements ValkyrieMa
 
   @Override
   @NotNull
-  public ValkyrieBracketBlock getBracketBlock() {
-    return findNotNullChildByClass(ValkyrieBracketBlock.class);
+  public List<ValkyrieMacroItem> getMacroItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieMacroItem.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieNamespace> getNamespaceList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieNamespace.class);
   }
 
 }

@@ -8,6 +8,30 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieTraitBlock extends PsiElement {
 
   @NotNull
-  ValkyrieBraceBlock getBraceBlock();
+  List<ValkyrieDefineStatement> getDefineStatementList();
+
+  @NotNull
+  List<ValkyrieExpression> getExpressionList();
+
+  @NotNull
+  List<ValkyrieForStatement> getForStatementList();
+
+  @NotNull
+  List<ValkyrieForallStatement> getForallStatementList();
+
+  @NotNull
+  List<ValkyrieIfStatement> getIfStatementList();
+
+  @NotNull
+  List<ValkyrieLetStatement> getLetStatementList();
+
+  @NotNull
+  List<ValkyrieMatchStatement> getMatchStatementList();
+
+  @NotNull
+  List<ValkyrieTypeStatement> getTypeStatementList();
+
+  @NotNull
+  List<ValkyrieWhileStatement> getWhileStatementList();
 
 }

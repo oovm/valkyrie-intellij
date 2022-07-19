@@ -28,10 +28,4 @@ public class ValkyrieModifierSymbolsNode extends ValkyrieElement implements Valk
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public List<ValkyrieIdentifier> getIdentifierList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
-  }
-
 }

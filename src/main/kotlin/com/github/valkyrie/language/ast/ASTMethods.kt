@@ -34,17 +34,7 @@ class ASTMethods {
             return node.modifierSymbols.lastChild as ValkyrieIdentifier
         }
 
-        @JvmStatic
-        fun getSymbol(node: ValkyrieDefStatement): ValkyrieIdentifier {
-            return node.modifierSymbols.lastChild as ValkyrieIdentifier
-        }
 
-        @JvmStatic
-        fun getSymbol(node: ValkyrieDefItem): ValkyrieIdentifier = when {
-            node.identifier != null -> node.identifier!!
-            node.defItemSign != null -> ValkyrieIdentifierNode(node.node)
-            else -> node.modifierSymbols!!.lastChild as ValkyrieIdentifier
-        }
 
 
         /// ----------------------------------------------------------------------------
@@ -73,22 +63,7 @@ class ASTMethods {
             return extractModifiers(node.modifierSymbols)
         }
 
-        @JvmStatic
-        fun getModifiers(node: ValkyrieDefStatement): Array<ValkyrieIdentifier> {
-            return extractModifiers(node.modifierSymbols)
-        }
 
-        @JvmStatic
-        fun getModifiers(node: ValkyrieDefItem): Array<ValkyrieIdentifier> = when {
-            node.identifier != null -> {
-                val mods = node.modifierSymbols;
-                when {
-                    mods != null -> extractModifiers(mods)
-                    else -> arrayOf()
-                }
-            }
-            else -> extractModifiers(node.modifierSymbols)
-        }
 
         /// ----------------------------------------------------------------------------
         @JvmStatic
@@ -104,29 +79,6 @@ class ASTMethods {
         @JvmStatic
         fun isEmpty(node: ValkyrieClassStatement): Boolean {
             return getBraceItemList(node).isEmpty() || getTupleItemList(node).isEmpty()
-        }
-
-        /// ----------------------------------------------------------------------------
-        @JvmStatic
-        fun isMethod(node: ValkyrieDefStatement): Boolean {
-            return Random.nextBoolean()
-        }
-        @JvmStatic
-        fun getSymbolColor(node: ValkyrieDefItem): ValkyrieHighlightColor {
-            when (node.text) {
-                "self" -> return ValkyrieHighlightColor.SYM_ARG_SELF
-                "<", ">", "<>" -> return ValkyrieHighlightColor.OPERATION_SIGN
-                else -> {}
-            }
-            for (modifier in node.modifiers) {
-                if (modifier.text == "mut") {
-                    return when (node.symbol.text) {
-                        "self" -> ValkyrieHighlightColor.SYM_ARG_SELF_MUT
-                        else -> ValkyrieHighlightColor.SYM_ARG_MUT
-                    }
-                }
-            }
-            return ValkyrieHighlightColor.SYM_ARG
         }
     }
 }

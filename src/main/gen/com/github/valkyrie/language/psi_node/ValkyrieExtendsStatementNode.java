@@ -30,8 +30,8 @@ public class ValkyrieExtendsStatementNode extends MixinExtends implements Valkyr
 
   @Override
   @NotNull
-  public ValkyrieModifierSymbols getModifierSymbols() {
-    return findNotNullChildByClass(ValkyrieModifierSymbols.class);
+  public ValkyrieModifiers getModifiers() {
+    return findNotNullChildByClass(ValkyrieModifiers.class);
   }
 
   @Override
@@ -50,18 +50,6 @@ public class ValkyrieExtendsStatementNode extends MixinExtends implements Valkyr
   @Nullable
   public ValkyrieTypeExpression getTypeExpression() {
     return findChildByClass(ValkyrieTypeExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieIdentifier getSymbol() {
-    return ASTMethods.getSymbol(this);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieIdentifier[] getModifiers() {
-    return ASTMethods.getModifiers(this);
   }
 
 }

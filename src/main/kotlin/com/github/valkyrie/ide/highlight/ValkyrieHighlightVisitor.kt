@@ -48,14 +48,14 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
         super.visitCasePattern(o)
     }
 
-    override fun visitDefStatement(o: ValkyrieDefStatement) {
-        highlight(o.symbol, Color.SYM_FUNCTION_FREE)
-        highlightModifiers(o.modifiers)
+    override fun visitDefineStatement(o: ValkyrieDefineStatement) {
+        //        highlight(o.symbol, Color.SYM_FUNCTION_FREE)
+//        highlightModifiers(o.modifiers)
     }
 
-    override fun visitDefItem(o: ValkyrieDefItem) {
-        highlight(o.symbol, o.symbolColor)
-        highlightModifiers(o.modifiers)
+    override fun visitDefineItem(o: ValkyrieDefineItem) {
+//        highlight(o.symbol, o.symbolColor)
+//        highlightModifiers(o.modifiers)
     }
 
     override fun visitForallStatement(o: ValkyrieForallStatement) {
@@ -69,18 +69,18 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
     override fun visitClassStatement(o: ValkyrieClassStatement) {
         highlight(o.symbol, Color.SYM_CLASS)
         o.identifier?.let { highlight(it, Color.SYM_TRAIT) }
-        highlightModifiers(o.modifiers)
+        highlightModifiers(o.getModifiers())
     }
 
-    override fun visitClassBraceItem(o: ValkyrieClassBraceItem) {
-        o.modifierSymbols?.let { highlightSymbolList(it.identifierList, Color.SYM_FIELD) }
-        super.visitClassBraceItem(o)
-    }
-
-    override fun visitClassNumericKey(o: ValkyrieClassNumericKey) {
-        o.modifierSymbols?.let { highlightSymbolList(it.identifierList, Color.KEYWORD) }
-        super.visitClassNumericKey(o)
-    }
+//    override fun visitClassBraceItem(o: ValkyrieClassBraceItem) {
+//        o.modifierSymbols?.let { highlightSymbolList(it.identifierList, Color.SYM_FIELD) }
+//        super.visitClassBraceItem(o)
+//    }
+//
+//    override fun visitClassNumericKey(o: ValkyrieClassNumericKey) {
+//        o.modifierSymbols?.let { highlightSymbolList(it.identifierList, Color.KEYWORD) }
+//        super.visitClassNumericKey(o)
+//    }
 
     override fun visitTraitStatement(o: ValkyrieTraitStatement) {
         highlight(o.symbol, Color.SYM_TRAIT)
@@ -178,7 +178,8 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
             if (first) {
                 first = false
                 highlight(symbol, last)
-            } else {
+            }
+            else {
                 highlight(symbol, rest)
             }
         }

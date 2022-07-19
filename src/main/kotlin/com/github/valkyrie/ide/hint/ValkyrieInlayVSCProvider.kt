@@ -20,7 +20,6 @@ class ValkyrieInlayVSCProvider : VcsCodeVisionLanguageContext {
         is ValkyrieClassStatementNode,
         is ValkyrieTraitStatementNode,
         is ValkyrieExtendsStatementNode,
-        is ValkyrieDefStatementNode,
         -> true
         else -> false
     }

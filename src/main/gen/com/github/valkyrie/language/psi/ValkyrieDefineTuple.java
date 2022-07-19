@@ -5,6 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieBraceBlock extends PsiElement {
+public interface ValkyrieDefineTuple extends PsiElement {
+
+  @NotNull
+  List<ValkyrieDefineItem> getDefineItemList();
 
 }

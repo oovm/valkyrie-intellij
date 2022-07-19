@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface ValkyrieMacroItem extends PsiElement {
 
-  @Nullable
-  ValkyrieBraceBlock getBraceBlock();
+  @NotNull
+  List<ValkyrieExpression> getExpressionList();
 
-  @Nullable
-  ValkyrieParenthesis getParenthesis();
+  @NotNull
+  List<ValkyriePair> getPairList();
 
 }

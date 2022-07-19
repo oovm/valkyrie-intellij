@@ -5,32 +5,21 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieDefStatement extends PsiElement {
+public interface ValkyrieDefineItem extends PsiElement {
 
   @Nullable
-  ValkyrieDefBlock getDefBlock();
-
-  @NotNull
-  ValkyrieDefTuple getDefTuple();
+  ValkyrieDefItemSign getDefItemSign();
 
   @Nullable
   ValkyrieExpression getExpression();
 
   @NotNull
-  ValkyrieModifierSymbols getModifierSymbols();
+  List<ValkyrieIdentifier> getIdentifierList();
 
   @Nullable
-  ValkyrieTypeAngle getTypeAngle();
+  ValkyrieModifiers getModifiers();
 
   @Nullable
   ValkyrieTypeExpression getTypeExpression();
-
-  @NotNull
-  ValkyrieIdentifier getSymbol();
-
-  @NotNull
-  ValkyrieIdentifier[] getModifiers();
-
-  boolean isMethod();
 
 }

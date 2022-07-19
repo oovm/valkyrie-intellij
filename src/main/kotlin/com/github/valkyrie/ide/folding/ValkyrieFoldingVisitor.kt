@@ -46,12 +46,11 @@ class ValkyrieFoldingVisitor(private val descriptors: MutableList<FoldingDescrip
         super.visitMatchStatement(o)
     }
 
-    override fun visitDefStatement(o: ValkyrieDefStatement) {
-        val block = o.defBlock
+    override fun visitDefineStatement(o: ValkyrieDefineStatement) {
+        val block = o.defineBlock
         if (block != null) {
             fold(block.node, block.firstChild.endOffset, block.lastChild.startOffset)
         }
-        super.visitDefStatement(o)
     }
 
     private fun fold(element: PsiElement) {

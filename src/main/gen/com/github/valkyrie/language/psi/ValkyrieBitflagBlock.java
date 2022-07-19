@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieBitflagBlock extends PsiElement {
 
   @NotNull
-  ValkyrieBraceBlock getBraceBlock();
+  List<ValkyrieBitflagItem> getBitflagItemList();
+
+  @NotNull
+  List<ValkyrieMacroCall> getMacroCallList();
 
 }

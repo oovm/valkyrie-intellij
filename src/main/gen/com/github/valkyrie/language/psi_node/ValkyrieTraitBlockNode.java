@@ -30,8 +30,56 @@ public class ValkyrieTraitBlockNode extends ValkyrieElement implements ValkyrieT
 
   @Override
   @NotNull
-  public ValkyrieBraceBlock getBraceBlock() {
-    return findNotNullChildByClass(ValkyrieBraceBlock.class);
+  public List<ValkyrieDefineStatement> getDefineStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieDefineStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieForStatement> getForStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieForStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieForallStatement> getForallStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieForallStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieIfStatement> getIfStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIfStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieLetStatement> getLetStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieLetStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieMatchStatement> getMatchStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieMatchStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieTypeStatement> getTypeStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieTypeStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieWhileStatement> getWhileStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieWhileStatement.class);
   }
 
 }

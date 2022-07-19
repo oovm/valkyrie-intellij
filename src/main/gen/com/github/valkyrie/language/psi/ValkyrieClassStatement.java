@@ -17,23 +17,9 @@ public interface ValkyrieClassStatement extends PsiElement {
   ValkyrieIdentifier getIdentifier();
 
   @NotNull
-  ValkyrieModifierSymbols getModifierSymbols();
+  ValkyrieModifiers getModifiers();
 
   @Nullable
   ValkyrieTypeAngle getTypeAngle();
-
-  @NotNull
-  ValkyrieIdentifier getSymbol();
-
-  @NotNull
-  ValkyrieIdentifier[] getModifiers();
-
-  @NotNull
-  ValkyrieClassBraceItem[] getBraceItemList();
-
-  @NotNull
-  ValkyrieClassTupleItem[] getTupleItemList();
-
-  boolean isEmpty();
 
 }

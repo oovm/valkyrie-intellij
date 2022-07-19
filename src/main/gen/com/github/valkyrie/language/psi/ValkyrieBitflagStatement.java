@@ -14,12 +14,6 @@ public interface ValkyrieBitflagStatement extends PsiElement {
   ValkyrieBitflagLayout getBitflagLayout();
 
   @NotNull
-  ValkyrieModifierSymbols getModifierSymbols();
-
-  @NotNull
-  ValkyrieIdentifier getSymbol();
-
-  @NotNull
-  ValkyrieIdentifier[] getModifiers();
+  ValkyrieModifiers getModifiers();
 
 }

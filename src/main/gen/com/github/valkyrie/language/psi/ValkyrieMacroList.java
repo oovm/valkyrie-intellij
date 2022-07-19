@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieMacroList extends PsiElement {
 
   @NotNull
-  ValkyrieBracketBlock getBracketBlock();
+  List<ValkyrieMacroItem> getMacroItemList();
+
+  @NotNull
+  List<ValkyrieNamespace> getNamespaceList();
 
 }

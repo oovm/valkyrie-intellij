@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieIfStatement extends PsiElement {
 
   @NotNull
-  ValkyrieBraceBlock getBraceBlock();
-
-  @NotNull
   ValkyrieCondition getCondition();
 
   @NotNull
@@ -18,5 +15,8 @@ public interface ValkyrieIfStatement extends PsiElement {
 
   @Nullable
   ValkyrieElseStatement getElseStatement();
+
+  @NotNull
+  List<ValkyrieExpression> getExpressionList();
 
 }

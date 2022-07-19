@@ -67,11 +67,10 @@ class ValkyrieFormatBlock(
         val lastLine = node.lastChildNode == child;
         val isCornerChild = firstLine || lastLine
         return when (node.psi) {
-            is ValkyrieBraceBlock,
             is ValkyrieTaggedBlock, is ValkyrieBitflagBlock,
             is ValkyrieClassTuple, is ValkyrieClassBrace,
             is ValkyrieForallBlock, is ValkyrieTraitBlock,
-            is ValkyrieDefBlock,
+            is ValkyrieDefineBlock,
             -> when {
                 isCornerChild -> Indent.getNoneIndent()
                 else -> Indent.getNormalIndent()

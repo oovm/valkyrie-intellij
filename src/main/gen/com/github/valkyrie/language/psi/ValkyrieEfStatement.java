@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieEfStatement extends PsiElement {
 
   @NotNull
-  ValkyrieBraceBlock getBraceBlock();
+  ValkyrieCondition getCondition();
 
   @NotNull
-  ValkyrieCondition getCondition();
+  List<ValkyrieExpression> getExpressionList();
 
 }

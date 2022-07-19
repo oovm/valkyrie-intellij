@@ -30,14 +30,14 @@ public class ValkyrieWhileStatementNode extends ValkyrieElement implements Valky
 
   @Override
   @NotNull
-  public ValkyrieBraceBlock getBraceBlock() {
-    return findNotNullChildByClass(ValkyrieBraceBlock.class);
+  public ValkyrieCondition getCondition() {
+    return findNotNullChildByClass(ValkyrieCondition.class);
   }
 
   @Override
   @NotNull
-  public ValkyrieCondition getCondition() {
-    return findNotNullChildByClass(ValkyrieCondition.class);
+  public List<ValkyrieExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExpression.class);
   }
 
 }

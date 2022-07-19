@@ -4,7 +4,6 @@ package com.github.valkyrie.language.lexer
 import com.intellij.lexer.LexerBase
 import com.intellij.psi.tree.IElementType
 
-// class NLexerAdapter : FlexAdapter(_NotedownLexer());
 class ValkyrieLexerAdapter : LexerBase() {
     private var buffer: CharSequence = ""
     private var startOffset: Int = 0

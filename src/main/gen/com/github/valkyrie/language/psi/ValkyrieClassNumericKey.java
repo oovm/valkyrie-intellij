@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieClassNumericKey extends PsiElement {
 
   @Nullable
-  ValkyrieModifierSymbols getModifierSymbols();
+  ValkyrieModifiers getModifiers();
 
 }

@@ -30,8 +30,8 @@ public class ValkyrieClassTupleNode extends ValkyrieElement implements ValkyrieC
 
   @Override
   @NotNull
-  public ValkyrieParenthesis getParenthesis() {
-    return findNotNullChildByClass(ValkyrieParenthesis.class);
+  public List<ValkyrieClassTupleItem> getClassTupleItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieClassTupleItem.class);
   }
 
 }

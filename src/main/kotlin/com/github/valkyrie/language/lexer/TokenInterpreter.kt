@@ -51,6 +51,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             | ⊻ | ⊼ | ⊽
             # start with :
             | ::
+            | :
             | !
             | != | ≠
             | \?
@@ -65,7 +66,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     var typeContext = false
 
-    var shadowKeyword: String? = null;
+    var shadowMode: String = "";
 
     fun interpreter(): Array<StackItem> {
         while (startOffset < endOffset) {
@@ -129,6 +130,10 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "is" -> {
                 pushToken(ValkyrieTypes.OP_IS_A, r)
             }
+            "def" -> {
+                shadowMode = "define"
+                pushToken(ValkyrieTypes.KW_DEFINE, r)
+            }
             else -> {
                 pushToken(BAD_CHARACTER, r)
             }
@@ -138,13 +143,14 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     private fun codeIdentifier(): Boolean {
         assert(context == StackContext.CODE)
-        var r = tryMatch(SYMBOL_XID)
-        if (r == null) {
-            r = tryMatch(SYMBOL_RAW) ?: return false
-            pushToken(ValkyrieTypes.SYMBOL_RAW, r)
-        }
-        else {
-            pushToken(ValkyrieTypes.SYMBOL_XID, r)
+        val r = tryMatch(SYMBOL_XID) ?: tryMatch(SYMBOL_RAW) ?: return false
+        when (shadowMode) {
+            "define" -> {
+                pushToken(ValkyrieTypes.KW_MODIFIER, r)
+            }
+            else -> {
+                pushToken(ValkyrieTypes.SYMBOL_XID, r)
+            }
         }
         return true
     }
@@ -188,8 +194,17 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "!=" -> pushToken(ValkyrieTypes.OP_NE, r)
             "!" -> pushToken(ValkyrieTypes.OP_NOT, r)
             // start with =
-            "∈" -> {
+            "∈", "∊" -> {
                 pushToken(ValkyrieTypes.OP_IN, r)
+            }
+            "∉" -> {
+                pushToken(ValkyrieTypes.OP_NOT_IN, r)
+            }
+            "≻" -> {
+                pushToken(ValkyrieTypes.OP_AND_THEN, r)
+            }
+            "⊁" -> {
+                pushToken(ValkyrieTypes.OP_OR_ELSE, r)
             }
             // start with >
             ">>>", "⋙" -> pushToken(ValkyrieTypes.OP_GGG, r)
@@ -227,6 +242,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             }
             // surround with ( )
             "(" -> {
+
 
                 pushToken(ValkyrieTypes.PARENTHESIS_L, r)
             }
@@ -299,9 +315,10 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 }
 
-fun TokenInterpreter.lastIs(vararg token: IElementType, skipWS: Boolean = true): Boolean {
+
+private fun TokenInterpreter.lastIs(vararg token: IElementType, skipWS: Boolean = true): Boolean {
     for (item in stack.reversed()) {
-        if (item.tokenIs(WHITE_SPACE, ValkyrieTypes.COMMENT_LINE, ValkyrieTypes.COMMENT_BLOCK)) {
+        if (item.canSkip()) {
             when {
                 skipWS -> continue
                 else -> return false
@@ -312,7 +329,7 @@ fun TokenInterpreter.lastIs(vararg token: IElementType, skipWS: Boolean = true):
     return false
 }
 
-fun TokenInterpreter.lastNot(vararg token: IElementType, skipWS: Boolean = true): Boolean {
+private fun TokenInterpreter.lastNot(vararg token: IElementType, skipWS: Boolean = true): Boolean {
     for (item in stack.reversed()) {
         if (item.tokenIs(WHITE_SPACE, ValkyrieTypes.COMMENT_LINE, ValkyrieTypes.COMMENT_BLOCK)) {
             when {
@@ -326,3 +343,22 @@ fun TokenInterpreter.lastNot(vararg token: IElementType, skipWS: Boolean = true)
 }
 
 
+private fun TokenInterpreter.unShadowWith(token: IElementType) {
+    for (item in stack.asReversed()) {
+        when {
+            item.canSkip() -> continue
+            else -> item.token = token
+        }
+    }
+    shadowMode = ""
+}
+
+private fun TokenInterpreter.reShadowWith(token: IElementType, mode: String) {
+    for (item in stack.asReversed()) {
+        when {
+            item.canSkip() -> continue
+            else -> item.token = token
+        }
+    }
+    shadowMode = mode
+}

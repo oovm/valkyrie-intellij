@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieLetTypeHint extends PsiElement {
 
   @NotNull
-  ValkyrieSequence getSequence();
+  List<ValkyrieTypeExpression> getTypeExpressionList();
 
 }

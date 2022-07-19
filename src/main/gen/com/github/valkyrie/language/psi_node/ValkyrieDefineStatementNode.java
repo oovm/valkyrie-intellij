@@ -12,14 +12,14 @@ import com.github.valkyrie.language.mixin.MixinDefine;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieDefStatementNode extends MixinDefine implements ValkyrieDefStatement {
+public class ValkyrieDefineStatementNode extends MixinDefine implements ValkyrieDefineStatement {
 
-  public ValkyrieDefStatementNode(@NotNull ASTNode node) {
+  public ValkyrieDefineStatementNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitDefStatement(this);
+    visitor.visitDefineStatement(this);
   }
 
   @Override
@@ -30,14 +30,14 @@ public class ValkyrieDefStatementNode extends MixinDefine implements ValkyrieDef
 
   @Override
   @Nullable
-  public ValkyrieDefBlock getDefBlock() {
-    return findChildByClass(ValkyrieDefBlock.class);
+  public ValkyrieDefineBlock getDefineBlock() {
+    return findChildByClass(ValkyrieDefineBlock.class);
   }
 
   @Override
   @NotNull
-  public ValkyrieDefTuple getDefTuple() {
-    return findNotNullChildByClass(ValkyrieDefTuple.class);
+  public ValkyrieDefineTuple getDefineTuple() {
+    return findNotNullChildByClass(ValkyrieDefineTuple.class);
   }
 
   @Override
@@ -48,8 +48,14 @@ public class ValkyrieDefStatementNode extends MixinDefine implements ValkyrieDef
 
   @Override
   @NotNull
-  public ValkyrieModifierSymbols getModifierSymbols() {
-    return findNotNullChildByClass(ValkyrieModifierSymbols.class);
+  public ValkyrieIdentifier getIdentifier() {
+    return findNotNullChildByClass(ValkyrieIdentifier.class);
+  }
+
+  @Override
+  @Nullable
+  public ValkyrieModifiers getModifiers() {
+    return findChildByClass(ValkyrieModifiers.class);
   }
 
   @Override
@@ -62,23 +68,6 @@ public class ValkyrieDefStatementNode extends MixinDefine implements ValkyrieDef
   @Nullable
   public ValkyrieTypeExpression getTypeExpression() {
     return findChildByClass(ValkyrieTypeExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieIdentifier getSymbol() {
-    return ASTMethods.getSymbol(this);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieIdentifier[] getModifiers() {
-    return ASTMethods.getModifiers(this);
-  }
-
-  @Override
-  public boolean isMethod() {
-    return ASTMethods.isMethod(this);
   }
 
 }

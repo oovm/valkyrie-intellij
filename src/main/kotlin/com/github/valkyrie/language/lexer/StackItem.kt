@@ -1,5 +1,7 @@
 package com.github.valkyrie.language.lexer
 
+import com.github.valkyrie.language.psi.ValkyrieTypes
+import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -43,6 +45,13 @@ class StackItem {
 
     fun tokenIs(vararg token: IElementType): Boolean {
         return token.firstOrNull { it == this.token } != null
+    }
+
+    /**
+     * @return true if this token is whitespace, newline or comment
+     */
+    fun canSkip(): Boolean {
+        return tokenIs(TokenType.WHITE_SPACE, ValkyrieTypes.COMMENT_LINE, ValkyrieTypes.COMMENT_BLOCK)
     }
 
     fun IElementType.isHardLeftMark(): Boolean? = when (this) {

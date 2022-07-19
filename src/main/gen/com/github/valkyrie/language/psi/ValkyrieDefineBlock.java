@@ -5,10 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieMatchExpression extends PsiElement {
-
-  @NotNull
-  ValkyrieCasePattern getCasePattern();
+public interface ValkyrieDefineBlock extends PsiElement {
 
   @NotNull
   List<ValkyrieDefineStatement> getDefineStatementList();

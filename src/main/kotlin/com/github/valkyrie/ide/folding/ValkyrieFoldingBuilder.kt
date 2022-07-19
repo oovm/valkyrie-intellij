@@ -29,7 +29,6 @@ class ValkyrieFoldingBuilder : CustomFoldingBuilder(), DumbAware {
     override fun getLanguagePlaceholderText(node: ASTNode, range: TextRange) =
         when (node.elementType) {
 //            BRACKET_BLOCK -> "[...]"
-            ValkyrieTypes.BRACE_BLOCK -> "{...}"
             else -> "..."
         }
 

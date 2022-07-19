@@ -107,6 +107,9 @@
         OP_NOT_A = "is not"
 
         OP_IN = "in"
+        OP_NOT_IN = "not_in"
+        OP_AND_THEN = "and_then"
+        OP_OR_ELSE = "or_else"
 
         PARENTHESIS_L = '('
         PARENTHESIS_R = ')'
@@ -122,6 +125,7 @@
         KW_EXTENSION = "extension"
         KW_CLASS = 'class'
         KW_AS = "as"
+        KW_DEFINE = "def"
 
         IF = "if"
         ELSE = "else"
@@ -133,7 +137,6 @@
         CATCH = 'catch'
         LET = "let"
         NEW = 'new'
-        DEFINE = "def"
 
         TRAIT = 'trait'
         TAGGED = 'tagged'
@@ -161,15 +164,13 @@ private normal_statements ::=
   | while_statement
   | match_statement
   | let_statement
-  | def_statement
+  | define_statement
   | type_statement
   | forall_statement
 //  | macro_list
 //  | macro_call
   | expression
   ;
-private block_import ::= <<brace_block import_item COMMA>>;
-private block    ::= <<brace_block expression SEMICOLON>>;
 // ---------------------------------------------------------------------------------------------------------------------
 namespace_statement ::= KW_NAMESPACE namespace_dot {
     mixin="com.github.valkyrie.language.mixin.MixinNamespace"
@@ -177,10 +178,11 @@ namespace_statement ::= KW_NAMESPACE namespace_dot {
 namespace_dot    ::= identifier (may_dot identifier)*;
 private may_dot  ::= DOT | PROPORTION;
 // ---------------------------------------------------------------------------------------------------------------------
-import_statement ::= KW_IMPORT (block_import|import_item)
-import_item      ::= namespace_dot [KW_AS identifier|may_dot block_import] {
+import_statement ::= KW_IMPORT (import_block|import_item)
+import_item      ::= namespace_dot [KW_AS identifier|may_dot import_block] {
     mixin="com.github.valkyrie.language.mixin.MixinImportItem"
 }
+import_block ::= <<brace_block import_item COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
 extension_statement ::= KW_EXTENSION identifier COLON namespace_dot <<brace_block normal_statements COMMA>> {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
@@ -192,6 +194,7 @@ private else_if  ::= ELSE IF
 else_statement   ::= ELSE block;
 condition        ::= case_pattern BIND expression | expression;
 case_pattern     ::= CASE [identifier* [namespace]] pattern;
+private block    ::= <<brace_block expression SEMICOLON>>;
 // ---------------------------------------------------------------------------------------------------------------------
 for_statement    ::= FOR (case_pattern|normal_pattern) IN expression [if_guard] block [else_statement];
 if_guard         ::= IF condition;
@@ -219,17 +222,17 @@ let_statement    ::=
   | LET case_pattern BIND expression;
 let_type_hint    ::= COLON <<sequence type_expression COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
-def_statement    ::= DEFINE modifier_symbols [[PROPORTION] type_angle] def_tuple [(COLON|TO) type_expression] [def_block| BIND expression] {
+define_statement ::= KW_DEFINE [modifiers] identifier [type_angle] define_tuple [def_type] [define_block| BIND expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefine"
-    methods=[getSymbol getModifiers isMethod]
 };
-def_tuple        ::= <<parenthesis def_item COMMA>>;
-def_item         ::= def_item_sign | modifier_symbols [(DOT2|DOT3) identifier] [COLON type_expression] [BIND expression] {
+define_item      ::= def_item_sign | [modifiers] identifier [(DOT2|DOT3) identifier] [COLON type_expression] [BIND expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefineItem"
-    methods=[getSymbol getModifiers getSymbolColor]
 }
+modifiers        ::= KW_MODIFIER+;
 def_item_sign    ::= ANGLE_L | ANGLE_R
-def_block        ::= <<brace_block normal_statements SEMICOLON>>;
+define_tuple     ::= <<parenthesis define_item COMMA>>;
+define_block     ::= <<brace_block normal_statements SEMICOLON>>;
+private def_type ::= (COLON|TO) type_expression;
 // ---------------------------------------------------------------------------------------------------------------------
 type_statement   ::= TYPE identifier [[PROPORTION] type_angle] [BIND type_expr] {
     mixin="com.github.valkyrie.language.mixin.MixinType"
@@ -238,52 +241,46 @@ type_statement   ::= TYPE identifier [[PROPORTION] type_angle] [BIND type_expr] 
 forall_statement ::= FORALL <<sequence identifier COMMA>> [forall_block];
 forall_block     ::= <<brace_block (type_expression COLON type_expression) (COMMA|SEMICOLON)>>;
 // ---------------------------------------------------------------------------------------------------------------------
-class_statement     ::= KW_CLASS modifier_symbols [[PROPORTION] type_angle] [COLON identifier] [class_tuple|class_brace] {
+class_statement     ::= KW_CLASS modifiers [[PROPORTION] type_angle] [COLON identifier] [class_tuple|class_brace] {
     mixin="com.github.valkyrie.language.mixin.MixinClass"
-    methods=[getSymbol getModifiers getBraceItemList getTupleItemList isEmpty]
 };
 class_tuple         ::= <<parenthesis class_tuple_item COMMA>>;
 class_brace         ::= <<brace_block class_brace_item (COMMA|SEMICOLON)>>;
 class_tuple_item    ::= type_expression [BIND expression] {
     mixin="com.github.valkyrie.language.mixin.MixinClassTuple"
 };
-class_brace_item    ::= (class_numeric_key | modifier_symbols) COLON type_expression [BIND expression] {
+class_brace_item    ::= (class_numeric_key | modifiers) COLON type_expression [BIND expression] {
     mixin="com.github.valkyrie.language.mixin.MixinClassBrace"
-    methods=[getSymbol getModifiers]
 };
-class_numeric_key   ::= [modifier_symbols] INTEGER
+class_numeric_key   ::= [modifiers] INTEGER
 // ---------------------------------------------------------------------------------------------------------------------
-trait_statement     ::= TRAIT modifier_symbols [[PROPORTION] type_angle] [COLON type_expression] trait_block {
+trait_statement     ::= TRAIT modifiers [[PROPORTION] type_angle] [COLON type_expression] trait_block {
     extends="com.github.valkyrie.language.mixin.MixinTrait"
-    methods=[getSymbol getModifiers]
 };
 trait_block         ::= <<brace_block normal_statements SEMICOLON>>;
 //trait_item        ::= normal_statements;
 // ---------------------------------------------------------------------------------------------------------------------
-extends_statement   ::= EXTENDS modifier_symbols [[PROPORTION] type_angle] [COLON type_expression] trait_block {
+extends_statement   ::= EXTENDS modifiers [[PROPORTION] type_angle] [COLON type_expression] trait_block {
     extends="com.github.valkyrie.language.mixin.MixinExtends"
-    methods=[getSymbol getModifiers]
 }
 // ---------------------------------------------------------------------------------------------------------------------
-tagged_statement    ::= TAGGED modifier_symbols [[PROPORTION] type_angle] tagged_block {
+tagged_statement    ::= TAGGED modifiers [[PROPORTION] type_angle] tagged_block {
     mixin="com.github.valkyrie.language.mixin.MixinTagged"
-    methods=[getSymbol getModifiers]
 };
 tagged_block        ::= <<brace_block tagged_item (COMMA|SEMICOLON)>>;
 tagged_item         ::= identifier [class_tuple|class_brace];
 // ---------------------------------------------------------------------------------------------------------------------
-bitflag_statement   ::= BITFLAG modifier_symbols [bitflag_layout] bitflag_block {
+bitflag_statement   ::= BITFLAG modifiers [bitflag_layout] bitflag_block {
     mixin="com.github.valkyrie.language.mixin.MixinBitflag"
-    methods=[getSymbol getModifiers]
 };
 bitflag_block       ::= <<brace_block (bitflag_item | macro_call) SEMICOLON>>;
 bitflag_layout      ::= PARENTHESIS_L type_expression PARENTHESIS_R;
 bitflag_item        ::= identifier BIND expression;
 // ---------------------------------------------------------------------------------------------------------------------
-new_statement       ::= NEW modifier_symbols [[PROPORTION] type_angle] [COLON type_expression] trait_block;
+new_statement       ::= NEW modifiers [type_angle] [COLON type_expression] trait_block;
 // ---------------------------------------------------------------------------------------------------------------------
 expression          ::= expr (op_binary expr)*;
-private expr        ::= op_prefix* term (op_suffix|call_suffix|PROPORTION type_angle|slice_suffix)*;
+private expr        ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
 private term        ::= list | tuple | atoms;
 private op_binary   ::= type_binary | ANGLE_L | ANGLE_R | LESS | GREATER | DOT_LESS | DOT_EQ | DOT2 | DOT;
 private op_prefix   ::= PLUS | MINUS | NOT | BANG | AMP | DOT3 | DOT2;
@@ -293,7 +290,7 @@ call_suffix         ::= <<parenthesis expression COMMA>>;
 type_expression     ::= type_expr (type_binary type_expr)*;
 private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
 private type_binary ::= VERTICAL | EQ | NE | PLUS | MINUS | TO;
-type_angle          ::= <<generic_block ([identifier COLON] type_expression) COMMA>>;
+type_angle          ::= OP_PROPORTION? <<angle_block ([identifier COLON] type_expression) COMMA>> OP_PROPORTION?;
 // ---------------------------------------------------------------------------------------------------------------------
 slice_suffix        ::= <<bracket_block slice_expression COMMA>>;
 slice_expression    ::=
@@ -304,7 +301,6 @@ slice_expression    ::=
 // ---------------------------------------------------------------------------------------------------------------------
 namespace        ::= (macro|identifier) (PROPORTION (macro|identifier))*
 macro            ::= AT identifier;
-modifier_symbols ::= identifier+;
 // ---------------------------------------------------------------------------------------------------------------------
 macro_call ::= macro [macro_item];
 macro_item ::=
@@ -326,12 +322,12 @@ identifier     ::= SYMBOL_XID | SYMBOL_RAW {
 number_literal ::= BYTE | INTEGER | DECIMAL;
 string_literal ::= STRING_EMPTY | STRING_START STRING_CHAR+ STRING_END;
 // ---------------------------------------------------------------------------------------------------------------------
-meta sequence      ::= <<item>> (<<sp>> <<item>>)* [<<sp>>];
+private meta sequence      ::= <<item>> (<<sp>> <<item>>)* [<<sp>>];
 // parenthesis ( )
-meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;
+private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;
 // bracket [ ]
-meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
+private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
 // brace { }
-meta brace_block   ::= BRACE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACE_R;
+private meta brace_block   ::= BRACE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACE_R;
 // angle ::< >::
-meta generic_block ::= OP_PROPORTION? GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R OP_PROPORTION?;
+private meta angle_block ::= GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R;

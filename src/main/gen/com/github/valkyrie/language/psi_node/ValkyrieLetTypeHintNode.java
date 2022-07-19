@@ -30,8 +30,8 @@ public class ValkyrieLetTypeHintNode extends ValkyrieElement implements Valkyrie
 
   @Override
   @NotNull
-  public ValkyrieSequence getSequence() {
-    return findNotNullChildByClass(ValkyrieSequence.class);
+  public List<ValkyrieTypeExpression> getTypeExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieTypeExpression.class);
   }
 
 }

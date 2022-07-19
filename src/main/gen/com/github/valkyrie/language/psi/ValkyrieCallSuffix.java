@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieCallSuffix extends PsiElement {
 
   @NotNull
-  ValkyrieParenthesis getParenthesis();
+  List<ValkyrieExpression> getExpressionList();
 
 }

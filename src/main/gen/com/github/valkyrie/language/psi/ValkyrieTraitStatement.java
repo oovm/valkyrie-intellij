@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieTraitStatement extends PsiElement {
 
   @NotNull
-  ValkyrieModifierSymbols getModifierSymbols();
+  ValkyrieModifiers getModifiers();
 
   @NotNull
   ValkyrieTraitBlock getTraitBlock();
@@ -18,11 +18,5 @@ public interface ValkyrieTraitStatement extends PsiElement {
 
   @Nullable
   ValkyrieTypeExpression getTypeExpression();
-
-  @NotNull
-  ValkyrieIdentifier getSymbol();
-
-  @NotNull
-  ValkyrieIdentifier[] getModifiers();
 
 }

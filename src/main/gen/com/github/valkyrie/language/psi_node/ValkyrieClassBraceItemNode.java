@@ -42,8 +42,8 @@ public class ValkyrieClassBraceItemNode extends MixinClassBrace implements Valky
 
   @Override
   @Nullable
-  public ValkyrieModifierSymbols getModifierSymbols() {
-    return findChildByClass(ValkyrieModifierSymbols.class);
+  public ValkyrieModifiers getModifiers() {
+    return findChildByClass(ValkyrieModifiers.class);
   }
 
   @Override

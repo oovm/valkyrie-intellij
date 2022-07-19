@@ -29,33 +29,21 @@ public class ValkyrieNormalPatternNode extends MixinNormalPattern implements Val
   }
 
   @Override
-  @Nullable
-  public ValkyrieBraceBlock getBraceBlock() {
-    return findChildByClass(ValkyrieBraceBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieBracketBlock getBracketBlock() {
-    return findChildByClass(ValkyrieBracketBlock.class);
-  }
-
-  @Override
   @NotNull
   public List<ValkyrieIdentifier> getIdentifierList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
   }
 
   @Override
-  @Nullable
-  public ValkyrieParenthesis getParenthesis() {
-    return findChildByClass(ValkyrieParenthesis.class);
+  @NotNull
+  public List<ValkyriePatternItem> getPatternItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyriePatternItem.class);
   }
 
   @Override
-  @Nullable
-  public ValkyrieSequence getSequence() {
-    return findChildByClass(ValkyrieSequence.class);
+  @NotNull
+  public List<ValkyriePatternPair> getPatternPairList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyriePatternPair.class);
   }
 
 }

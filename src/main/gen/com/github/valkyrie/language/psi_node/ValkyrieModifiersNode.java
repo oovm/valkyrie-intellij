@@ -12,14 +12,14 @@ import com.github.valkyrie.language.ast.ValkyrieElement;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieSequenceNode extends ValkyrieElement implements ValkyrieSequence {
+public class ValkyrieModifiersNode extends ValkyrieElement implements ValkyrieModifiers {
 
-  public ValkyrieSequenceNode(@NotNull ASTNode node) {
+  public ValkyrieModifiersNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitSequence(this);
+    visitor.visitModifiers(this);
   }
 
   @Override
