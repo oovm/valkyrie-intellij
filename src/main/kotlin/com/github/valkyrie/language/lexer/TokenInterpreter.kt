@@ -2,6 +2,8 @@
 
 package com.github.valkyrie.language.lexer
 
+import com.github.valkyrie.language.lexer.LexerContext.Define
+import com.github.valkyrie.language.lexer.LexerContext.Type
 import com.github.valkyrie.language.psi.ValkyrieTypes
 import com.intellij.psi.TokenType.BAD_CHARACTER
 import com.intellij.psi.TokenType.WHITE_SPACE
@@ -9,16 +11,9 @@ import com.intellij.psi.TokenType.WHITE_SPACE
 import com.intellij.psi.tree.IElementType
 
 // @Suppress("MemberVisibilityCanBePrivate")
-class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int, var context: StackContext) {
+class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int) {
     companion object {
-        val EOL = "\\R".toRegex()
-        val ROL = "[^\\r\\n]+".toRegex()
-        val WS = "\\s+".toRegex()
-        val NL = "\\r\\n|\\r|\\n".toRegex()
-        val COMMENT = """(?x)
-          (\#{3,})([^\00]*?)(\1)
-        | (\#)([^\n\r]*)
-        """.toRegex()
+
         val SYMBOL_XID = """[\p{L}_][\p{L}_]*""".toRegex()
         val SYMBOL_RAW = """(`)((?:[^`\\]|\\.)*)(\1)""".toRegex()
         val STRING_SINGLE = """(')((?:[^'\\]|\\.)*)(\1)""".toRegex()
@@ -72,26 +67,19 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     var stack: MutableList<StackItem> = mutableListOf()
 
-    var contextStack: MutableList<StackContext> = mutableListOf();
+    var contextStack: MutableList<LexerContext> = mutableListOf();
+
+    val context: LexerContext
+        get() = contextStack.lastOrNull() ?: LexerContext.CODE
 
     fun interpreter(): Array<StackItem> {
         while (startOffset < endOffset) {
 //            matchesWhitespace() ?: continue
             if (matchesWhitespace()) continue
-            when (context) {
-                StackContext.CODE -> {
-                    if (codeComment()) continue
-                    if (codeKeywords()) continue
-                    if (codeIdentifier()) continue
-                    if (codePunctuations()) continue
-                }
-                StackContext.TEXT -> {
-
-                }
-                StackContext.COMMENT -> {
-
-                }
-            }
+            if (codeComment()) continue
+            if (codePunctuations()) continue
+            if (codeKeywords()) continue
+            if (codeIdentifier()) continue
             break
         }
         checkRest()
@@ -99,26 +87,22 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun matchesWhitespace(): Boolean {
-        val r = tryMatch(WS) ?: return false
-        when (context) {
-            StackContext.CODE, StackContext.COMMENT -> {
-                pushToken(WHITE_SPACE, r)
-            }
-            StackContext.TEXT -> {
-                pushToken(ValkyrieTypes.STRING_LITERAL, r)
-            }
-        }
+        val r = tryMatch("\\s+".toRegex()) ?: return false
+        pushToken(WHITE_SPACE, r)
         return true
     }
 
     private fun codeComment(): Boolean {
-        val r = tryMatch(COMMENT) ?: return false
+        val comment = """(?x)
+          (\#{3,})([^\00]*?)(\1)
+        | (\#)([^\n\r]*)
+        """.toRegex()
+        val r = tryMatch(comment) ?: return false
         pushToken(ValkyrieTypes.COMMENT, r)
         return true
     }
 
     private fun codeKeywords(): Boolean {
-        assert(context == StackContext.CODE)
         val r = tryMatch(KEYWORDS) ?: return false
         when (r.value) {
             "namespace", "namespace!", "namespace*" -> {
@@ -134,13 +118,18 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.KW_TRAIT, r)
             }
             "as", "as?", "as!", "as*" -> {
+                enterContext(Type)
                 pushToken(ValkyrieTypes.KW_AS, r)
             }
             "is" -> {
+                enterContext(Type)
                 pushToken(ValkyrieTypes.OP_IS_A, r)
             }
+            "not" -> {
+                pushToken(ValkyrieTypes.OP_NOT_A, r)
+            }
             "def" -> {
-                contextStack = "define"
+                enterContext(Define)
                 pushToken(ValkyrieTypes.KW_DEFINE, r)
             }
             else -> {
@@ -151,10 +140,13 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun codeIdentifier(): Boolean {
-        assert(context == StackContext.CODE)
-        val r = tryMatch(SYMBOL_XID) ?: tryMatch(SYMBOL_RAW) ?: return false
-        when (contextStack) {
-            "define" -> {
+        val xid = """(?x)
+        [\p{L}_][\p{L}_\00]*
+        | (`)((?:[^`\\]|\\.)*)(\1)
+        """.toRegex()
+        val r = tryMatch(xid) ?: return false
+        when {
+            contextIs(Type) -> {
                 pushToken(ValkyrieTypes.KW_MODIFIER, r)
             }
             else -> {
@@ -165,7 +157,6 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun codePunctuations(): Boolean {
-        assert(context == StackContext.CODE)
         val r = tryMatch(PUNCTUATIONS) ?: return false
         when (r.value) {
             // DOT
@@ -175,8 +166,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "->", "⟶" -> pushToken(ValkyrieTypes.OP_ARROW, r)
             "=>", "⇒" -> pushToken(ValkyrieTypes.OP_ARROW2, r)
             "." -> {
-                when (contextStack) {
-                    "define" -> {
+                when  {
+                    contextIs(Define) -> {
                         reShadowWith(ValkyrieTypes.SYMBOL_XID, "args")
                     }
                 }
@@ -239,9 +230,6 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.OP_GS, r)
             }
             ">" -> {
-                if (typeContext) {
-                    typeContext = false
-                }
                 pushToken(ValkyrieTypes.OP_GT, r)
             }
             // start with <
@@ -252,19 +240,19 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.OP_LS, r)
             }
             "<:", "⊑" -> {
-                typeContext = true
+                enterContext(Type)
                 pushToken(ValkyrieTypes.OP_IS_A, r)
             }
             "!<:", "⋢" -> {
-                typeContext = true
+                enterContext(Type)
                 pushToken(ValkyrieTypes.OP_NOT_A, r)
             }
             "<" -> {
-                when (contextStack) {
-                    "define" -> {
+                when {
+                    contextIs(Define) -> {
                         reShadowWith(ValkyrieTypes.SYMBOL_XID, "type")
                     }
-                    "type" -> {
+                    contextIs(Type) -> {
 
                     }
                 }
@@ -272,8 +260,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             }
             // surround with ( )
             "(" -> {
-                when (contextStack) {
-                    "define" -> {
+                when (context) {
+                    Define -> {
                         reShadowWith(ValkyrieTypes.SYMBOL_XID, "args")
                     }
                 }
@@ -303,7 +291,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun matchesK(): Boolean {
-        assert(context == StackContext.CODE)
+        
         val patterns = """(?x)
             | 
             | ;
@@ -353,6 +341,19 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 }
 
+private fun TokenInterpreter.enterContext(context: LexerContext) {
+    contextStack.add(context)
+}
+
+private fun TokenInterpreter.contextIs(vararg check: LexerContext): Boolean {
+    for (c in check) {
+        if (context == c) {
+            return true
+        }
+    }
+    return false
+}
+
 
 private fun TokenInterpreter.lastIs(vararg token: IElementType, skipWS: Boolean = true): Boolean {
     for (item in stack.reversed()) {
@@ -378,31 +379,4 @@ private fun TokenInterpreter.lastNot(vararg token: IElementType, skipWS: Boolean
         if (item.tokenIs(*token)) return false
     }
     return true
-}
-
-
-private fun TokenInterpreter.unShadowWith(token: IElementType) {
-    for (item in stack.asReversed()) {
-        when {
-            item.canSkip() -> continue
-            else -> {
-                item.token = token
-                break
-            }
-        }
-    }
-    contextStack = ""
-}
-
-private fun TokenInterpreter.reShadowWith(token: IElementType, mode: String) {
-    for (item in stack.asReversed()) {
-        when {
-            item.canSkip() -> continue
-            else -> {
-                item.token = token
-                break
-            }
-        }
-    }
-    contextStack = mode
 }

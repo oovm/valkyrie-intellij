@@ -18,7 +18,7 @@ class ValkyrieLexerAdapter : LexerBase() {
             this.buffer = buffer
             this.startOffset = startOffset
             this.endOffset = endOffset
-            this.stack = TokenInterpreter(buffer, startOffset, endOffset, StackContext.fromID(initialState)).interpreter()
+            this.stack = TokenInterpreter(buffer, startOffset, endOffset, LexerContext.fromID(initialState)).interpreter()
             this.eraseImbalance();
             this.index = 0
         }

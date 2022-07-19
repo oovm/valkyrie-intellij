@@ -9,17 +9,17 @@ class StackItem {
     var token: IElementType
     val startOffset: Int
     val endOffset: Int
-    var context: StackContext
+    var context: LexerContext
     var paired: Boolean? = null
 
-    constructor(token: IElementType, startOffset: Int, endOffset: Int, context: StackContext) {
+    constructor(token: IElementType, startOffset: Int, endOffset: Int, context: LexerContext) {
         this.token = token
         this.startOffset = startOffset
         this.endOffset = endOffset
         this.context = context
     }
 
-    constructor(token: IElementType, match: MatchGroup, context: StackContext) {
+    constructor(token: IElementType, match: MatchGroup, context: LexerContext) {
         this.token = token
         this.startOffset = match.range.first
         this.endOffset = match.range.last + 1
