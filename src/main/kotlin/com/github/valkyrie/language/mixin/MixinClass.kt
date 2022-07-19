@@ -16,7 +16,7 @@ open class MixinClass(node: ASTNode) : DeclareNode(node) {
         return this as ValkyrieClassStatementNode
     }
 
-    override fun getNameIdentifier(): PsiElement = originalElement
+    override fun getNameIdentifier(): PsiElement = originalElement.identifier
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Class
 
     override fun setName(name: String): PsiElement {

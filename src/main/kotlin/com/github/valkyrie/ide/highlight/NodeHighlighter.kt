@@ -68,9 +68,7 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 
 
     override fun visitClassStatement(o: ValkyrieClassStatement) {
-//        highlight(o.symbol, Color.SYM_CLASS)
-        o.identifier?.let { highlight(it, Color.SYM_TRAIT) }
-//        highlightModifiers(o.modifiers)
+        highlight(o.identifier, Color.SYM_CLASS)
     }
 
 //    override fun visitClassBraceItem(o: ValkyrieClassBraceItem) {

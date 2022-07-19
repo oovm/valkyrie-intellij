@@ -3,43 +3,49 @@ package com.github.valkyrie.ide.doc
 import com.github.valkyrie.ValkyrieLanguage
 import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor
 import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor.*
-import com.github.valkyrie.language.psi.ValkyrieTypes
 import com.github.valkyrie.language.psi_node.ValkyrieClassStatementNode
 import com.github.valkyrie.language.psi_node.ValkyrieTraitStatementNode
+import com.github.valkyrie.language.symbol.KeywordData
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.editor.richcopy.HtmlSyntaxInfoUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import com.intellij.ui.ColorUtil
 
-
-class DocumentationRender(var element: PsiElement, private var original: PsiElement?) {
+class DocumentationRenderer(var element: PsiElement, private var original: PsiElement?) {
     private val doc = StringBuilder()
     fun onHover(): String {
-        when (element) {
-            is ValkyrieTraitStatementNode -> buildShort(element as ValkyrieTraitStatementNode)
-            is ValkyrieClassStatementNode -> buildShort(element as ValkyrieClassStatementNode)
-            else -> doc.append("onHover: ${element.text}")
+        when {
+            KeywordData.getData(element.elementType) -> {
+                KeywordData.Database[element.text]?.documentation(this)
+            }
+            else -> when (element) {
+                is ValkyrieTraitStatementNode -> buildShort(element as ValkyrieTraitStatementNode)
+                is ValkyrieClassStatementNode -> buildShort(element as ValkyrieClassStatementNode)
+                else -> doc.append("onHover: ${element.text}")
+            }
         }
         return doc.toString()
     }
 
     fun onDetail(): String {
-        when (element.elementType) {
-            ValkyrieTypes.EXTENDS -> appendExtends()
-            else -> {}
-        }
-        when (element) {
-            is ValkyrieTraitStatementNode -> buildDetail(element as ValkyrieTraitStatementNode)
-            is ValkyrieClassStatementNode -> buildShort(element as ValkyrieClassStatementNode)
-            else -> {
-                doc.append(element)
-                doc.append("<br/>")
-                doc.append(original)
-                doc.append("<br/>")
-                doc.append("onDetail: ${element.text}")
+        when {
+            KeywordData.getData(element.elementType) -> {
+                KeywordData.Database[element.text]?.documentation(this)
+            }
+            else -> when (element) {
+                is ValkyrieTraitStatementNode -> buildDetail(element as ValkyrieTraitStatementNode)
+                is ValkyrieClassStatementNode -> buildShort(element as ValkyrieClassStatementNode)
+                else -> {
+                    doc.append(element)
+                    doc.append("<br/>")
+                    doc.append(original)
+                    doc.append("<br/>")
+                    doc.append("onDetail: ${element.text}")
+                }
             }
         }
+
         return doc.toString()
     }
 
@@ -82,11 +88,11 @@ class DocumentationRender(var element: PsiElement, private var original: PsiElem
         append(path)
     }
 
-    private fun append(text: String) {
+    fun append(text: String) {
         doc.append("<span>${text}</span>")
     }
 
-    private fun append(key: ValkyrieHighlightColor, text: String) {
+    fun append(key: ValkyrieHighlightColor, text: String) {
         // HtmlSyntaxInfoUtil.getStyledSpan(key.textAttributesKey, text, 1.0f)
         val attr = EditorColorsManager.getInstance().globalScheme.getAttributes(key.textAttributesKey)
         val color = ColorUtil.toHtmlColor(attr.foregroundColor)
@@ -107,20 +113,6 @@ class DocumentationRender(var element: PsiElement, private var original: PsiElem
         doc.append("<span>+</span>")
     }
 
-
-    private fun appendExtends() {
-        append(ValkyrieHighlightColor.KEYWORD, "keyword ")
-        append(ValkyrieHighlightColor.SYM_MACRO, "extends")
-        doc.append("<hr/>")
-        appendHighlight(
-            """
-        extends Point {
-            def eq(self, other: Self) -> bool { }
-        }
-        """
-        )
-
-    }
 }
 
 

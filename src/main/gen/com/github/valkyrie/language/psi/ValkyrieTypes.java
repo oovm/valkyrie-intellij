@@ -17,6 +17,7 @@ public interface ValkyrieTypes {
   IElementType CASE_PATTERN = new ValkyrieTokenType("CASE_PATTERN");
   IElementType CLASS_BRACE = new ValkyrieTokenType("CLASS_BRACE");
   IElementType CLASS_BRACE_ITEM = new ValkyrieTokenType("CLASS_BRACE_ITEM");
+  IElementType CLASS_INHERIT = new ValkyrieTokenType("CLASS_INHERIT");
   IElementType CLASS_NUMERIC_KEY = new ValkyrieTokenType("CLASS_NUMERIC_KEY");
   IElementType CLASS_STATEMENT = new ValkyrieTokenType("CLASS_STATEMENT");
   IElementType CLASS_TUPLE = new ValkyrieTokenType("CLASS_TUPLE");
@@ -77,6 +78,7 @@ public interface ValkyrieTypes {
   IElementType TUPLE = new ValkyrieTokenType("TUPLE");
   IElementType TYPE_ANGLE = new ValkyrieTokenType("TYPE_ANGLE");
   IElementType TYPE_EXPRESSION = new ValkyrieTokenType("TYPE_EXPRESSION");
+  IElementType TYPE_INSTANCE = new ValkyrieTokenType("TYPE_INSTANCE");
   IElementType TYPE_STATEMENT = new ValkyrieTokenType("TYPE_STATEMENT");
   IElementType WHILE_STATEMENT = new ValkyrieTokenType("WHILE_STATEMENT");
 
@@ -222,6 +224,9 @@ public interface ValkyrieTypes {
       }
       else if (type == CLASS_BRACE_ITEM) {
         return new ValkyrieClassBraceItemNode(node);
+      }
+      else if (type == CLASS_INHERIT) {
+        return new ValkyrieClassInheritNode(node);
       }
       else if (type == CLASS_NUMERIC_KEY) {
         return new ValkyrieClassNumericKeyNode(node);
@@ -402,6 +407,9 @@ public interface ValkyrieTypes {
       }
       else if (type == TYPE_EXPRESSION) {
         return new ValkyrieTypeExpressionNode(node);
+      }
+      else if (type == TYPE_INSTANCE) {
+        return new ValkyrieTypeInstanceNode(node);
       }
       else if (type == TYPE_STATEMENT) {
         return new ValkyrieTypeStatementNode(node);

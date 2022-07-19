@@ -103,7 +103,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     private fun codeKeywords(): Boolean {
         val r = tryMatch(KEYWORDS) ?: return false
-        when ( context) {
+        when (context) {
             Coding -> {
                 pushToken(ValkyrieTypes.SYMBOL_XID, r);
                 return true
@@ -167,29 +167,34 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         val r = tryMatch(PUNCTUATIONS) ?: return false
         when (r.value) {
             // DOT
-            "::", "∷" -> pushToken(ValkyrieTypes.PROPORTION, r)
+
             ":=", "≔" -> pushToken(ValkyrieTypes.OP_BIND, r)
             ":", "∶" -> pushToken(ValkyrieTypes.COLON, r)
             "->", "⟶" -> pushToken(ValkyrieTypes.OP_ARROW, r)
             "=>", "⇒" -> pushToken(ValkyrieTypes.OP_ARROW2, r)
             "." -> {
                 when (context) {
-                    CatchModifier -> {
-                        resetToken(ValkyrieTypes.SYMBOL_XID)
-                        resetContext(Coding)
-                    }
+                    CatchModifier -> resetToken(ValkyrieTypes.SYMBOL_XID)
                     else -> {}
                 }
                 pushToken(ValkyrieTypes.DOT, r)
             }
+            "::", "∷" -> {
+                when (context) {
+                    CatchModifier -> resetToken(ValkyrieTypes.SYMBOL_XID)
+                    else -> {}
+                }
+                pushToken(ValkyrieTypes.PROPORTION, r)
+
+            }
             ".." -> pushToken(ValkyrieTypes.DOT, r)
             "..." -> pushToken(ValkyrieTypes.DOT, r)
             ";" -> {
-//                when (shadowMode) {
-//                    "define" -> {
-//                        unShadowWith(ValkyrieTypes.SYMBOL_XID)
-//                    }
-//                }
+                when (context) {
+                    CatchModifier -> resetToken(ValkyrieTypes.SYMBOL_XID)
+                    else -> {}
+                }
+                endContext()
                 pushToken(ValkyrieTypes.SEMICOLON, r)
             }
             "@" -> pushToken(ValkyrieTypes.AT, r)
@@ -300,6 +305,15 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.BRACKET_R, r)
             }
             "{" -> {
+                when (context) {
+                    CatchModifier -> {
+                        resetToken(ValkyrieTypes.SYMBOL_XID)
+                        resetContext(TopCoding)
+                    }
+                    else -> {
+
+                    }
+                }
                 pushToken(ValkyrieTypes.BRACE_L, r)
             }
             "}" -> {

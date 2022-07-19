@@ -238,9 +238,10 @@ type_statement   ::= KW_TYPE identifier [[PROPORTION] type_angle] [BIND type_exp
 forall_statement ::= FORALL <<sequence identifier COMMA>> [forall_block];
 forall_block     ::= <<brace_block (type_expression COLON type_expression) (COMMA|SEMICOLON)>>;
 // ---------------------------------------------------------------------------------------------------------------------
-class_statement     ::= KW_CLASS modifiers [[PROPORTION] type_angle] [COLON identifier] [class_tuple|class_brace] {
+class_statement     ::= KW_CLASS [modifiers] identifier [type_angle] [class_inherit] [class_tuple|class_brace] {
     mixin="com.github.valkyrie.language.mixin.MixinClass"
 };
+class_inherit       ::= COLON type_instance (OP_ADD type_instance)*;
 class_tuple         ::= <<parenthesis class_tuple_item COMMA>>;
 class_brace         ::= <<brace_block class_brace_item (COMMA|SEMICOLON)>>;
 class_tuple_item    ::= type_expression [BIND expression] {
@@ -251,7 +252,7 @@ class_brace_item    ::= (class_numeric_key | modifiers) COLON type_expression [B
 };
 class_numeric_key   ::= [modifiers] INTEGER
 // ---------------------------------------------------------------------------------------------------------------------
-trait_statement     ::= KW_TRAIT modifiers [[PROPORTION] type_angle] [COLON type_expression] trait_block {
+trait_statement     ::= KW_TRAIT modifiers [type_angle] [COLON type_expression] trait_block {
     extends="com.github.valkyrie.language.mixin.MixinTrait"
 };
 trait_block         ::= <<brace_block normal_statements SEMICOLON>>;
@@ -288,6 +289,7 @@ type_expression     ::= type_expr (type_binary type_expr)*;
 private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
 private type_binary ::= VERTICAL | EQ | NE | PLUS | MINUS | TO;
 type_angle          ::= OP_PROPORTION? <<generic_block ([identifier COLON] type_expression) COMMA>> OP_PROPORTION?;
+type_instance       ::= identifier type_angle
 // ---------------------------------------------------------------------------------------------------------------------
 slice_suffix        ::= <<bracket_block slice_expression COMMA>>;
 slice_expression    ::=

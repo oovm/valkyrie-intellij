@@ -102,7 +102,7 @@
 		<!-- Document -->
 		<lang.documentationProvider
 			language="Valkyrie"
-			implementationClass="com.github.valkyrie.ide.doc.ValkyrieDocumentationProvider"
+			implementationClass="com.github.valkyrie.ide.doc.DocumentationProvider"
 		/>
 		<!--		<indexPatternBuilder-->
 		<!--				implementation="com.github.valkyrie.ide.todo.VomlTodoIndexPatternBuilder"-->
