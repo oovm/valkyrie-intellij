@@ -16,10 +16,10 @@ open class MixinClassBrace(node: ASTNode) : DeclareNode(node) {
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Field
 
     override fun getNameIdentifier(): PsiElement {
-        val index = getOriginalElement().classNumericKey;
+        val index = originalElement.classNumericKey;
         return when {
             index != null -> index.lastChild
-            else -> getOriginalElement().modifierSymbols?.lastChild ?: this.originalElement
+            else -> this.originalElement
         }
     }
 

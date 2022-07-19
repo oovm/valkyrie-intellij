@@ -16,7 +16,7 @@ open class MixinDefine(node: ASTNode) : DeclareNode(node) {
     }
 
     override fun getNameIdentifier(): PsiElement {
-        return originalElement.modifierSymbols.lastChild
+        return originalElement.identifier
     }
 
     override fun getIcon(flags: Int): Icon = when {

@@ -14,7 +14,7 @@ open class MixinBitflag(node: ASTNode) : DeclareNode(node) {
     override fun getOriginalElement(): ValkyrieBitflagStatementNode {
         return this as ValkyrieBitflagStatementNode
     }
-    override fun getNameIdentifier(): PsiElement = originalElement.symbol
+    override fun getNameIdentifier(): PsiElement = originalElement
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Enum
     override fun setName(name: String): PsiElement {
         TODO("Not yet implemented")

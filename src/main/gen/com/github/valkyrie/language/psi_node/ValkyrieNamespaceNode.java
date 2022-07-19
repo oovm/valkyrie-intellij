@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieElement;
+import com.github.valkyrie.language.mixin.MixinNamepath;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieNamespaceNode extends ValkyrieElement implements ValkyrieNamespace {
+public class ValkyrieNamespaceNode extends MixinNamepath implements ValkyrieNamespace {
 
   public ValkyrieNamespaceNode(@NotNull ASTNode node) {
     super(node);

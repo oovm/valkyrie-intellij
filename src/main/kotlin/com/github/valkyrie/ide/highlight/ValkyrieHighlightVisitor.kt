@@ -67,9 +67,9 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
 
 
     override fun visitClassStatement(o: ValkyrieClassStatement) {
-        highlight(o.symbol, Color.SYM_CLASS)
+//        highlight(o.symbol, Color.SYM_CLASS)
         o.identifier?.let { highlight(it, Color.SYM_TRAIT) }
-        highlightModifiers(o.getModifiers())
+        highlightModifiers(o.modifiers)
     }
 
 //    override fun visitClassBraceItem(o: ValkyrieClassBraceItem) {
@@ -83,17 +83,17 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
 //    }
 
     override fun visitTraitStatement(o: ValkyrieTraitStatement) {
-        highlight(o.symbol, Color.SYM_TRAIT)
+//        highlight(o.symbol, Color.SYM_TRAIT)
         highlightModifiers(o.modifiers)
     }
 
     override fun visitExtendsStatement(o: ValkyrieExtendsStatement) {
-        highlight(o.symbol, Color.SYM_TRAIT)
-        highlightModifiers(o.modifiers)
+//        highlight(o.symbol, Color.SYM_TRAIT)
+        // highlightModifiers(o.modifiers)
     }
 
     override fun visitTaggedStatement(o: ValkyrieTaggedStatement) {
-        highlight(o.symbol, Color.SYM_CLASS)
+//        highlight(o.symbol, Color.SYM_CLASS)
         highlightModifiers(o.modifiers)
     }
 
@@ -103,7 +103,7 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
     }
 
     override fun visitBitflagStatement(o: ValkyrieBitflagStatement) {
-        highlight(o.symbol, Color.SYM_CLASS)
+//        highlight(o.symbol, Color.SYM_CLASS)
         highlightModifiers(o.modifiers)
     }
 
@@ -185,13 +185,15 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
         }
     }
 
-    private fun highlightModifiers(element: Array<ValkyrieIdentifier>?) {
-        for (modifier in element ?: emptyArray()) {
+    private fun highlightModifiers(element: ValkyrieModifiers?) {
+        if (element == null) return
+        for (modifier in element.children) {
             highlight(modifier, Color.KEYWORD)
         }
     }
 
-    fun highlight(element: PsiElement, color: Color) {
+    fun highlight(element: PsiElement?, color: Color) {
+        if (element == null) return
         val builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION)
         builder.textAttributes(color.textAttributesKey)
         builder.range(element)

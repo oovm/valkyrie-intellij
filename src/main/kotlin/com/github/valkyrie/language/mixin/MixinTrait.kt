@@ -14,7 +14,7 @@ open class MixinTrait(node: ASTNode) : DeclareNode(node) {
         return this as ValkyrieTraitStatementNode
     }
 
-    override fun getNameIdentifier(): PsiElement = originalElement.modifierSymbols.lastChild
+    override fun getNameIdentifier(): PsiElement = originalElement
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Interface
 
     override fun setName(name: String): PsiElement {
@@ -22,11 +22,11 @@ open class MixinTrait(node: ASTNode) : DeclareNode(node) {
     }
 
     fun getViewName(): String {
-        val name = originalElement.modifierSymbols.lastChild.text;
+        val name = originalElement
         val ty = originalElement.typeExpression;
         return when {
             ty != null -> "${name}: ${ty.text}"
-            else -> name
+            else -> name.text
         }
     }
 

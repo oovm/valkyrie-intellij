@@ -17,7 +17,7 @@ open class MixinTagged(node: ASTNode) : DeclareNode(node) {
     override fun getOriginalElement(): ValkyrieTaggedStatementNode {
         return this as ValkyrieTaggedStatementNode
     }
-    override fun getNameIdentifier(): PsiElement = originalElement.modifierSymbols.lastChild
+    override fun getNameIdentifier(): PsiElement = originalElement
 
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Enum
 

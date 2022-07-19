@@ -13,7 +13,7 @@ open class MixinExtends(node: ASTNode) : DeclareNode(node) {
         return this as ValkyrieExtendsStatementNode
     }
 
-    override fun getNameIdentifier(): PsiElement = originalElement.symbol
+    override fun getNameIdentifier(): PsiElement = originalElement
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.EntryPoints
 
     override fun setName(name: String): PsiElement {

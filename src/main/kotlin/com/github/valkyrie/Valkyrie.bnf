@@ -299,8 +299,10 @@ slice_expression    ::=
   | [expression] PROPORTION [expression]
   | expression;
 // ---------------------------------------------------------------------------------------------------------------------
-namespace        ::= (macro|identifier) (PROPORTION (macro|identifier))*
-macro            ::= AT identifier;
+namespace  ::= (macro|identifier) (PROPORTION (macro|identifier))* {
+    mixin="com.github.valkyrie.language.mixin.MixinNamepath"
+}
+macro      ::= AT identifier;
 // ---------------------------------------------------------------------------------------------------------------------
 macro_call ::= macro [macro_item];
 macro_item ::=

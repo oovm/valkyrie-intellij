@@ -16,7 +16,7 @@ open class MixinClass(node: ASTNode) : DeclareNode(node) {
         return this as ValkyrieClassStatementNode
     }
 
-    override fun getNameIdentifier(): PsiElement = originalElement.modifierSymbols.lastChild
+    override fun getNameIdentifier(): PsiElement = originalElement
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Class
 
     override fun setName(name: String): PsiElement {
@@ -25,12 +25,12 @@ open class MixinClass(node: ASTNode) : DeclareNode(node) {
 
     override fun getChildrenView(): Array<TreeElement> {
         val view = mutableListOf<TreeElement>()
-        for (it in originalElement.braceItemList) {
-            view.add(ValkyrieViewElement(it as NavigatablePsiElement))
-        }
-        for (it in originalElement.tupleItemList) {
-            view.add(ValkyrieViewElement(it as NavigatablePsiElement))
-        }
+//        for (it in originalElement.braceItemList) {
+//            view.add(ValkyrieViewElement(it as NavigatablePsiElement))
+//        }
+//        for (it in originalElement.tupleItemList) {
+//            view.add(ValkyrieViewElement(it as NavigatablePsiElement))
+//        }
         return view.toTypedArray()
     }
 
