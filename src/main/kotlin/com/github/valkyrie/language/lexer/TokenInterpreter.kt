@@ -15,64 +15,64 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         val ROL = "[^\\r\\n]+".toRegex()
         val WS = "\\s+".toRegex()
         val NL = "\\r\\n|\\r|\\n".toRegex()
-        val COMMENT_LINE = "(#)([^\\n\\r]*)".toRegex()
-        val COMMENT_BLOCK = "(#{3,})(\\.*?)(\\1)".toRegex(RegexOption.DOT_MATCHES_ALL)
-        val SYMBOL_XID = "[a-zA-Z_][a-zA-Z0-9_]*".toRegex()
-        val SYMBOL_RAW = "(`)((?:[^`\\\\]|\\\\.)*)(`)".toRegex()
-        val DOTS = "\\.{1,3}".toRegex()
+        val COMMENT = """(?x)
+          (\#{3,})([^\00]*?)(\1)
+        | (\#)([^\n\r]*)
+        """.toRegex()
+        val SYMBOL_XID = """[\p{L}_][\p{L}_]*""".toRegex()
+        val SYMBOL_RAW = """(`)((?:[^`\\]|\\.)*)(\1)""".toRegex()
+        val STRING_SINGLE = """(')((?:[^'\\]|\\.)*)(\1)""".toRegex()
+        val STRING_DOUBLE = """(")((?:[^"\\]|\\.)*)(\1)""".toRegex()
+        val STRING_TUPLE = """("{3,}|'{3,})([^\00]*?)(\1)""".toRegex()
         val KEYWORDS = """(?x)
-            let
-          | def
-          | namespace[!*]?
-          | using[!*]?
-          | is
-          | as[?!*]?
-          | class
-          | trait
+          namespace[!*]? | extension
+        | using[!*]?
+        | class | struct | tagged | enum | bitset
+        | trait | interface | protocol | convention
+        | let | def | fun | type
+        | not | is | in | as[?!*]?
         """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
         val PUNCTUATIONS = """(?x)
-            [.]{1,3}
-            | [{}\[\]()]
-            | [,;$@^]
-            # start with < >
-            | >= | /> | ≥ | ⩾ | >{1,3}
-            | <= | </ | ≤ | ⩽ | <{1,3}
-            # start with +
-            | [+]= | [+]> | [+]{1,2}
-            # start with -
-            | -= | -> | ⟶ | -{1,2}
-            # start with *
-            | [*]=?
-            # start with / or % or ÷
-            | /=?
-            | ÷=?
-            | %=?
-            # start with &
-            | &> | &{1,2} | ≻
-            | [|]> | [|]{1,2} | ⊁
-            | ⊻=? | ⊼=? | ⊽=?
-            # start with :
-            | :: | :
-            # start with ~
-            | ~> | ~
-            # start with !
-            | != | ≠ | !
-            # start with ?
-            | [?]
-            # start with =
-            | => | ⇒
-            | === | == | =
-            # unicode
-            | [∈∊∉⊑⋢⨳∀∁∂∃∄¬±√∛∜⊹⋗]
-            #
+        [.]{1,3}
+        | [{}\[\]()]
+        | [,;$@^]
+        # start with < >
+        | >= | /> | ≥ | ⩾ | >{1,3}
+        | <= | </ | ≤ | ⩽ | <{1,3}
+        # start with +
+        | [+]= | [+]> | [+]{1,2}
+        # start with -
+        | -= | -> | ⟶ | -{1,2}
+        # start with *
+        | [*]=?
+        # start with / or % or ÷
+        | /=?
+        | ÷=?
+        | %=?
+        # start with &
+        | &> | &{1,2} | ≻
+        | [|]> | [|]{1,2} | ⊁
+        | ⊻=? | ⊼=? | ⊽=?
+        # start with :
+        | :: | :
+        # start with ~
+        | ~> | ~
+        # start with !
+        | != | ≠ | !
+        # start with ?
+        | [?]
+        # start with =
+        | => | ⇒
+        | === | == | =
+        # unicode
+        | [∈∊∉⊑⋢⨳∀∁∂∃∄¬±√∛∜⊹⋗]
+        #
         """.toRegex()
     }
 
     var stack: MutableList<StackItem> = mutableListOf()
 
-    var typeContext = false
-
-    var shadowMode: String = "";
+    var contextStack: MutableList<StackContext> = mutableListOf();
 
     fun interpreter(): Array<StackItem> {
         while (startOffset < endOffset) {
@@ -112,7 +112,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun codeComment(): Boolean {
-        val r = tryMatch(COMMENT_BLOCK) ?: tryMatch(COMMENT_LINE) ?: return false
+        val r = tryMatch(COMMENT) ?: return false
         pushToken(ValkyrieTypes.COMMENT, r)
         return true
     }
@@ -127,8 +127,11 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "using", "using!", "using*" -> {
                 pushToken(ValkyrieTypes.KW_IMPORT, r)
             }
-            "class" -> {
+            "class", "struct" -> {
                 pushToken(ValkyrieTypes.KW_CLASS, r)
+            }
+            "trait", "interface" -> {
+                pushToken(ValkyrieTypes.KW_TRAIT, r)
             }
             "as", "as?", "as!", "as*" -> {
                 pushToken(ValkyrieTypes.KW_AS, r)
@@ -137,7 +140,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.OP_IS_A, r)
             }
             "def" -> {
-                shadowMode = "define"
+                contextStack = "define"
                 pushToken(ValkyrieTypes.KW_DEFINE, r)
             }
             else -> {
@@ -150,7 +153,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     private fun codeIdentifier(): Boolean {
         assert(context == StackContext.CODE)
         val r = tryMatch(SYMBOL_XID) ?: tryMatch(SYMBOL_RAW) ?: return false
-        when (shadowMode) {
+        when (contextStack) {
             "define" -> {
                 pushToken(ValkyrieTypes.KW_MODIFIER, r)
             }
@@ -172,7 +175,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "->", "⟶" -> pushToken(ValkyrieTypes.OP_ARROW, r)
             "=>", "⇒" -> pushToken(ValkyrieTypes.OP_ARROW2, r)
             "." -> {
-                when (shadowMode) {
+                when (contextStack) {
                     "define" -> {
                         reShadowWith(ValkyrieTypes.SYMBOL_XID, "args")
                     }
@@ -257,14 +260,19 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.OP_NOT_A, r)
             }
             "<" -> {
-                if (typeContext) {
-                    typeContext = false
+                when (contextStack) {
+                    "define" -> {
+                        reShadowWith(ValkyrieTypes.SYMBOL_XID, "type")
+                    }
+                    "type" -> {
+
+                    }
                 }
                 pushToken(ValkyrieTypes.OP_LT, r)
             }
             // surround with ( )
             "(" -> {
-                when (shadowMode) {
+                when (contextStack) {
                     "define" -> {
                         reShadowWith(ValkyrieTypes.SYMBOL_XID, "args")
                     }
@@ -383,7 +391,7 @@ private fun TokenInterpreter.unShadowWith(token: IElementType) {
             }
         }
     }
-    shadowMode = ""
+    contextStack = ""
 }
 
 private fun TokenInterpreter.reShadowWith(token: IElementType, mode: String) {
@@ -396,5 +404,5 @@ private fun TokenInterpreter.reShadowWith(token: IElementType, mode: String) {
             }
         }
     }
-    shadowMode = mode
+    contextStack = mode
 }

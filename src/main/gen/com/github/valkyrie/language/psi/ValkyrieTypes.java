@@ -125,6 +125,7 @@ public interface ValkyrieTypes {
   IElementType KW_IMPORT = new ValkyrieTokenType("using");
   IElementType KW_MODIFIER = new ValkyrieTokenType("KW_MODIFIER");
   IElementType KW_NAMESPACE = new ValkyrieTokenType("namespace");
+  IElementType KW_TRAIT = new ValkyrieTokenType("trait");
   IElementType KW_TYPE = new ValkyrieTokenType("KW_TYPE");
   IElementType LESS = new ValkyrieTokenType("LESS");
   IElementType LET = new ValkyrieTokenType("let");
@@ -188,7 +189,6 @@ public interface ValkyrieTypes {
   IElementType TAGGED = new ValkyrieTokenType("tagged");
   IElementType TILDE = new ValkyrieTokenType("~");
   IElementType TO = new ValkyrieTokenType("TO");
-  IElementType TRAIT = new ValkyrieTokenType("trait");
   IElementType URL = new ValkyrieTokenType("Url");
   IElementType VERTICAL = new ValkyrieTokenType("VERTICAL");
   IElementType WHILE = new ValkyrieTokenType("while");

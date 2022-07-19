@@ -2475,13 +2475,13 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TRAIT modifiers [[PROPORTION] type_angle] [COLON type_expression] trait_block
+  // KW_TRAIT modifiers [[PROPORTION] type_angle] [COLON type_expression] trait_block
   public static boolean trait_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "trait_statement")) return false;
-    if (!nextTokenIs(b, TRAIT)) return false;
+    if (!nextTokenIs(b, KW_TRAIT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, TRAIT);
+    r = consumeToken(b, KW_TRAIT);
     r = r && modifiers(b, l + 1);
     r = r && trait_statement_2(b, l + 1);
     r = r && trait_statement_3(b, l + 1);

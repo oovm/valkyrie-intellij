@@ -134,7 +134,7 @@
         LET = "let"
         NEW = 'new'
 
-        TRAIT = 'trait'
+        KW_TRAIT = 'trait'
         TAGGED = 'tagged'
         BITFLAG = 'bitset'
         EXTENDS = 'extends'
@@ -251,7 +251,7 @@ class_brace_item    ::= (class_numeric_key | modifiers) COLON type_expression [B
 };
 class_numeric_key   ::= [modifiers] INTEGER
 // ---------------------------------------------------------------------------------------------------------------------
-trait_statement     ::= TRAIT modifiers [[PROPORTION] type_angle] [COLON type_expression] trait_block {
+trait_statement     ::= KW_TRAIT modifiers [[PROPORTION] type_angle] [COLON type_expression] trait_block {
     extends="com.github.valkyrie.language.mixin.MixinTrait"
 };
 trait_block         ::= <<brace_block normal_statements SEMICOLON>>;
