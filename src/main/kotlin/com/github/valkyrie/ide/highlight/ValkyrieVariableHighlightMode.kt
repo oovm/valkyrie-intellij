@@ -20,7 +20,7 @@ enum class ValkyrieVariableHighlightMode {
     }
 
     fun highlightPatternItem(
-        visitor: ValkyrieHighlightVisitor,
+        visitor: NodeHighlighter,
         o: ValkyriePatternItem,
         force_mut: Boolean = false,
     ) {
@@ -29,7 +29,7 @@ enum class ValkyrieVariableHighlightMode {
     }
 
     fun highlightPatternPair(
-        visitor: ValkyrieHighlightVisitor,
+        visitor: NodeHighlighter,
         o: ValkyriePatternPair,
         force_mut: Boolean = false,
     ) {
@@ -38,7 +38,7 @@ enum class ValkyrieVariableHighlightMode {
     }
 
     fun highlightMaybeMutable(
-        visitor: ValkyrieHighlightVisitor,
+        visitor: NodeHighlighter,
         symbols: List<ValkyrieIdentifier>,
         force_mut: Boolean,
         skip_last: Boolean,

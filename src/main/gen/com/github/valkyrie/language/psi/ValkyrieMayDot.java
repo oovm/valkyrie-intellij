@@ -5,12 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieNamespaceDot extends PsiElement {
-
-  @NotNull
-  List<ValkyrieIdentifier> getIdentifierList();
-
-  @NotNull
-  List<ValkyrieMayDot> getMayDotList();
+public interface ValkyrieMayDot extends PsiElement {
 
 }

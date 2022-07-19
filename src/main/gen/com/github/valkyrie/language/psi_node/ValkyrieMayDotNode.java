@@ -12,14 +12,14 @@ import com.github.valkyrie.language.ast.ValkyrieElement;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieDefItemSignNode extends ValkyrieElement implements ValkyrieDefItemSign {
+public class ValkyrieMayDotNode extends ValkyrieElement implements ValkyrieMayDot {
 
-  public ValkyrieDefItemSignNode(@NotNull ASTNode node) {
+  public ValkyrieMayDotNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitDefItemSign(this);
+    visitor.visitMayDot(this);
   }
 
   @Override

@@ -4,6 +4,7 @@ package com.github.valkyrie.ide.highlight
 import com.github.valkyrie.ide.file.ValkyrieFileNode
 import com.github.valkyrie.language.ast.isMutable
 import com.github.valkyrie.language.psi.*
+import com.github.valkyrie.language.psi_node.ValkyrieDefineStatementNode
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.codeInsight.daemon.impl.HighlightVisitor
@@ -12,7 +13,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor as Color
 
-class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
+class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
     private var infoHolder: HighlightInfoHolder? = null
 
 
@@ -49,8 +50,8 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
     }
 
     override fun visitDefineStatement(o: ValkyrieDefineStatement) {
-        //        highlight(o.symbol, Color.SYM_FUNCTION_FREE)
-//        highlightModifiers(o.modifiers)
+        val node = o as ValkyrieDefineStatementNode;
+        highlight(node.nameIdentifier, node.kind.color)
     }
 
     override fun visitDefineItem(o: ValkyrieDefineItem) {
@@ -69,7 +70,7 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
     override fun visitClassStatement(o: ValkyrieClassStatement) {
 //        highlight(o.symbol, Color.SYM_CLASS)
         o.identifier?.let { highlight(it, Color.SYM_TRAIT) }
-        highlightModifiers(o.modifiers)
+//        highlightModifiers(o.modifiers)
     }
 
 //    override fun visitClassBraceItem(o: ValkyrieClassBraceItem) {
@@ -84,7 +85,7 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
 
     override fun visitTraitStatement(o: ValkyrieTraitStatement) {
 //        highlight(o.symbol, Color.SYM_TRAIT)
-        highlightModifiers(o.modifiers)
+//        highlightModifiers(o.modifiers)
     }
 
     override fun visitExtendsStatement(o: ValkyrieExtendsStatement) {
@@ -94,7 +95,7 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
 
     override fun visitTaggedStatement(o: ValkyrieTaggedStatement) {
 //        highlight(o.symbol, Color.SYM_CLASS)
-        highlightModifiers(o.modifiers)
+//        highlightModifiers(o.modifiers)
     }
 
     override fun visitTaggedItem(o: ValkyrieTaggedItem) {
@@ -104,7 +105,7 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
 
     override fun visitBitflagStatement(o: ValkyrieBitflagStatement) {
 //        highlight(o.symbol, Color.SYM_CLASS)
-        highlightModifiers(o.modifiers)
+//        highlightModifiers(o.modifiers)
     }
 
     override fun visitBitflagItem(o: ValkyrieBitflagItem) {
@@ -214,7 +215,7 @@ class ValkyrieHighlightVisitor : ValkyrieVisitor(), HighlightVisitor {
         return true
     }
 
-    override fun clone(): HighlightVisitor = ValkyrieHighlightVisitor()
+    override fun clone(): HighlightVisitor = NodeHighlighter()
 
     override fun suitableForFile(file: PsiFile): Boolean = file is ValkyrieFileNode
 

@@ -10,9 +10,11 @@ import java.util.function.Supplier
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors as Default
 import com.github.valkyrie.ValkyrieBundle;
 
+@Suppress("UnstableApiUsage")
 enum class ValkyrieHighlightColor(humanName: Supplier<@AttributeDescriptor String>, default: TextAttributesKey? = null) {
     // 特殊关键词
     KEYWORD(OptionsBundle.messagePointer("options.language.defaults.keyword"), Default.KEYWORD),
+    MODIFIER(ValkyrieBundle.messagePointer("valkyrie.highlight.modifier"), Default.KEYWORD),
 
     // 字面量
     NULL(ValkyrieBundle.messagePointer("color.token.null"), Default.KEYWORD),

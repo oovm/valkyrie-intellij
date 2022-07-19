@@ -16,11 +16,11 @@ public interface ValkyrieDefineStatement extends PsiElement {
   @Nullable
   ValkyrieExpression getExpression();
 
-  @NotNull
-  ValkyrieIdentifier getIdentifier();
-
   @Nullable
   ValkyrieModifiers getModifiers();
+
+  @NotNull
+  ValkyrieNamespaceDot getNamespaceDot();
 
   @Nullable
   ValkyrieTypeAngle getTypeAngle();

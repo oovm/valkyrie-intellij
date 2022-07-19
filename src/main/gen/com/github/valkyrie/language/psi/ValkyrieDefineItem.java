@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieDefineItem extends PsiElement {
 
   @Nullable
-  ValkyrieDefItemSign getDefItemSign();
-
-  @Nullable
   ValkyrieExpression getExpression();
 
   @NotNull

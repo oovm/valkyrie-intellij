@@ -26,7 +26,6 @@ public interface ValkyrieTypes {
   IElementType DEFINE_ITEM = new ValkyrieTokenType("DEFINE_ITEM");
   IElementType DEFINE_STATEMENT = new ValkyrieTokenType("DEFINE_STATEMENT");
   IElementType DEFINE_TUPLE = new ValkyrieTokenType("DEFINE_TUPLE");
-  IElementType DEF_ITEM_SIGN = new ValkyrieTokenType("DEF_ITEM_SIGN");
   IElementType EF_STATEMENT = new ValkyrieTokenType("EF_STATEMENT");
   IElementType ELSE_STATEMENT = new ValkyrieTokenType("ELSE_STATEMENT");
   IElementType EXPRESSION = new ValkyrieTokenType("EXPRESSION");
@@ -51,6 +50,7 @@ public interface ValkyrieTypes {
   IElementType MATCH_BLOCK = new ValkyrieTokenType("MATCH_BLOCK");
   IElementType MATCH_EXPRESSION = new ValkyrieTokenType("MATCH_EXPRESSION");
   IElementType MATCH_STATEMENT = new ValkyrieTokenType("MATCH_STATEMENT");
+  IElementType MAY_DOT = new ValkyrieTokenType("MAY_DOT");
   IElementType MODIFIERS = new ValkyrieTokenType("MODIFIERS");
   IElementType NAMESPACE = new ValkyrieTokenType("NAMESPACE");
   IElementType NAMESPACE_DOT = new ValkyrieTokenType("NAMESPACE_DOT");
@@ -248,9 +248,6 @@ public interface ValkyrieTypes {
       else if (type == DEFINE_TUPLE) {
         return new ValkyrieDefineTupleNode(node);
       }
-      else if (type == DEF_ITEM_SIGN) {
-        return new ValkyrieDefItemSignNode(node);
-      }
       else if (type == EF_STATEMENT) {
         return new ValkyrieEfStatementNode(node);
       }
@@ -322,6 +319,9 @@ public interface ValkyrieTypes {
       }
       else if (type == MATCH_STATEMENT) {
         return new ValkyrieMatchStatementNode(node);
+      }
+      else if (type == MAY_DOT) {
+        return new ValkyrieMayDotNode(node);
       }
       else if (type == MODIFIERS) {
         return new ValkyrieModifiersNode(node);

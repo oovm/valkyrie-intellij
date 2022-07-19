@@ -1,7 +1,10 @@
 package com.github.valkyrie.language.mixin
 
 import com.github.valkyrie.language.ast.DeclareNode
+import com.github.valkyrie.language.ast.FunctionKind
+import com.github.valkyrie.language.psi_node.ValkyrieDefineItemNode
 import com.github.valkyrie.language.psi_node.ValkyrieDefineStatementNode
+import com.github.valkyrie.language.psi_node.ValkyrieIdentifierNode
 import com.intellij.icons.AllIcons.Nodes.Function
 import com.intellij.icons.AllIcons.Nodes.Method
 import com.intellij.lang.ASTNode
@@ -15,12 +18,12 @@ open class MixinDefine(node: ASTNode) : DeclareNode(node) {
         return this as ValkyrieDefineStatementNode
     }
 
-    override fun getNameIdentifier(): PsiElement {
-        return originalElement.identifier
+    override fun getNameIdentifier(): ValkyrieIdentifierNode {
+        return originalElement.namespaceDot.identifierList.last() as ValkyrieIdentifierNode
     }
 
     override fun getIcon(flags: Int): Icon = when {
-        originalElement.isMethod -> Method
+        originalElement.isMethod() -> Method
         else -> Function
     }
 
@@ -28,9 +31,33 @@ open class MixinDefine(node: ASTNode) : DeclareNode(node) {
         TODO("Not yet implemented")
     }
 
-    val isMethod: Boolean
+    val kind: FunctionKind
         get() {
-            return Random.nextBoolean()
+            val lastDot = originalElement.namespaceDot.mayDotList.lastOrNull();
+            val firstArg = originalElement.defineTuple.defineItemList.firstOrNull()
+            return when {
+                lastDot != null -> {
+                    when (lastDot.text == "::") {
+                        true -> FunctionKind.STATIC_METHOD
+                        false -> FunctionKind.METHOD
+                    }
+                }
+                else -> {
+                    if (firstArg == null) {
+                        return FunctionKind.FREE_FUNCTION
+                    }
+                    FunctionKind.FREE_FUNCTION
+                }
+            }
         }
+
+    fun isMethod(): Boolean = kind.isMethod
+    fun isStatic(): Boolean = kind.isStatic
+
+    fun hasMutableArgument(): Boolean {
+        return originalElement.defineTuple.defineItemList.any {
+            (it as ValkyrieDefineItemNode).hasMutable()
+        }
+    }
 }
 

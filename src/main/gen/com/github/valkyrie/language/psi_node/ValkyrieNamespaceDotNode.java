@@ -34,4 +34,10 @@ public class ValkyrieNamespaceDotNode extends ValkyrieElement implements Valkyri
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
   }
 
+  @Override
+  @NotNull
+  public List<ValkyrieMayDot> getMayDotList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieMayDot.class);
+  }
+
 }

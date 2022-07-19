@@ -163,10 +163,24 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "::", "∷" -> pushToken(ValkyrieTypes.PROPORTION, r)
             ":=", "≔" -> pushToken(ValkyrieTypes.OP_BIND, r)
             ":", "∶" -> pushToken(ValkyrieTypes.COLON, r)
-            "." -> pushToken(ValkyrieTypes.DOT, r)
+            "." -> {
+                when (shadowMode) {
+                    "define" -> {
+                        reShadowWith(ValkyrieTypes.SYMBOL_XID, "args")
+                    }
+                }
+                pushToken(ValkyrieTypes.DOT, r)
+            }
             ".." -> pushToken(ValkyrieTypes.DOT, r)
             "..." -> pushToken(ValkyrieTypes.DOT, r)
-            ";" -> pushToken(ValkyrieTypes.SEMICOLON, r)
+            ";" -> {
+//                when (shadowMode) {
+//                    "define" -> {
+//                        unShadowWith(ValkyrieTypes.SYMBOL_XID)
+//                    }
+//                }
+                pushToken(ValkyrieTypes.SEMICOLON, r)
+            }
             "@" -> pushToken(ValkyrieTypes.AT, r)
             "," -> pushToken(ValkyrieTypes.COMMA, r)
             // start with +
@@ -242,8 +256,11 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             }
             // surround with ( )
             "(" -> {
-
-
+                when (shadowMode) {
+                    "define" -> {
+                        reShadowWith(ValkyrieTypes.SYMBOL_XID, "args")
+                    }
+                }
                 pushToken(ValkyrieTypes.PARENTHESIS_L, r)
             }
             ")" -> {
@@ -347,7 +364,10 @@ private fun TokenInterpreter.unShadowWith(token: IElementType) {
     for (item in stack.asReversed()) {
         when {
             item.canSkip() -> continue
-            else -> item.token = token
+            else -> {
+                item.token = token
+                break
+            }
         }
     }
     shadowMode = ""
@@ -357,7 +377,10 @@ private fun TokenInterpreter.reShadowWith(token: IElementType, mode: String) {
     for (item in stack.asReversed()) {
         when {
             item.canSkip() -> continue
-            else -> item.token = token
+            else -> {
+                item.token = token
+                break
+            }
         }
     }
     shadowMode = mode

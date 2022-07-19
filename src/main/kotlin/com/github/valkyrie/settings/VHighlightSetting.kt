@@ -3,7 +3,7 @@ package com.github.valkyrie.settings
 import com.github.valkyrie.ValkyrieBundle
 import com.github.valkyrie.ide.file.ValkyrieIconProvider
 import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor
-import com.github.valkyrie.ide.highlight.ValkyrieSyntaxHighlighter
+import com.github.valkyrie.ide.highlight.TokenHighlight
 
 import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
@@ -24,7 +24,7 @@ class VHighlightSetting : ColorSettingsPage {
 
     override fun getIcon() = ValkyrieIconProvider.FILE
 
-    override fun getHighlighter() = ValkyrieSyntaxHighlighter()
+    override fun getHighlighter() = TokenHighlight()
 
     override fun getAdditionalHighlightingTagToDescriptorMap() = annotatorTags
 

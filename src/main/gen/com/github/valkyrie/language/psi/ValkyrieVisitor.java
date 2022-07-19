@@ -63,10 +63,6 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitDefItemSign(@NotNull ValkyrieDefItemSign o) {
-    visitPsiElement(o);
-  }
-
   public void visitDefineBlock(@NotNull ValkyrieDefineBlock o) {
     visitPsiElement(o);
   }
@@ -176,6 +172,10 @@ public class ValkyrieVisitor extends PsiElementVisitor {
   }
 
   public void visitMatchStatement(@NotNull ValkyrieMatchStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMayDot(@NotNull ValkyrieMayDot o) {
     visitPsiElement(o);
   }
 

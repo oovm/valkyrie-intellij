@@ -47,15 +47,15 @@ public class ValkyrieDefineStatementNode extends MixinDefine implements Valkyrie
   }
 
   @Override
-  @NotNull
-  public ValkyrieIdentifier getIdentifier() {
-    return findNotNullChildByClass(ValkyrieIdentifier.class);
-  }
-
-  @Override
   @Nullable
   public ValkyrieModifiers getModifiers() {
     return findChildByClass(ValkyrieModifiers.class);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieNamespaceDot getNamespaceDot() {
+    return findNotNullChildByClass(ValkyrieNamespaceDot.class);
   }
 
   @Override

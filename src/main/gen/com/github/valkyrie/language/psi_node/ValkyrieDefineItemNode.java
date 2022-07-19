@@ -30,12 +30,6 @@ public class ValkyrieDefineItemNode extends MixinDefineItem implements ValkyrieD
 
   @Override
   @Nullable
-  public ValkyrieDefItemSign getDefItemSign() {
-    return findChildByClass(ValkyrieDefItemSign.class);
-  }
-
-  @Override
-  @Nullable
   public ValkyrieExpression getExpression() {
     return findChildByClass(ValkyrieExpression.class);
   }

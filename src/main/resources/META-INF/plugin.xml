@@ -27,10 +27,10 @@
 			implementationClass="com.github.valkyrie.ide.view.VStructureViewFactory"/>
 		<!-- Highlight -->
 		<colorSettingsPage implementation="com.github.valkyrie.settings.VHighlightSetting"/>
-		<highlightVisitor implementation="com.github.valkyrie.ide.highlight.ValkyrieHighlightVisitor"/>
+		<highlightVisitor implementation="com.github.valkyrie.ide.highlight.NodeHighlighter"/>
 		<lang.syntaxHighlighter
 			language="Valkyrie"
-			implementationClass="com.github.valkyrie.ide.highlight.ValkyrieSyntaxHighlighter"
+			implementationClass="com.github.valkyrie.ide.highlight.TokenHighlight"
 		/>
 		<!-- Formatter -->
 		<lang.formatter

@@ -10,7 +10,7 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor as Color
 
-class ValkyrieSyntaxHighlighter : SyntaxHighlighterBase() {
+class TokenHighlight : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer {
         return ValkyrieLexerAdapter()
     }
@@ -23,6 +23,7 @@ class ValkyrieSyntaxHighlighter : SyntaxHighlighterBase() {
         return when (tokenType) {
             // Keywords
             KW_IMPORT, KW_EXTENSION, KW_NAMESPACE, KW_AS -> Color.KEYWORD
+            KW_MODIFIER -> Color.MODIFIER
             MATCH, CATCH, EXTENDS, CASE -> Color.KEYWORD
             IF, ELSE, FOR, IN, WHILE -> Color.KEYWORD
             LET, KW_DEFINE, KW_CLASS, TRAIT, TAGGED, BITFLAG, FORALL, TYPE -> Color.KEYWORD
