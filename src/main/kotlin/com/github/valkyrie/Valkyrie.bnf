@@ -178,7 +178,7 @@ import_statement ::= KW_IMPORT (import_block|import_item)
 import_item      ::= namespace_dot [KW_AS identifier|may_dot import_block] {
     mixin="com.github.valkyrie.language.mixin.MixinImportItem"
 }
-import_block ::= <<brace_block import_item COMMA>>;
+import_block     ::= <<brace_block import_item COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
 extension_statement ::= KW_EXTENSION identifier COLON namespace_dot top_block {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"

@@ -18,7 +18,7 @@ class ValkyrieLexerAdapter : LexerBase() {
             this.buffer = buffer
             this.startOffset = startOffset
             this.endOffset = endOffset
-            val context = LexerContext.fromID(initialState);
+            // val context = LexerContext.fromID(initialState);
             this.stack = TokenInterpreter(buffer, startOffset, endOffset).interpreter()
             this.index = 0
         }
