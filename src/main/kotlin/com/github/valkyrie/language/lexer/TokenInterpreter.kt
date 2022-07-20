@@ -9,59 +9,62 @@ import com.intellij.psi.TokenType.WHITE_SPACE
 
 import com.intellij.psi.tree.IElementType
 
-// @Suppress("MemberVisibilityCanBePrivate")
+private val KEYWORDS = """(?x)
+      namespace[!*]? | extension
+    | using[!*]?
+    | class | struct | tagged | enum | bitset
+    | trait | interface | protocol | convention
+    | let | def | fun | type
+    | not | is | in | as[?!*]?
+    """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
+private val PUNCTUATIONS = """(?x)
+      [.]{1,3}
+    | [{}\[\]()]
+    | [,;$^]
+    | @[*!?@]?
+    # start with < >
+    | >= | /> | ≥ | ⩾ | >{1,3}
+    | <= | </ | ≤ | ⩽ | <{1,3}
+    # start with +
+    | [+]= | [+]> | [+]{1,2}
+    # start with -
+    | -= | -> | ⟶ | -{1,2}
+    # start with *
+    | [*]=?
+    # start with / or % or ÷
+    | /=?
+    | ÷=?
+    | %=?
+    # start with &
+    | &> | &{1,2} | ≻
+    | [|]> | [|]{1,2} | ⊁
+    | ⊻=? | ⊼=? | ⊽=?
+    # start with :
+    | :: | :
+    # start with ~
+    | ~> | ~
+    # start with !
+    | != | ≠ | !
+    # start with ?
+    | [?]
+    # start with =
+    | => | ⇒
+    | === | == | =
+    # unicode
+    | [∈∊∉⊑⋢⨳∀∁∂∃∄¬±√∛∜⊹⋗]
+    #
+    """.toRegex()
+private val comment = """(?x)
+      (\#{3,})([^\00]*?)(\1)
+    | (\#)([^\n\r]*)
+    """.toRegex()
+
+@Suppress("MemberVisibilityCanBePrivate")
 class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int) {
     companion object {
-
-        val SYMBOL_XID = """[\p{L}_][\p{L}_]*""".toRegex()
-        val SYMBOL_RAW = """(`)((?:[^`\\]|\\.)*)(\1)""".toRegex()
         val STRING_SINGLE = """(')((?:[^'\\]|\\.)*)(\1)""".toRegex()
         val STRING_DOUBLE = """(")((?:[^"\\]|\\.)*)(\1)""".toRegex()
         val STRING_TUPLE = """("{3,}|'{3,})([^\00]*?)(\1)""".toRegex()
-        val KEYWORDS = """(?x)
-          namespace[!*]? | extension
-        | using[!*]?
-        | class | struct | tagged | enum | bitset
-        | trait | interface | protocol | convention
-        | let | def | fun | type
-        | not | is | in | as[?!*]?
-        """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
-        val PUNCTUATIONS = """(?x)
-        [.]{1,3}
-        | [{}\[\]()]
-        | [,;$@^]
-        # start with < >
-        | >= | /> | ≥ | ⩾ | >{1,3}
-        | <= | </ | ≤ | ⩽ | <{1,3}
-        # start with +
-        | [+]= | [+]> | [+]{1,2}
-        # start with -
-        | -= | -> | ⟶ | -{1,2}
-        # start with *
-        | [*]=?
-        # start with / or % or ÷
-        | /=?
-        | ÷=?
-        | %=?
-        # start with &
-        | &> | &{1,2} | ≻
-        | [|]> | [|]{1,2} | ⊁
-        | ⊻=? | ⊼=? | ⊽=?
-        # start with :
-        | :: | :
-        # start with ~
-        | ~> | ~
-        # start with !
-        | != | ≠ | !
-        # start with ?
-        | [?]
-        # start with =
-        | => | ⇒
-        | === | == | =
-        # unicode
-        | [∈∊∉⊑⋢⨳∀∁∂∃∄¬±√∛∜⊹⋗]
-        #
-        """.toRegex()
     }
 
     var stack: MutableList<StackItem> = mutableListOf()
@@ -92,16 +95,14 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun codeComment(): Boolean {
-        val comment = """(?x)
-          (\#{3,})([^\00]*?)(\1)
-        | (\#)([^\n\r]*)
-        """.toRegex()
+
         val r = tryMatch(comment) ?: return false
         pushToken(ValkyrieTypes.COMMENT, r)
         return true
     }
 
     private fun codeKeywords(): Boolean {
+
         val r = tryMatch(KEYWORDS) ?: return false
         when (context) {
             Coding -> {
@@ -164,12 +165,11 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun codePunctuations(): Boolean {
+
         val r = tryMatch(PUNCTUATIONS) ?: return false
         when (r.value) {
             // DOT
-
             ":=", "≔" -> pushToken(ValkyrieTypes.OP_BIND, r)
-            ":", "∶" -> pushToken(ValkyrieTypes.COLON, r)
             "->", "⟶" -> pushToken(ValkyrieTypes.OP_ARROW, r)
             "=>", "⇒" -> pushToken(ValkyrieTypes.OP_ARROW2, r)
             "." -> {
@@ -179,6 +179,14 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 }
                 pushToken(ValkyrieTypes.DOT, r)
             }
+            ":", "∶" -> {
+                when (context) {
+                    CatchModifier -> resetToken(ValkyrieTypes.SYMBOL_XID)
+                    else -> {}
+                }
+                pushToken(ValkyrieTypes.COLON, r)
+            }
+
             "::", "∷" -> {
                 when (context) {
                     CatchModifier -> resetToken(ValkyrieTypes.SYMBOL_XID)
@@ -197,7 +205,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 endContext()
                 pushToken(ValkyrieTypes.SEMICOLON, r)
             }
-            "@" -> pushToken(ValkyrieTypes.AT, r)
+            "@", "@@", "@!", "@?" -> pushToken(ValkyrieTypes.AT, r)
             "," -> pushToken(ValkyrieTypes.COMMA, r)
             // start with +
             "++" -> pushToken(ValkyrieTypes.OP_INC, r)

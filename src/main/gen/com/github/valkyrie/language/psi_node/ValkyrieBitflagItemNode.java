@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieElement;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieBitflagItemNode extends ValkyrieElement implements ValkyrieBitflagItem {
+public class ValkyrieBitflagItemNode extends ValkyrieASTBase implements ValkyrieBitflagItem {
 
   public ValkyrieBitflagItemNode(@NotNull ASTNode node) {
     super(node);

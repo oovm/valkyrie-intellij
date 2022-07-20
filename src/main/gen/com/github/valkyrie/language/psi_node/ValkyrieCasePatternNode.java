@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieElement;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieCasePatternNode extends ValkyrieElement implements ValkyrieCasePattern {
+public class ValkyrieCasePatternNode extends ValkyrieASTBase implements ValkyrieCasePattern {
 
   public ValkyrieCasePatternNode(@NotNull ASTNode node) {
     super(node);

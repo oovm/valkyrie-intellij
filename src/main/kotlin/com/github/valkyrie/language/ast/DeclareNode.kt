@@ -14,7 +14,7 @@ import javax.swing.Icon
 
 /// 一定是可以 view 的节点
 /// PsiSymbolDeclarationProvider,
-abstract class DeclareNode(node: ASTNode) : ValkyrieElement(node),
+abstract class DeclareNode(node: ASTNode) : ValkyrieASTBase(node),
     PsiNameIdentifierOwner {
     abstract override fun getOriginalElement(): PsiElement
     abstract override fun getNameIdentifier(): PsiElement

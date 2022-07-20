@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieElement;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieClassInheritNode extends ValkyrieElement implements ValkyrieClassInherit {
+public class ValkyrieClassInheritNode extends ValkyrieASTBase implements ValkyrieClassInherit {
 
   public ValkyrieClassInheritNode(@NotNull ASTNode node) {
     super(node);

@@ -2694,16 +2694,23 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier type_angle
+  // identifier type_angle?
   public static boolean type_instance(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "type_instance")) return false;
     if (!nextTokenIs(b, "<type instance>", SYMBOL_RAW, SYMBOL_XID)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, TYPE_INSTANCE, "<type instance>");
     r = identifier(b, l + 1);
-    r = r && type_angle(b, l + 1);
+    r = r && type_instance_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  // type_angle?
+  private static boolean type_instance_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "type_instance_1")) return false;
+    type_angle(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

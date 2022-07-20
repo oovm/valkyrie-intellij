@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieElement;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieMayDotNode extends ValkyrieElement implements ValkyrieMayDot {
+public class ValkyrieMayDotNode extends ValkyrieASTBase implements ValkyrieMayDot {
 
   public ValkyrieMayDotNode(@NotNull ASTNode node) {
     super(node);

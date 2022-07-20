@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieElement;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieConditionNode extends ValkyrieElement implements ValkyrieCondition {
+public class ValkyrieConditionNode extends ValkyrieASTBase implements ValkyrieCondition {
 
   public ValkyrieConditionNode(@NotNull ASTNode node) {
     super(node);

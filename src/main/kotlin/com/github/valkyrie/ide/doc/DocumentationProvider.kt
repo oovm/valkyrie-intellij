@@ -7,7 +7,10 @@ import com.github.valkyrie.language.psi.ValkyrieTypes.*
 import com.intellij.lang.documentation.DocumentationProvider
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.*
+import com.intellij.psi.PsiDocCommentBase
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import com.intellij.psi.TokenType
 import com.intellij.psi.util.elementType
 import java.util.function.Consumer
 
@@ -25,21 +28,18 @@ class DocumentationProvider : DocumentationProvider {
     override fun collectDocComments(file: PsiFile, sink: Consumer<in PsiDocCommentBase>) {
         if (file !is ValkyrieFileNode) return
         for (child in file.children) {
-            val doc = DocumentNode.tryBuild(child);
-            if (doc != null) {
-                sink.accept(doc)
+            DocumentNode.tryBuild(child).let {
+                if (it != null) {
+                    sink.accept(it)
+                }
             }
         }
     }
 
     override fun generateRenderedDoc(comment: PsiDocCommentBase): String? {
         return when (comment) {
-            is DocumentNode -> {
-                comment.render()
-            }
-            else -> {
-                super.generateRenderedDoc(comment)
-            }
+            is DocumentNode -> comment.render()
+            else -> super.generateRenderedDoc(comment)
         }
     }
 

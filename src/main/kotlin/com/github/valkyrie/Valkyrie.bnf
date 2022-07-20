@@ -2,7 +2,7 @@
     parserClass = "com.github.valkyrie.language.parser.ValkyrieParser"
     parserUtilClass = "com.github.valkyrie.language.psi.ValkyrieParserExtension"
 
-    extends = "com.github.valkyrie.language.ast.ValkyrieElement"
+    extends = "com.github.valkyrie.language.ast.ValkyrieASTBase"
 
     psiClassPrefix = "Valkyrie"
     psiImplClassSuffix = "Node"
@@ -289,7 +289,7 @@ type_expression     ::= type_expr (type_binary type_expr)*;
 private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
 private type_binary ::= VERTICAL | EQ | NE | PLUS | MINUS | TO;
 type_angle          ::= OP_PROPORTION? <<generic_block ([identifier COLON] type_expression) COMMA>> OP_PROPORTION?;
-type_instance       ::= identifier type_angle
+type_instance       ::= identifier type_angle?
 // ---------------------------------------------------------------------------------------------------------------------
 slice_suffix        ::= <<bracket_block slice_expression COMMA>>;
 slice_expression    ::=

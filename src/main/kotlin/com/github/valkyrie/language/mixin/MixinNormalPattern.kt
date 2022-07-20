@@ -1,7 +1,7 @@
 package com.github.valkyrie.language.mixin
 
 import com.github.valkyrie.ide.reference.ValkyrieReference
-import com.github.valkyrie.language.ast.ValkyrieElement
+import com.github.valkyrie.language.ast.ValkyrieASTBase
 import com.github.valkyrie.language.psi.ValkyrieIdentifier
 import com.github.valkyrie.language.psi.ValkyrieNormalPattern
 import com.github.valkyrie.language.psi.ValkyriePatternPair
@@ -15,7 +15,7 @@ import com.intellij.psi.PsiReference
 
 
 @Suppress("UnstableApiUsage")
-abstract class MixinNormalPattern(node: ASTNode) : ValkyrieElement(node),
+abstract class MixinNormalPattern(node: ASTNode) : ValkyrieASTBase(node),
     ValkyrieNormalPattern {
 
     override fun getReference(): PsiReference? {

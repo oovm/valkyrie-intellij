@@ -6,13 +6,12 @@ import com.intellij.psi.PsiDocCommentBase
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 
-class DocumentNode(comment: PsiComment, rawText: String? = null) : ValkyrieElement(comment.node),
+class DocumentNode(comment: PsiComment, rawText: String? = null) : ValkyrieASTBase(comment.node),
     PsiDocCommentBase {
 
     private val documentText: String
 
     init {
-        print(rawText)
         this.documentText = rawText?.trimIndent() ?: "[PARSE_FAILED]: ${comment.text}"
     }
 
@@ -22,8 +21,7 @@ class DocumentNode(comment: PsiComment, rawText: String? = null) : ValkyrieEleme
     }
 
     fun render(): String {
-        print(documentText)
-        return documentText
+        return "<div>$documentText<div>"
     }
 
     companion object {

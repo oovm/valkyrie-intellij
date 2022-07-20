@@ -10,7 +10,7 @@ public interface ValkyrieTypeInstance extends PsiElement {
   @NotNull
   ValkyrieIdentifier getIdentifier();
 
-  @NotNull
+  @Nullable
   ValkyrieTypeAngle getTypeAngle();
 
 }

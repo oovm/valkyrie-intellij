@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieElement;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieTypeInstanceNode extends ValkyrieElement implements ValkyrieTypeInstance {
+public class ValkyrieTypeInstanceNode extends ValkyrieASTBase implements ValkyrieTypeInstance {
 
   public ValkyrieTypeInstanceNode(@NotNull ASTNode node) {
     super(node);
@@ -35,9 +35,9 @@ public class ValkyrieTypeInstanceNode extends ValkyrieElement implements Valkyri
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ValkyrieTypeAngle getTypeAngle() {
-    return findNotNullChildByClass(ValkyrieTypeAngle.class);
+    return findChildByClass(ValkyrieTypeAngle.class);
   }
 
 }

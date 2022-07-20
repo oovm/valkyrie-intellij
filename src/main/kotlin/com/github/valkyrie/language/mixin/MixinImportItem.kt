@@ -1,6 +1,6 @@
 package com.github.valkyrie.language.mixin
 
-import com.github.valkyrie.language.ast.ValkyrieElement
+import com.github.valkyrie.language.ast.ValkyrieASTBase
 import com.github.valkyrie.language.psi.ValkyrieIdentifier
 import com.github.valkyrie.language.psi_node.ValkyrieImportItemNode
 import com.intellij.icons.AllIcons
@@ -9,7 +9,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
 import javax.swing.Icon
 
-open class MixinImportItem(node: ASTNode) : ValkyrieElement(node), PsiNameIdentifierOwner {
+open class MixinImportItem(node: ASTNode) : ValkyrieASTBase(node), PsiNameIdentifierOwner {
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Class
     override fun getOriginalElement(): ValkyrieImportItemNode {
         return this as ValkyrieImportItemNode

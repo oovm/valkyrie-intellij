@@ -1,6 +1,5 @@
 package com.github.valkyrie.language.mixin
 
-import com.github.valkyrie.language.ast.ValkyrieElement
 import com.github.valkyrie.language.ast.ViewableNode
 import com.github.valkyrie.language.psi_node.ValkyrieNamespaceStatementNode
 import com.intellij.lang.ASTNode

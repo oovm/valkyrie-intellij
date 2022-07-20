@@ -98,7 +98,6 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 
     override fun visitTaggedItem(o: ValkyrieTaggedItem) {
         highlight(o.identifier, Color.SYM_VARIANT)
-        super.visitTaggedItem(o)
     }
 
     override fun visitBitflagStatement(o: ValkyrieBitflagStatement) {
@@ -108,15 +107,15 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 
     override fun visitBitflagItem(o: ValkyrieBitflagItem) {
         highlight(o.identifier, Color.SYM_VARIANT)
-        super.visitBitflagItem(o)
+    }
+
+    override fun visitMacro(o: ValkyrieMacro) {
+        highlight(o.firstChild, Color.SYM_MACRO)
+        highlight(o.identifier, Color.SYM_MACRO)
     }
 
     // TODO: real syntax resolve
     override fun visitIdentifier(o: ValkyrieIdentifier) {
-        // guess macro
-        if (o.text.startsWith('@') || o.text.startsWith('#')) {
-            return highlight(o, Color.SYM_MACRO)
-        }
         when (o.text) {
             "Default", "Debug", "Clone", "Copy", "Serialize", "Deserialize",
             "SemiGroup", "Monoid", "HKT", "Functor",
