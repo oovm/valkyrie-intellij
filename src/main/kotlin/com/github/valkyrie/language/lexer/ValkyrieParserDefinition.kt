@@ -33,7 +33,7 @@ object ValkyrieParserDefinition : ParserDefinition {
 
     override fun getCommentTokens(): TokenSet = TokenSet.create(ValkyrieTypes.COMMENT)
 
-    override fun getStringLiteralElements(): TokenSet = TokenSet.create(ValkyrieTypes.STRING_LITERAL)
+    override fun getStringLiteralElements(): TokenSet = TokenSet.create(ValkyrieTypes.STRING_RAW)
 
     override fun createElement(node: ASTNode): PsiElement = Factory.createElement(node)
 

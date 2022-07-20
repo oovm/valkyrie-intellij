@@ -17,14 +17,17 @@
     generateTokenAccessors = false
 
     tokens = [
+        COMMENT = "Comment"
         // literal
         SYMBOL_XID = "Symbol"
         SYMBOL_RAW = "Symbol"
+        STRING_RAW = "String"
         BYTE = "Byte"
-        STRING_START = "'"
-        STRING_END = "'"
-        STRING_TEXT = "String Text"
-        STRING_ESCAPE = "String Escape"
+
+        DOT = '.'
+        SEMICOLON = ';'
+        COLON = ':'
+        PROPORTION = "::"
 
         OP_INC = "++"
         OP_ADD_ASSIGN = "+="
@@ -46,10 +49,6 @@
         OP_OR = "|"
         OP_OR2 = "||"
         // DOTS
-        DOT = '.'
-        SEMICOLON = ';'
-        COLON = ':'
-        PROPORTION = "::"
         OP_ARROW = "->"
         OP_ARROW2 = "=>"
         //
@@ -289,17 +288,14 @@ tuple          ::= <<parenthesis expression COMMA>>
 private atoms  ::= number | string | boolean | namespace;
 boolean        ::= "true" | "false";
 number         ::= number_literal [identifier];
-string         ::= [identifier] string_literal
+string         ::= [identifier] STRING_RAW {
+    mixin="com.github.valkyrie.language.mixin.MixinString"
+}
 identifier     ::= SYMBOL_XID | SYMBOL_RAW {
     mixin="com.github.valkyrie.language.mixin.MixinIdentifier"
 }
 number_literal ::= BYTE | INTEGER | DECIMAL;
-string_literal ::= STRING_EMPTY | STRING_START STRING_CHAR+ STRING_END;
 // ---------------------------------------------------------------------------------------------------------------------
-comment_part   ::= COMMENT {
-    mixin="com.github.valkyrie.language.mixin.ValkyrieDocumentMixin"
-}
-
 private meta sequence      ::= <<item>> (<<sp>> <<item>>)* [<<sp>>];
 // parenthesis ( )
 private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] PARENTHESIS_R;

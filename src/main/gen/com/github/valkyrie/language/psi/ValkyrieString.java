@@ -10,7 +10,4 @@ public interface ValkyrieString extends PsiElement {
   @Nullable
   ValkyrieIdentifier getIdentifier();
 
-  @NotNull
-  ValkyrieStringLiteral getStringLiteral();
-
 }

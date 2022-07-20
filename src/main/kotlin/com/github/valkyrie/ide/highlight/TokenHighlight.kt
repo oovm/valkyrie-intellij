@@ -26,7 +26,7 @@ class TokenHighlight : SyntaxHighlighterBase() {
             KW_DEFINE -> Color.KEYWORD
             KW_MODIFIER -> Color.MODIFIER
             KW_TYPE -> Color.KEYWORD
-            MATCH, CATCH, EXTENDS, CASE -> Color.KEYWORD
+            MATCH, KW_CATCH, KW_EXTENDS, CASE -> Color.KEYWORD
             IF, ELSE, FOR, IN, WHILE -> Color.KEYWORD
             LET, KW_DEFINE, KW_CLASS, KW_TRAIT, TAGGED, BITFLAG, FORALL -> Color.KEYWORD
             // ANNOTATION -> JssColor.ANNOTATION
@@ -45,8 +45,7 @@ class TokenHighlight : SyntaxHighlighterBase() {
             INTEGER -> Color.INTEGER
             BYTE -> Color.INTEGER
             DECIMAL -> Color.DECIMAL
-            STRING_CHAR -> Color.STRING
-            STRING_START, STRING_END, STRING_CHAR, STRING_EMPTY -> Color.STRING
+            STRING_RAW -> Color.STRING
             SYMBOL_XID, SYMBOL_RAW -> Color.IDENTIFIER
             // 注释
             COMMENT -> Color.BLOCK_COMMENT

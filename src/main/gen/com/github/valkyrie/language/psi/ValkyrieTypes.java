@@ -22,7 +22,6 @@ public interface ValkyrieTypes {
   IElementType CLASS_STATEMENT = new ValkyrieTokenType("CLASS_STATEMENT");
   IElementType CLASS_TUPLE = new ValkyrieTokenType("CLASS_TUPLE");
   IElementType CLASS_TUPLE_ITEM = new ValkyrieTokenType("CLASS_TUPLE_ITEM");
-  IElementType COMMENT_PART = new ValkyrieTokenType("COMMENT_PART");
   IElementType CONDITION = new ValkyrieTokenType("CONDITION");
   IElementType DEFINE_BLOCK = new ValkyrieTokenType("DEFINE_BLOCK");
   IElementType DEFINE_ITEM = new ValkyrieTokenType("DEFINE_ITEM");
@@ -68,7 +67,6 @@ public interface ValkyrieTypes {
   IElementType SLICE_EXPRESSION = new ValkyrieTokenType("SLICE_EXPRESSION");
   IElementType SLICE_SUFFIX = new ValkyrieTokenType("SLICE_SUFFIX");
   IElementType STRING = new ValkyrieTokenType("STRING");
-  IElementType STRING_LITERAL = new ValkyrieTokenType("STRING_LITERAL");
   IElementType TAGGED_BLOCK = new ValkyrieTokenType("TAGGED_BLOCK");
   IElementType TAGGED_ITEM = new ValkyrieTokenType("TAGGED_ITEM");
   IElementType TAGGED_STATEMENT = new ValkyrieTokenType("TAGGED_STATEMENT");
@@ -97,7 +95,7 @@ public interface ValkyrieTypes {
   IElementType CASE = new ValkyrieTokenType("CASE");
   IElementType COLON = new ValkyrieTokenType(":");
   IElementType COMMA = new ValkyrieTokenType("COMMA");
-  IElementType COMMENT = new ValkyrieTokenType("COMMENT");
+  IElementType COMMENT = new ValkyrieTokenType("Comment");
   IElementType DECIMAL = new ValkyrieTokenType("DECIMAL");
   IElementType DOT = new ValkyrieTokenType(".");
   IElementType DOT2 = new ValkyrieTokenType("DOT2");
@@ -193,12 +191,7 @@ public interface ValkyrieTypes {
   IElementType PROPORTION = new ValkyrieTokenType("::");
   IElementType QUESTION = new ValkyrieTokenType("QUESTION");
   IElementType SEMICOLON = new ValkyrieTokenType(";");
-  IElementType STRING_CHAR = new ValkyrieTokenType("STRING_CHAR");
-  IElementType STRING_EMPTY = new ValkyrieTokenType("STRING_EMPTY");
-  IElementType STRING_END = new ValkyrieTokenType("'");
-  IElementType STRING_ESCAPE = new ValkyrieTokenType("String Escape");
-  IElementType STRING_START = new ValkyrieTokenType("STRING_START");
-  IElementType STRING_TEXT = new ValkyrieTokenType("String Text");
+  IElementType STRING_RAW = new ValkyrieTokenType("String");
   IElementType SYMBOL_RAW = new ValkyrieTokenType("Symbol");
   IElementType SYMBOL_XID = new ValkyrieTokenType("SYMBOL_XID");
   IElementType TAGGED = new ValkyrieTokenType("TAGGED");
@@ -250,9 +243,6 @@ public interface ValkyrieTypes {
       }
       else if (type == CLASS_TUPLE_ITEM) {
         return new ValkyrieClassTupleItemNode(node);
-      }
-      else if (type == COMMENT_PART) {
-        return new ValkyrieCommentPartNode(node);
       }
       else if (type == CONDITION) {
         return new ValkyrieConditionNode(node);
@@ -388,9 +378,6 @@ public interface ValkyrieTypes {
       }
       else if (type == STRING) {
         return new ValkyrieStringNode(node);
-      }
-      else if (type == STRING_LITERAL) {
-        return new ValkyrieStringLiteralNode(node);
       }
       else if (type == TAGGED_BLOCK) {
         return new ValkyrieTaggedBlockNode(node);

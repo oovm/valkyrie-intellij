@@ -66,7 +66,6 @@ class DocumentationProvider : DocumentationProvider {
                 null
             }
             else -> {
-                print(contextElement)
                 null
             }
         }

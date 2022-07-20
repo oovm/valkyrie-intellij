@@ -54,19 +54,21 @@ private val PUNCTUATIONS = """(?x)
     | [∈∊∉⊑⋢⨳∀∁∂∃∄¬±√∛∜⊹⋗]
     #
     """.toRegex()
-private val comment = """(?x)
+private val COMMENTS = """(?x)
       (\#{3,})([^\00]*?)(\1)
     | (\#)([^\n\r]*)
+    """.toRegex()
+private val STRINGS = """(?x)
+      ("{3,}|'{3,})([^\00]*?)(\1)
+    | '[^']*'
+    | "[^"]*"
+    | «[^»]*»
+    | ‘[^’]*’
+    | “[^”]*”
     """.toRegex()
 
 @Suppress("MemberVisibilityCanBePrivate")
 class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int) {
-    companion object {
-        val STRING_SINGLE = """(')((?:[^'\\]|\\.)*)(\1)""".toRegex()
-        val STRING_DOUBLE = """(")((?:[^"\\]|\\.)*)(\1)""".toRegex()
-        val STRING_TUPLE = """("{3,}|'{3,})([^\00]*?)(\1)""".toRegex()
-    }
-
     var stack: MutableList<StackItem> = mutableListOf()
 
     var contextStack: MutableList<LexerContext> = mutableListOf();
@@ -79,6 +81,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 //            matchesWhitespace() ?: continue
             if (matchesWhitespace()) continue
             if (codeComment()) continue
+            if (codeString()) continue
             if (codePunctuations()) continue
             if (codeKeywords()) continue
             if (codeIdentifier()) continue
@@ -95,9 +98,14 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun codeComment(): Boolean {
-
-        val r = tryMatch(comment) ?: return false
+        val r = tryMatch(COMMENTS) ?: return false
         pushToken(ValkyrieTypes.COMMENT, r)
+        return true
+    }
+
+    private fun codeString(): Boolean {
+        val r = tryMatch(STRINGS) ?: return false
+        pushToken(ValkyrieTypes.STRING_RAW, r)
         return true
     }
 

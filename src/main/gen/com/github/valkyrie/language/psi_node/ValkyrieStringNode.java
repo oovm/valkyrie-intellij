@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieASTBase;
+import com.github.valkyrie.language.mixin.MixinString;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieStringNode extends ValkyrieASTBase implements ValkyrieString {
+public class ValkyrieStringNode extends MixinString implements ValkyrieString {
 
   public ValkyrieStringNode(@NotNull ASTNode node) {
     super(node);
@@ -32,12 +32,6 @@ public class ValkyrieStringNode extends ValkyrieASTBase implements ValkyrieStrin
   @Nullable
   public ValkyrieIdentifier getIdentifier() {
     return findChildByClass(ValkyrieIdentifier.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieStringLiteral getStringLiteral() {
-    return findNotNullChildByClass(ValkyrieStringLiteral.class);
   }
 
 }

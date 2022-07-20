@@ -63,10 +63,6 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitCommentPart(@NotNull ValkyrieCommentPart o) {
-    visitPsiElement(o);
-  }
-
   public void visitCondition(@NotNull ValkyrieCondition o) {
     visitPsiElement(o);
   }
@@ -244,10 +240,6 @@ public class ValkyrieVisitor extends PsiElementVisitor {
   }
 
   public void visitString(@NotNull ValkyrieString o) {
-    visitPsiElement(o);
-  }
-
-  public void visitStringLiteral(@NotNull ValkyrieStringLiteral o) {
     visitPsiElement(o);
   }
 

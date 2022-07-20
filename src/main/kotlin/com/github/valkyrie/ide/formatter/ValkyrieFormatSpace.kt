@@ -31,7 +31,6 @@ data class ValkyrieFormatSpace(
         private val remove_space_newline_after = TokenSet.create(
             BRACKET_L,
             DOT,
-            DOLLAR,
             OP_MUL,
             OP_SUB,
             PROPORTION,

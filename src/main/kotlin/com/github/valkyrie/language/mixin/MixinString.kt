@@ -4,7 +4,7 @@ import com.github.valkyrie.language.ast.ValkyrieASTBase
 import com.intellij.lang.ASTNode
 
 // PsiReference
-open class ValkyrieDocumentMixin(node: ASTNode) : ValkyrieASTBase(node) {
+open class MixinString(node: ASTNode) : ValkyrieASTBase(node) {
 
 }
 
