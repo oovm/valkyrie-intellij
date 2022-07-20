@@ -3,7 +3,9 @@ package com.github.valkyrie.language.symbol
 import com.github.valkyrie.ide.doc.DocumentationRenderer
 import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor
 import com.github.valkyrie.language.psi.ValkyrieTypes
+import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.util.elementType
 
 class KeywordData(
     val name: String,
@@ -11,14 +13,14 @@ class KeywordData(
 ) {
     fun documentation(doc: DocumentationRenderer) {
         doc.append(ValkyrieHighlightColor.KEYWORD, "keyword ")
-        doc.append(ValkyrieHighlightColor.MODIFIER, name)
-        doc.append("<br/>")
+        doc.append(ValkyrieHighlightColor.SYM_MACRO, name)
+        doc.append("<hr/>")
         doc.append(detail)
     }
 
 
     companion object {
-        fun getData(name: IElementType?): KeywordData? = when (name) {
+        fun builtinData(name: PsiElement): KeywordData? = when (name.elementType) {
             ValkyrieTypes.KW_CLASS -> KeywordData(
                 "class",
                 """
@@ -33,29 +35,5 @@ class KeywordData(
             )
             else -> null
         }
-
-        fun getData(name: String): Boolean = Database.containsKey(name)
-
-        val Database: Map<String, KeywordData> = mapOf(
-            "class" to ,
-            "trait" to KeywordData("trait"),
-            "interface" to KeywordData("interface"),
-            "extends" to KeywordData(
-                "extends",
-                """
-                extends Point {
-                    def eq(self, other: Self) -> bool { }
-                }
-                """.trimIndent()
-            ),
-
-            "let" to KeywordData(
-                "let",
-                """
-                let x = 1
-                """.trimIndent()
-            ),
-            "def"
-        )
     }
 }

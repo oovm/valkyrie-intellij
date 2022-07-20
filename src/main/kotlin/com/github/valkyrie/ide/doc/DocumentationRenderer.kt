@@ -6,46 +6,66 @@ import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor.*
 import com.github.valkyrie.language.psi_node.ValkyrieClassStatementNode
 import com.github.valkyrie.language.psi_node.ValkyrieTraitStatementNode
 import com.github.valkyrie.language.symbol.KeywordData
+import com.github.valkyrie.language.symbol.ModifierData
+import com.github.valkyrie.language.symbol.OperatorData
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.editor.richcopy.HtmlSyntaxInfoUtil
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.elementType
 import com.intellij.ui.ColorUtil
 
 class DocumentationRenderer(var element: PsiElement, private var original: PsiElement?) {
     private val doc = StringBuilder()
     fun onHover(): String {
+        val keyword = KeywordData.builtinData(element);
         when {
-            KeywordData.getData(element.elementType) -> {
-                KeywordData.Database[element.text]?.documentation(this)
+            keyword != null -> {
+                keyword.documentation(this)
             }
-            else -> when (element) {
-                is ValkyrieTraitStatementNode -> buildShort(element as ValkyrieTraitStatementNode)
-                is ValkyrieClassStatementNode -> buildShort(element as ValkyrieClassStatementNode)
-                else -> doc.append("onHover: ${element.text}")
+            else -> {
+                when (element) {
+                    is ValkyrieTraitStatementNode -> buildShort(element as ValkyrieTraitStatementNode)
+                    is ValkyrieClassStatementNode -> buildShort(element as ValkyrieClassStatementNode)
+                    else -> doc.append("onHover: ${element.text}")
+                }
             }
         }
         return doc.toString()
     }
 
     fun onDetail(): String {
-        when {
-            KeywordData.getData(element.elementType) -> {
-                KeywordData.Database[element.text]?.documentation(this)
+        when (val tokens = KeywordData.builtinData(element)) {
+            null -> {}
+            else -> {
+                tokens.documentation(this)
+                return doc.toString()
             }
-            else -> when (element) {
-                is ValkyrieTraitStatementNode -> buildDetail(element as ValkyrieTraitStatementNode)
-                is ValkyrieClassStatementNode -> buildShort(element as ValkyrieClassStatementNode)
-                else -> {
-                    doc.append(element)
-                    doc.append("<br/>")
-                    doc.append(original)
-                    doc.append("<br/>")
-                    doc.append("onDetail: ${element.text}")
-                }
+        }
+        when (val tokens = OperatorData.builtinData(element)) {
+            null -> {}
+            else -> {
+                tokens.documentation(this)
+                return doc.toString()
+            }
+        }
+        when (val tokens = ModifierData.builtinData(element)) {
+            null -> {}
+            else -> {
+                tokens.documentation(this)
+                return doc.toString()
             }
         }
 
+        when (element) {
+            is ValkyrieTraitStatementNode -> buildDetail(element as ValkyrieTraitStatementNode)
+            is ValkyrieClassStatementNode -> buildShort(element as ValkyrieClassStatementNode)
+            else -> {
+                doc.append(element)
+                doc.append("<br/>")
+                doc.append(original)
+                doc.append("<br/>")
+                doc.append("onDetail: ${element.text}")
+            }
+        }
         return doc.toString()
     }
 
@@ -112,7 +132,6 @@ class DocumentationRenderer(var element: PsiElement, private var original: PsiEl
     private fun appendAdd() {
         doc.append("<span>+</span>")
     }
-
 }
 
 

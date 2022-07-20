@@ -19,7 +19,7 @@ class DocumentationProvider : CodeDocumentationProvider {
 
     // 按住 Ctrl 后悬浮
     override fun getQuickNavigateInfo(element: PsiElement?, originalElement: PsiElement?): String? {
-        return element?.let { this.generateHoverDoc(it, originalElement) }
+        return originalElement?.let { this.generateHoverDoc(it, originalElement) }
     }
 
     // 悬浮
