@@ -18,43 +18,13 @@
 
     tokens = [
         // literal
-        URL = "Url"
         SYMBOL_XID = "Symbol"
         SYMBOL_RAW = "Symbol"
         BYTE = "Byte"
         STRING_START = "'"
         STRING_END = "'"
-        STRING_CHAR = "String Character"
-        STRING_EMPTY = "String Empty"
-
-
-
-        ACCENT = '^'
-        BIND = '='
-        EQ = '=='
-        NE = '!='
-
-
-        DOT2 = '..'
-        DOT3 = '...'
-        DOT_LESS = '..<'
-        DOT_EQ = '..='
-        COMMA = ','
-        STAR = '*'
-        AT = '@'
-        DOLLAR = '$'
-        HASH = '#'
-        HYPHEN = "-"
-        PLUS = "+"
-        VERTICAL = "|"
-        BANG = "!"
-        AMP  = "&"
-        TILDE = "~"
-        QUESTION = "?"
-        SLASH = "/"
-        BACKSLASH = "\\"
-        PERCENT = "%"
-        PIPE = "|"
+        STRING_TEXT = "String Text"
+        STRING_ESCAPE = "String Escape"
 
         OP_INC = "++"
         OP_ADD_ASSIGN = "+="
@@ -71,8 +41,10 @@
 
         OP_AND_ASSIGN = "&="
         OP_AND = "&"
+        OP_AND2 = "&&"
         OP_OR_ASSIGN = "|="
         OP_OR = "|"
+        OP_OR2 = "||"
         // DOTS
         DOT = '.'
         SEMICOLON = ';'
@@ -106,6 +78,8 @@
         OP_NOT_IN = "not_in"
         OP_AND_THEN = "and_then"
         OP_OR_ELSE = "or_else"
+        OP_FORALL = "forall"
+        OP_EXISTS = "exists"
 
         PARENTHESIS_L = '('
         PARENTHESIS_R = ')'
@@ -119,25 +93,24 @@
         KW_NAMESPACE = "namespace"
         KW_IMPORT = "using"
         KW_EXTENSION = "extension"
-        KW_CLASS = 'class'
         KW_AS = "as"
+
+        KW_LET = "let"
         KW_DEFINE = "def"
+        KW_NEW = 'new'
 
-        IF = "if"
-        ELSE = "else"
-        FOR = "for"
-        FORALL = "forall"
-//      EXISTS = "exists"
-        WHILE = "while"
-        MATCH = 'match'
-        CATCH = 'catch'
-        LET = "let"
-        NEW = 'new'
+        KW_IF = "if"
+        KW_ELSE = "else"
+        KW_FOR = "for"
+        KW_WHILE = "while"
+        KW_MATCH = 'match'
+        KW_CATCH = 'catch'
 
+        KW_CLASS = 'class'
         KW_TRAIT = 'trait'
-        TAGGED = 'tagged'
-        BITFLAG = 'bitset'
-        EXTENDS = 'extends'
+        KW_TAGGED = 'tagged'
+        KW_BITFLAG = 'bitset'
+        KW_EXTENDS = 'extends'
     ]
 }
 

@@ -10,12 +10,12 @@ import com.intellij.psi.TokenType.WHITE_SPACE
 import com.intellij.psi.tree.IElementType
 
 private val KEYWORDS = """(?x)
-      namespace[!*]? | extension
-    | using[!*]?
+      namespace[*!]? | extension
+    | using[*!]?
     | class | struct | tagged | enum | bitset
     | trait | interface | protocol | convention
     | let | def | fun | type
-    | not | is | in | as[?!*]?
+    | not | is | in | as[*!?]?
     """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
 private val PUNCTUATIONS = """(?x)
       [.]{1,3}
