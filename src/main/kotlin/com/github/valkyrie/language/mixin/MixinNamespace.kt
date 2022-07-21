@@ -3,11 +3,14 @@ package com.github.valkyrie.language.mixin
 import com.github.valkyrie.ide.file.ValkyrieIconProvider
 import com.github.valkyrie.ide.view.ValkyrieViewElement
 import com.github.valkyrie.language.ast.ViewableNode
+import com.github.valkyrie.language.ast.addChildrenView
+import com.github.valkyrie.language.psi_node.ValkyrieImportStatementNode
 import com.github.valkyrie.language.psi_node.ValkyrieNamespaceStatementNode
 import com.intellij.ide.projectView.PresentationData
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
+import com.intellij.psi.util.PsiTreeUtil
 import javax.swing.Icon
 
 open class MixinNamespace(node: ASTNode) : ViewableNode(node), PsiNameIdentifierOwner {
@@ -47,7 +50,11 @@ open class MixinNamespace(node: ASTNode) : ViewableNode(node), PsiNameIdentifier
     }
 
     override fun getChildrenView(): Array<ValkyrieViewElement> {
-        return super.getChildrenView()
+        val views: MutableList<ValkyrieViewElement> = mutableListOf()
+        for (item in PsiTreeUtil.getChildrenOfTypeAsList(containingFile, ValkyrieImportStatementNode::class.java)) {
+            item.addChildrenView(views)
+        }
+        return views.toTypedArray()
     }
 }
 

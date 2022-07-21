@@ -22,6 +22,5 @@ open class ValkyrieASTBase(node: ASTNode) : ASTWrapperPsiElement(node) {
             childrenView.add(ValkyrieViewElement(item))
         }
         return childrenView.toTypedArray()
-//        return  arrayOf()
     }
 }

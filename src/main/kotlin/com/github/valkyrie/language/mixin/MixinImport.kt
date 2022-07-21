@@ -7,6 +7,7 @@ import com.github.valkyrie.language.psi.ValkyrieImportStatement
 import com.github.valkyrie.language.psi_node.ValkyrieImportStatementNode
 import com.intellij.lang.ASTNode
 import com.intellij.navigation.ItemPresentation
+import com.intellij.psi.PsiElement
 import javax.swing.Icon
 
 open class MixinImport(node: ASTNode) : ValkyrieASTBase(node) {
@@ -21,6 +22,18 @@ open class MixinImport(node: ASTNode) : ValkyrieASTBase(node) {
 
     override fun getChildrenView(): Array<ValkyrieViewElement> {
         return arrayOf()
+    }
+
+    fun expandImports(): Map<String, Array<String>> {
+        val imports = mutableMapOf<String, Array<String>>()
+        val importStatement = this.originalElement.importItem
+
+
+        return imports
+    }
+
+    fun resolveImports() {
+
     }
 }
 

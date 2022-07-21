@@ -148,7 +148,7 @@ private normal_statements ::=
 namespace_statement ::= kw_namespace namepath_free {
     mixin="com.github.valkyrie.language.mixin.MixinNamespace"
 };
-kw_namespace ::= "namespace" | OP_NAMESAPCE {
+kw_namespace     ::= "namespace" | OP_NAMESAPCE {
     mixin="com.github.valkyrie.language.mixin.MixinKeyword"
 }
 // ---------------------------------------------------------------------------------------------------------------------
@@ -169,7 +169,7 @@ import_block     ::= <<brace_block import_item COMMA>>;
 extension_statement ::= kw_extension identifier COLON namepath_free top_block {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
 };
-kw_extension ::= "extension" | OP_EXTENSION {
+kw_extension     ::= "extension" | OP_EXTENSION {
     mixin="com.github.valkyrie.language.mixin.MixinKeyword"
 }
 top_block        ::= <<brace_block top_statements SEMICOLON>>
