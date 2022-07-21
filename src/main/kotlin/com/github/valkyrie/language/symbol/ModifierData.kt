@@ -1,12 +1,14 @@
+@file:Suppress("ConvertSecondaryConstructorToPrimary", "MemberVisibilityCanBePrivate", "UnstableApiUsage")
+
 package com.github.valkyrie.language.symbol
+
 
 import com.github.valkyrie.ide.doc.DocumentationRenderer
 import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor
-import com.github.valkyrie.language.psi.ValkyrieTypes
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.elementType
 
-@Suppress("MemberVisibilityCanBePrivate")
+
+
 class ModifierData(
     val namespace: Array<String>,
     val name: String,

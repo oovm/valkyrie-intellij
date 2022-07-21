@@ -10,6 +10,7 @@ import com.intellij.ide.projectView.PresentationData
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
 import javax.swing.Icon
 
@@ -24,12 +25,8 @@ open class MixinNamespace(node: ASTNode) : ViewableNode(node), PsiNameIdentifier
 
     override fun getNameIdentifier(): PsiElement? {
         return when {
-            originalElement.kwNamespace.text.endsWith("!") -> {
-                originalElement.namepathFree.lastChild
-            }
-            else -> {
-                null
-            }
+            originalElement.kwNamespace.text.endsWith("!") -> originalElement.namepathFree.lastChild
+            else -> null
         }
     }
 
@@ -38,15 +35,17 @@ open class MixinNamespace(node: ASTNode) : ViewableNode(node), PsiNameIdentifier
     }
 
     override fun getNavigationElement(): PsiElement {
-        return nameIdentifier ?: originalElement.namepathFree
+        return nameIdentifier ?: originalElement.namepathFree.lastChild
     }
+
 
     override fun getTextOffset(): Int {
         return navigationElement.textOffset
     }
 
     override fun getPresentation(): PresentationData {
-        return super.getPresentation()
+        val namepath = originalElement.namepathFree as MixinNamepath;
+        return PresentationData(namepath.name, "", this.getIcon(0), null)
     }
 
     override fun getChildrenView(): Array<ValkyrieViewElement> {

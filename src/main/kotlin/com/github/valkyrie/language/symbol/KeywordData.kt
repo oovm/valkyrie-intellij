@@ -1,16 +1,24 @@
+@file:Suppress("ConvertSecondaryConstructorToPrimary", "MemberVisibilityCanBePrivate", "UnstableApiUsage")
+
 package com.github.valkyrie.language.symbol
 
 import com.github.valkyrie.ide.doc.DocumentationRenderer
 import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor
 import com.github.valkyrie.language.psi.ValkyrieTypes
+import com.intellij.model.Pointer
+import com.intellij.model.Symbol
 import com.intellij.psi.PsiElement
-import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.elementType
 
-class KeywordData(
-    val name: String,
-    private val detail: String = "",
-) {
+class KeywordData : Symbol, Pointer<KeywordData> {
+    val name: String
+    val detail: String
+    constructor(name: String, detail: String = "") {
+        this.name = name
+        this.detail = detail
+    }
+    override fun createPointer(): Pointer<out KeywordData> = this
+    override fun dereference(): KeywordData = this
     fun documentation(doc: DocumentationRenderer) {
         doc.append(ValkyrieHighlightColor.KEYWORD, "keyword ")
         doc.append(ValkyrieHighlightColor.SYM_MACRO, name)
@@ -36,4 +44,6 @@ class KeywordData(
             else -> null
         }
     }
+
+
 }

@@ -3,10 +3,7 @@ package com.github.valkyrie.language.ast
 import com.github.valkyrie.ide.file.ValkyrieIconProvider
 import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor
 import com.github.valkyrie.ide.view.ValkyrieViewElement
-import com.github.valkyrie.language.psi.ValkyrieDefineTuple
-import com.github.valkyrie.language.psi.ValkyrieImportItem
-import com.github.valkyrie.language.psi.ValkyrieImportStatement
-import com.github.valkyrie.language.psi.ValkyrieModifiers
+import com.github.valkyrie.language.psi.*
 import com.github.valkyrie.language.psi_node.ValkyrieImportItemNode
 import com.github.valkyrie.language.psi_node.ValkyrieImportStatementNode
 import com.intellij.ide.projectView.PresentationData
@@ -18,32 +15,35 @@ fun ValkyrieImportStatement?.addChildrenView(list: MutableList<ValkyrieViewEleme
     if (this == null) return
     val node = this as ValkyrieImportStatementNode
     val head = mutableListOf<String>()
-    val item = node.importItem as? ValkyrieImportItemNode
-    if (item != null) {
-        item.getNamepath().forEach { head.add(it.name) }
-        when (val symbol = item.getIdentifierSymbol()) {
-            null -> {
-                item.importBlock
-            }
-            else -> {
-                val view = PresentationData(
-                    symbol.name,
-                    head.joinToString("::"),
-                    ValkyrieIconProvider.IMPORT,
-                    ValkyrieHighlightColor.LINE_COMMENT.textAttributesKey
-                )
-                list.add(ValkyrieViewElement(symbol, view))
-            }
+    node.importItem?.addChildrenView(list, head.toTypedArray())
+    node.importBlock?.addChildrenView(list, head.toTypedArray())
+}
+
+fun ValkyrieImportItem?.addChildrenView(list: MutableList<ValkyrieViewElement>, head: Array<String>) {
+    if (this == null) return
+    val item = this as ValkyrieImportItemNode
+    val head = head.toMutableList()
+    item.getNamepath().forEach { head.add(it.name) }
+    when (val symbol = item.getIdentifierSymbol()) {
+        null -> item.importBlock.addChildrenView(list, head.toTypedArray())
+        else -> {
+            val view = PresentationData(
+                symbol.name,
+                head.joinToString("∷"),
+                // TODO: resolve icon
+                symbol.reference?.element?.getIcon(0) ?: ValkyrieIconProvider.IMPORT,
+                ValkyrieHighlightColor.LINE_COMMENT.textAttributesKey
+            )
+            list.add(ValkyrieViewElement(symbol, view))
         }
     }
 }
 
-
-fun ValkyrieImportItem?.addChildrenView(list: MutableList<ValkyrieViewElement>, head: MutableList<String>) {
+fun ValkyrieImportBlock?.addChildrenView(list: MutableList<ValkyrieViewElement>, head: Array<String>) {
     if (this == null) return
-    val item = this as ValkyrieImportItemNode
-    item.getNamepath().forEach { head.add(it.name) }
-
+    for (item in this.importItemList) {
+        item.addChildrenView(list, head)
+    }
 }
 
 fun ValkyrieDefineTuple?.addChildrenView(list: MutableList<ValkyrieViewElement>) {

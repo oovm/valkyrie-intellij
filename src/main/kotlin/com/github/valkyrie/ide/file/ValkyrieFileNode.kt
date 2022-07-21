@@ -17,12 +17,11 @@ class ValkyrieFileNode(viewProvider: FileViewProvider) : PsiFileBase(viewProvide
     override fun toString(): String = ValkyrieBundle.message("action.create_file")
 
     fun getChildrenView(): Array<TreeElement> {
-        // TODO: modifier buffer
-        val childrenView: MutableSet<ValkyrieViewElement> = mutableSetOf()
-        for (item in PsiTreeUtil.getChildrenOfTypeAsList(this, NavigatablePsiElement::class.java)) {
-            childrenView.add(ValkyrieViewElement(item))
-        }
-        return childrenView.toTypedArray()
+        return PsiTreeUtil
+            .getChildrenOfTypeAsList(this, NavigatablePsiElement::class.java)
+            .filter { it.presentation != null }
+            .map { ValkyrieViewElement(it) }
+            .toTypedArray()
     }
 
     fun isIndexFile(): Boolean {
