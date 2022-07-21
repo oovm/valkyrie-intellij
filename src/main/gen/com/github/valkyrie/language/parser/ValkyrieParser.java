@@ -948,18 +948,17 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // KW_EXTENSION identifier COLON namepath_free top_block
+  // kw_extension identifier COLON namepath_free top_block
   public static boolean extension_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "extension_statement")) return false;
-    if (!nextTokenIs(b, KW_EXTENSION)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, KW_EXTENSION);
+    Marker m = enter_section_(b, l, _NONE_, EXTENSION_STATEMENT, "<extension statement>");
+    r = kw_extension(b, l + 1);
     r = r && identifier(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && namepath_free(b, l + 1);
     r = r && top_block(b, l + 1);
-    exit_section_(b, m, EXTENSION_STATEMENT, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -1220,7 +1219,7 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // namepath_free [KW_AS identifier|(COLON|OP_PROPORTION) import_block]
+  // namepath_free [kw_as identifier|(DOT|OP_PROPORTION) import_block]
   public static boolean import_item(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item")) return false;
     if (!nextTokenIs(b, "<import item>", SYMBOL_RAW, SYMBOL_XID)) return false;
@@ -1232,14 +1231,14 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [KW_AS identifier|(COLON|OP_PROPORTION) import_block]
+  // [kw_as identifier|(DOT|OP_PROPORTION) import_block]
   private static boolean import_item_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_1")) return false;
     import_item_1_0(b, l + 1);
     return true;
   }
 
-  // KW_AS identifier|(COLON|OP_PROPORTION) import_block
+  // kw_as identifier|(DOT|OP_PROPORTION) import_block
   private static boolean import_item_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_1_0")) return false;
     boolean r;
@@ -1250,18 +1249,18 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // KW_AS identifier
+  // kw_as identifier
   private static boolean import_item_1_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_1_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, KW_AS);
+    r = kw_as(b, l + 1);
     r = r && identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (COLON|OP_PROPORTION) import_block
+  // (DOT|OP_PROPORTION) import_block
   private static boolean import_item_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_1_0_1")) return false;
     boolean r;
@@ -1272,11 +1271,11 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // COLON|OP_PROPORTION
+  // DOT|OP_PROPORTION
   private static boolean import_item_1_0_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "import_item_1_0_1_0")) return false;
     boolean r;
-    r = consumeToken(b, COLON);
+    r = consumeToken(b, DOT);
     if (!r) r = consumeToken(b, OP_PROPORTION);
     return r;
   }
@@ -1303,6 +1302,18 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // "as" | OP_AS
+  public static boolean kw_as(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "kw_as")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, KW_AS, "<kw as>");
+    r = consumeToken(b, "as");
+    if (!r) r = consumeToken(b, OP_AS);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // "class"|"struct"
   public static boolean kw_class(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "kw_class")) return false;
@@ -1321,6 +1332,18 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, KW_DEFINE, "<kw define>");
     r = consumeToken(b, "def");
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "extension" | OP_EXTENSION
+  public static boolean kw_extension(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "kw_extension")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, KW_EXTENSION, "<kw extension>");
+    r = consumeToken(b, "extension");
+    if (!r) r = consumeToken(b, OP_EXTENSION);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

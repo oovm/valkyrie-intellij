@@ -158,14 +158,20 @@ import_statement ::= kw_import (import_block|import_item) {
 kw_import        ::= "using" | OP_IMPORT {
     mixin="com.github.valkyrie.language.mixin.MixinKeyword"
 }
-import_item      ::= namepath_free [KW_AS identifier|(COLON|OP_PROPORTION) import_block] {
+kw_as            ::= "as" | OP_AS {
+    mixin="com.github.valkyrie.language.mixin.MixinKeyword"
+}
+import_item      ::= namepath_free [kw_as identifier|(DOT|OP_PROPORTION) import_block] {
     mixin="com.github.valkyrie.language.mixin.MixinImportItem"
 }
 import_block     ::= <<brace_block import_item COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
-extension_statement ::= KW_EXTENSION identifier COLON namepath_free top_block {
+extension_statement ::= kw_extension identifier COLON namepath_free top_block {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
 };
+kw_extension ::= "extension" | OP_EXTENSION {
+    mixin="com.github.valkyrie.language.mixin.MixinKeyword"
+}
 top_block        ::= <<brace_block top_statements SEMICOLON>>
 // ---------------------------------------------------------------------------------------------------------------------
 if_statement     ::= (IF condition block) [ef_statement* [else_statement]]

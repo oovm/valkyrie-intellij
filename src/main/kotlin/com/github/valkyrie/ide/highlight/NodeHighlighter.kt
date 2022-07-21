@@ -24,6 +24,11 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
         highlight(o.kwImport, Color.KEYWORD)
     }
 
+    override fun visitImportItem(o: ValkyrieImportItem) {
+        //TODO: get real symbol color
+        highlight(o.kwAs, Color.KEYWORD)
+    }
+
     override fun visitNormalPattern(o: ValkyrieNormalPattern) {
         val mut = o.isMutable();
         val mode = ValkyrieVariableHighlightMode.Local;

@@ -41,8 +41,10 @@ public interface ValkyrieTypes {
   IElementType IMPORT_BLOCK = new ValkyrieTokenType("IMPORT_BLOCK");
   IElementType IMPORT_ITEM = new ValkyrieTokenType("IMPORT_ITEM");
   IElementType IMPORT_STATEMENT = new ValkyrieTokenType("IMPORT_STATEMENT");
+  IElementType KW_AS = new ValkyrieTokenType("KW_AS");
   IElementType KW_CLASS = new ValkyrieTokenType("KW_CLASS");
   IElementType KW_DEFINE = new ValkyrieTokenType("KW_DEFINE");
+  IElementType KW_EXTENSION = new ValkyrieTokenType("KW_EXTENSION");
   IElementType KW_IMPORT = new ValkyrieTokenType("KW_IMPORT");
   IElementType KW_NAMESPACE = new ValkyrieTokenType("KW_NAMESPACE");
   IElementType LET_STATEMENT = new ValkyrieTokenType("LET_STATEMENT");
@@ -118,8 +120,6 @@ public interface ValkyrieTypes {
   IElementType IF = new ValkyrieTokenType("IF");
   IElementType IN = new ValkyrieTokenType("IN");
   IElementType INTEGER = new ValkyrieTokenType("INTEGER");
-  IElementType KW_AS = new ValkyrieTokenType("KW_AS");
-  IElementType KW_EXTENSION = new ValkyrieTokenType("KW_EXTENSION");
   IElementType KW_TRAIT = new ValkyrieTokenType("KW_TRAIT");
   IElementType KW_TYPE = new ValkyrieTokenType("KW_TYPE");
   IElementType LESS = new ValkyrieTokenType("LESS");
@@ -137,6 +137,7 @@ public interface ValkyrieTypes {
   IElementType OP_AND_THEN = new ValkyrieTokenType("and_then");
   IElementType OP_ARROW = new ValkyrieTokenType("->");
   IElementType OP_ARROW2 = new ValkyrieTokenType("=>");
+  IElementType OP_AS = new ValkyrieTokenType("OP_AS");
   IElementType OP_BIND = new ValkyrieTokenType(":=");
   IElementType OP_DEC = new ValkyrieTokenType("--");
   IElementType OP_DIV = new ValkyrieTokenType("/");
@@ -144,6 +145,7 @@ public interface ValkyrieTypes {
   IElementType OP_EMPTY = new ValkyrieTokenType("(!)");
   IElementType OP_EQ = new ValkyrieTokenType("=");
   IElementType OP_EXISTS = new ValkyrieTokenType("exists");
+  IElementType OP_EXTENSION = new ValkyrieTokenType("OP_EXTENSION");
   IElementType OP_FORALL = new ValkyrieTokenType("forall");
   IElementType OP_GEQ = new ValkyrieTokenType(">=");
   IElementType OP_GG = new ValkyrieTokenType(">>");
@@ -293,11 +295,17 @@ public interface ValkyrieTypes {
       else if (type == IMPORT_STATEMENT) {
         return new ValkyrieImportStatementNode(node);
       }
+      else if (type == KW_AS) {
+        return new ValkyrieKwAsNode(node);
+      }
       else if (type == KW_CLASS) {
         return new ValkyrieKwClassNode(node);
       }
       else if (type == KW_DEFINE) {
         return new ValkyrieKwDefineNode(node);
+      }
+      else if (type == KW_EXTENSION) {
+        return new ValkyrieKwExtensionNode(node);
       }
       else if (type == KW_IMPORT) {
         return new ValkyrieKwImportNode(node);

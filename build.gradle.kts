@@ -4,17 +4,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-    // Java support
-    id("java")
-    // Kotlin support
+    idea
     kotlin("jvm") version "1.7.0"
-    // Gradle IntelliJ Plugin
     id("org.jetbrains.intellij") version "1.7.0"
-    // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
-    // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
 }
+
 
 group = properties("pluginGroup")
 version = properties("pluginVersion")
@@ -22,6 +18,7 @@ version = properties("pluginVersion")
 // Configure project's dependencies
 repositories {
     mavenCentral()
+    maven("https://cache-redirector.jetbrains.com/intellij-dependencies")
 }
 
 sourceSets["main"].java.srcDirs("src/main/gen")
