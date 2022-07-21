@@ -10,8 +10,11 @@ public interface ValkyrieDefineItem extends PsiElement {
   @Nullable
   ValkyrieExpression getExpression();
 
+  @Nullable
+  ValkyrieIdentifier getIdentifier();
+
   @NotNull
-  List<ValkyrieIdentifier> getIdentifierList();
+  List<ValkyrieMacroCall> getMacroCallList();
 
   @Nullable
   ValkyrieModifiers getModifiers();

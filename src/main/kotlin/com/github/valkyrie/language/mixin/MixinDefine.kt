@@ -5,12 +5,12 @@ import com.github.valkyrie.language.ast.FunctionKind
 import com.github.valkyrie.language.psi_node.ValkyrieDefineItemNode
 import com.github.valkyrie.language.psi_node.ValkyrieDefineStatementNode
 import com.github.valkyrie.language.psi_node.ValkyrieIdentifierNode
+import com.github.valkyrie.language.psi_node.ValkyrieNamespaceFreeNode
 import com.intellij.icons.AllIcons.Nodes.Function
 import com.intellij.icons.AllIcons.Nodes.Method
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import javax.swing.Icon
-import kotlin.random.Random
 
 open class MixinDefine(node: ASTNode) : DeclareNode(node) {
 
@@ -19,7 +19,7 @@ open class MixinDefine(node: ASTNode) : DeclareNode(node) {
     }
 
     override fun getNameIdentifier(): ValkyrieIdentifierNode {
-        return originalElement.namespaceDot.identifierList.last() as ValkyrieIdentifierNode
+        return originalElement.namespaceFree.identifierList.last() as ValkyrieIdentifierNode
     }
 
     override fun getIcon(flags: Int): Icon = when {
@@ -33,21 +33,14 @@ open class MixinDefine(node: ASTNode) : DeclareNode(node) {
 
     val kind: FunctionKind
         get() {
-            val lastDot = originalElement.namespaceDot.mayDotList.lastOrNull();
+            val namespace = originalElement.namespaceFree as ValkyrieNamespaceFreeNode;
+            val lastDot = namespace.delimiterList().lastOrNull();
             val firstArg = originalElement.defineTuple.defineItemList.firstOrNull()
             return when {
-                lastDot != null -> {
-                    when (lastDot.text == "::") {
-                        true -> FunctionKind.STATIC_METHOD
-                        false -> FunctionKind.METHOD
-                    }
-                }
-                else -> {
-                    if (firstArg == null) {
-                        return FunctionKind.FREE_FUNCTION
-                    }
-                    FunctionKind.FREE_FUNCTION
-                }
+                lastDot?.text == "::" -> FunctionKind.STATIC_METHOD
+                lastDot?.text == "." -> FunctionKind.METHOD
+                firstArg == null -> FunctionKind.FREE_FUNCTION
+                else -> FunctionKind.FREE_FUNCTION
             }
         }
 

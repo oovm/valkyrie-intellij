@@ -141,12 +141,6 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "using", "using!", "using*" -> {
                 pushToken(ValkyrieTypes.KW_IMPORT, r)
             }
-            "class", "struct" -> {
-                pushToken(ValkyrieTypes.KW_CLASS, r)
-            }
-            "trait", "interface" -> {
-                pushToken(ValkyrieTypes.KW_TRAIT, r)
-            }
             "as", "as?", "as!", "as*" -> {
                 pushToken(ValkyrieTypes.KW_AS, r)
             }
@@ -155,9 +149,6 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             }
             "not" -> {
                 pushToken(ValkyrieTypes.OP_NOT_A, r)
-            }
-            "def" -> {
-                pushToken(ValkyrieTypes.KW_DEFINE, r)
             }
             else -> {
                 pushToken(BAD_CHARACTER, r)

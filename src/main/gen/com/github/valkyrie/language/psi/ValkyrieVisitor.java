@@ -139,6 +139,10 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitKwClass(@NotNull ValkyrieKwClass o) {
+    visitPsiElement(o);
+  }
+
   public void visitKwDefine(@NotNull ValkyrieKwDefine o) {
     visitPsiElement(o);
   }
@@ -180,10 +184,6 @@ public class ValkyrieVisitor extends PsiElementVisitor {
   }
 
   public void visitMatchStatement(@NotNull ValkyrieMatchStatement o) {
-    visitPsiElement(o);
-  }
-
-  public void visitMayDot(@NotNull ValkyrieMayDot o) {
     visitPsiElement(o);
   }
 

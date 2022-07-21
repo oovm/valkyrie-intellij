@@ -41,6 +41,7 @@ public interface ValkyrieTypes {
   IElementType IMPORT_BLOCK = new ValkyrieTokenType("IMPORT_BLOCK");
   IElementType IMPORT_ITEM = new ValkyrieTokenType("IMPORT_ITEM");
   IElementType IMPORT_STATEMENT = new ValkyrieTokenType("IMPORT_STATEMENT");
+  IElementType KW_CLASS = new ValkyrieTokenType("KW_CLASS");
   IElementType KW_DEFINE = new ValkyrieTokenType("KW_DEFINE");
   IElementType LET_STATEMENT = new ValkyrieTokenType("LET_STATEMENT");
   IElementType LET_TYPE_HINT = new ValkyrieTokenType("LET_TYPE_HINT");
@@ -52,7 +53,6 @@ public interface ValkyrieTypes {
   IElementType MATCH_BLOCK = new ValkyrieTokenType("MATCH_BLOCK");
   IElementType MATCH_EXPRESSION = new ValkyrieTokenType("MATCH_EXPRESSION");
   IElementType MATCH_STATEMENT = new ValkyrieTokenType("MATCH_STATEMENT");
-  IElementType MAY_DOT = new ValkyrieTokenType("MAY_DOT");
   IElementType MODIFIERS = new ValkyrieTokenType("MODIFIERS");
   IElementType NAMESPACE = new ValkyrieTokenType("NAMESPACE");
   IElementType NAMESPACE_FREE = new ValkyrieTokenType("NAMESPACE_FREE");
@@ -117,7 +117,6 @@ public interface ValkyrieTypes {
   IElementType IN = new ValkyrieTokenType("IN");
   IElementType INTEGER = new ValkyrieTokenType("INTEGER");
   IElementType KW_AS = new ValkyrieTokenType("KW_AS");
-  IElementType KW_CLASS = new ValkyrieTokenType("KW_CLASS");
   IElementType KW_EXTENSION = new ValkyrieTokenType("KW_EXTENSION");
   IElementType KW_IMPORT = new ValkyrieTokenType("KW_IMPORT");
   IElementType KW_NAMESPACE = new ValkyrieTokenType("KW_NAMESPACE");
@@ -292,6 +291,9 @@ public interface ValkyrieTypes {
       else if (type == IMPORT_STATEMENT) {
         return new ValkyrieImportStatementNode(node);
       }
+      else if (type == KW_CLASS) {
+        return new ValkyrieKwClassNode(node);
+      }
       else if (type == KW_DEFINE) {
         return new ValkyrieKwDefineNode(node);
       }
@@ -324,9 +326,6 @@ public interface ValkyrieTypes {
       }
       else if (type == MATCH_STATEMENT) {
         return new ValkyrieMatchStatementNode(node);
-      }
-      else if (type == MAY_DOT) {
-        return new ValkyrieMayDotNode(node);
       }
       else if (type == MODIFIERS) {
         return new ValkyrieModifiersNode(node);

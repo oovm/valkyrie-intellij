@@ -34,12 +34,12 @@ open class MixinImportItem(node: ASTNode) : ValkyrieASTBase(node), PsiNameIdenti
 
     val symbolName: ValkyrieIdentifier
         get() {
-            return originalElement.namespaceDot.identifierList.last()
+            return originalElement.namespaceFree.identifierList.last()
         }
 
     val symbolNamespace: Array<ValkyrieIdentifier>
         get() {
-            return originalElement.namespaceDot.identifierList.toTypedArray()
+            return originalElement.namespaceFree.identifierList.toTypedArray()
         }
 }
 

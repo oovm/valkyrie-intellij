@@ -112,7 +112,9 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 
     override fun visitMacro(o: ValkyrieMacro) {
         highlight(o.firstChild, Color.SYM_MACRO)
-        highlight(o.identifier, Color.SYM_MACRO)
+        for (i in o.namespaceFree.identifierList) {
+            highlight(i, Color.SYM_MACRO)
+        }
     }
 
     override fun visitModifiers(o: ValkyrieModifiers) {

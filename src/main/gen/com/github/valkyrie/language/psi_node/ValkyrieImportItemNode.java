@@ -41,12 +41,6 @@ public class ValkyrieImportItemNode extends MixinImportItem implements ValkyrieI
   }
 
   @Override
-  @Nullable
-  public ValkyrieMayDot getMayDot() {
-    return findChildByClass(ValkyrieMayDot.class);
-  }
-
-  @Override
   @NotNull
   public ValkyrieNamespaceFree getNamespaceFree() {
     return findNotNullChildByClass(ValkyrieNamespaceFree.class);

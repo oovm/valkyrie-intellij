@@ -35,9 +35,15 @@ public class ValkyrieDefineItemNode extends MixinDefineItem implements ValkyrieD
   }
 
   @Override
+  @Nullable
+  public ValkyrieIdentifier getIdentifier() {
+    return findChildByClass(ValkyrieIdentifier.class);
+  }
+
+  @Override
   @NotNull
-  public List<ValkyrieIdentifier> getIdentifierList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
+  public List<ValkyrieMacroCall> getMacroCallList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieMacroCall.class);
   }
 
   @Override

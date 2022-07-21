@@ -8,18 +8,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieASTBase;
+import com.github.valkyrie.language.mixin.MixinKeyword;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieMayDotNode extends ValkyrieASTBase implements ValkyrieMayDot {
+public class ValkyrieKwClassNode extends MixinKeyword implements ValkyrieKwClass {
 
-  public ValkyrieMayDotNode(@NotNull ASTNode node) {
+  public ValkyrieKwClassNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitMayDot(this);
+    visitor.visitKwClass(this);
   }
 
   @Override

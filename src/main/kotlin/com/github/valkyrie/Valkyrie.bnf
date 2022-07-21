@@ -148,7 +148,7 @@ namespace_statement ::= KW_NAMESPACE namespace_free {
 };
 // ---------------------------------------------------------------------------------------------------------------------
 import_statement ::= KW_IMPORT (import_block|import_item)
-import_item      ::= namespace_free [KW_AS identifier|may_dot import_block] {
+import_item      ::= namespace_free [KW_AS identifier|(COLON|OP_PROPORTION) import_block] {
     mixin="com.github.valkyrie.language.mixin.MixinImportItem"
 }
 import_block     ::= <<brace_block import_item COMMA>>;
@@ -190,16 +190,16 @@ match_expression ::= case_pattern COLON (normal_statements [SEMICOLON])+
 define_statement ::= kw_define [modifiers] namespace_free [old_generic] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefine"
 };
-kw_define        ::= "def"
+kw_define        ::= "def" {
+    mixin="com.github.valkyrie.language.mixin.MixinKeyword"
+}
 define_tuple     ::= <<parenthesis define_item COMMA>>;
-define_item      ::= OP_POW | ANGLE_L | ANGLE_R | [modifiers] identifier [(DOT2|DOT3) identifier] [COLON type_expression] [OP_EQ expression] {
+define_item      ::= OP_POW | OP_LT | OP_GT
+  | macro_call* [modifiers] [DOT2|DOT3] identifier [COLON type_expression] [OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefineItem"
 }
 define_block     ::= <<brace_block normal_statements SEMICOLON>>;
-old_generic      ::=
-    OP_PROPORTION  <<parenthesis ([identifier COLON] type_expression) COMMA>>
-  | OP_PROPORTION? <<generic_block ([identifier COLON] type_expression) COMMA>>
-  | OP_PROPORTION? <<bracket_block ([identifier COLON] type_expression) COMMA>>
+old_generic      ::= OP_PROPORTION? <<generic_block ([identifier COLON] type_expression) COMMA>>
 // ---------------------------------------------------------------------------------------------------------------------
 let_statement    ::=
     LET normal_pattern [let_type_hint] [BIND expression]
@@ -213,9 +213,12 @@ type_statement   ::= KW_TYPE identifier [[OP_PROPORTION] type_angle] [BIND type_
 forall_statement ::= FORALL <<sequence identifier COMMA>> [forall_block];
 forall_block     ::= <<brace_block (type_expression COLON type_expression) (COMMA|SEMICOLON)>>;
 // ---------------------------------------------------------------------------------------------------------------------
-class_statement     ::= KW_CLASS [modifiers] identifier [type_angle] [class_inherit] [class_tuple|class_brace] {
+class_statement     ::= kw_class [modifiers] identifier [type_angle] [class_inherit] [class_tuple|class_brace] {
     mixin="com.github.valkyrie.language.mixin.MixinClass"
 };
+kw_class            ::= "class" {
+    mixin="com.github.valkyrie.language.mixin.MixinKeyword"
+}
 class_inherit       ::= COLON type_instance (OP_ADD type_instance)*;
 class_tuple         ::= <<parenthesis class_tuple_item COMMA>>;
 class_brace         ::= <<brace_block class_brace_item (COMMA|SEMICOLON)>>;
@@ -293,17 +296,18 @@ string         ::= [identifier] STRING_START STRING_TEXT STRING_END {
 }
 number_literal ::= BYTE | INTEGER | DECIMAL;
 // ---------------------------------------------------------------------------------------------------------------------
-namespace_free ::= identifier (may_dot identifier)*;
+namespace_free ::= identifier ((DOT|OP_PROPORTION) identifier)* {
+    mixin="com.github.valkyrie.language.mixin.MixinNamepath"
+}
 namespace      ::= identifier (OP_PROPORTION identifier)* {
     mixin="com.github.valkyrie.language.mixin.MixinNamepath"
 }
 identifier     ::= SYMBOL_XID | SYMBOL_RAW {
     mixin="com.github.valkyrie.language.mixin.MixinIdentifier"
 }
-modifiers      ::= (identifier !(PARENTHESIS_L|DOT|SEMICOLON|OP_PROPORTION))+ {
+modifiers      ::= (identifier !(PARENTHESIS_L|PARENTHESIS_R|DOT|COLON|SEMICOLON|OP_PROPORTION|COMMA|OP_EQ))+ {
     mixin="com.github.valkyrie.language.mixin.MixinModifier"
 };
-may_dot        ::= DOT | OP_PROPORTION;
 // ---------------------------------------------------------------------------------------------------------------------
 private meta sequence      ::= <<item>> (<<sp>> <<item>>)* [<<sp>>];
 // parenthesis ( )

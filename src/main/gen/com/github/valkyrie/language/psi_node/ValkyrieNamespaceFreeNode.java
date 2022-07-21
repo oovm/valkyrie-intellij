@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieASTBase;
+import com.github.valkyrie.language.mixin.MixinNamepath;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieNamespaceFreeNode extends ValkyrieASTBase implements ValkyrieNamespaceFree {
+public class ValkyrieNamespaceFreeNode extends MixinNamepath implements ValkyrieNamespaceFree {
 
   public ValkyrieNamespaceFreeNode(@NotNull ASTNode node) {
     super(node);
@@ -32,12 +32,6 @@ public class ValkyrieNamespaceFreeNode extends ValkyrieASTBase implements Valkyr
   @NotNull
   public List<ValkyrieIdentifier> getIdentifierList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ValkyrieMayDot> getMayDotList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieMayDot.class);
   }
 
 }
