@@ -8,42 +8,24 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.mixin.MixinImport;
+import com.github.valkyrie.language.mixin.MixinKeyword;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieImportStatementNode extends MixinImport implements ValkyrieImportStatement {
+public class ValkyrieKwImportNode extends MixinKeyword implements ValkyrieKwImport {
 
-  public ValkyrieImportStatementNode(@NotNull ASTNode node) {
+  public ValkyrieKwImportNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitImportStatement(this);
+    visitor.visitKwImport(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ValkyrieVisitor) accept((ValkyrieVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieImportBlock getImportBlock() {
-    return findChildByClass(ValkyrieImportBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieImportItem getImportItem() {
-    return findChildByClass(ValkyrieImportItem.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieKwImport getKwImport() {
-    return findNotNullChildByClass(ValkyrieKwImport.class);
   }
 
 }

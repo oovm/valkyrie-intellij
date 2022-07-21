@@ -20,18 +20,6 @@ open class MixinTagged(node: ASTNode) : DeclareNode(node) {
         TODO("Not yet implemented")
     }
 
-    override fun getChildrenView(): Array<TreeElement> {
-//        PsiTreeUtil.getChildrenOfTypeAsList(
-//            this.taggedBlock,
-//            NavigatablePsiElement::class.java
-//        ).forEach {
-//            if (it is ValkyrieTaggedItem) {
-//                val kind = ValkyriePresentationItem(it.identifier.text, AllIcons.Nodes.Variable)
-//                childrenView.add(ValkyrieViewElement(it, kind))
-//            }
-//        }
-        return super.getChildrenView()
-    }
 
 }
 

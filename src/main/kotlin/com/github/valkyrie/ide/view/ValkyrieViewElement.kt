@@ -28,9 +28,9 @@ class ValkyrieViewElement(private val self: NavigatablePsiElement, var view: Ite
         else -> PresentationData()
     }
 
-    override fun getChildren(): Array<TreeElement> = when (self) {
+    override fun getChildren(): Array<out TreeElement> = when (self) {
         is ValkyrieFileNode -> self.getChildrenView()
-        is ValkyrieASTBase -> self.getChildrenView()
+        is ValkyrieASTBase ->self.getChildrenView()
         else -> arrayOf()
     }
 

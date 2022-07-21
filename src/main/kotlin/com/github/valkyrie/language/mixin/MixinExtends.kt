@@ -20,16 +20,6 @@ open class MixinExtends(node: ASTNode) : DeclareNode(node) {
         TODO("Not yet implemented")
     }
 
-    override fun getChildrenView(): Array<TreeElement> {
-//        PsiTreeUtil.getChildrenOfTypeAsList(
-//            this.traitBlock,
-//            NavigatablePsiElement::class.java
-//        ).forEach {
-//            childrenView.add(ValkyrieViewElement(it))
-//        }
-        return super.getChildrenView()
-    }
-
 
 }
 

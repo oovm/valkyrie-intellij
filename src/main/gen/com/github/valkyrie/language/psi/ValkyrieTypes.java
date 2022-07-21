@@ -43,6 +43,7 @@ public interface ValkyrieTypes {
   IElementType IMPORT_STATEMENT = new ValkyrieTokenType("IMPORT_STATEMENT");
   IElementType KW_CLASS = new ValkyrieTokenType("KW_CLASS");
   IElementType KW_DEFINE = new ValkyrieTokenType("KW_DEFINE");
+  IElementType KW_IMPORT = new ValkyrieTokenType("KW_IMPORT");
   IElementType KW_NAMESPACE = new ValkyrieTokenType("KW_NAMESPACE");
   IElementType LET_STATEMENT = new ValkyrieTokenType("LET_STATEMENT");
   IElementType LET_TYPE_HINT = new ValkyrieTokenType("LET_TYPE_HINT");
@@ -119,7 +120,6 @@ public interface ValkyrieTypes {
   IElementType INTEGER = new ValkyrieTokenType("INTEGER");
   IElementType KW_AS = new ValkyrieTokenType("KW_AS");
   IElementType KW_EXTENSION = new ValkyrieTokenType("KW_EXTENSION");
-  IElementType KW_IMPORT = new ValkyrieTokenType("KW_IMPORT");
   IElementType KW_TRAIT = new ValkyrieTokenType("KW_TRAIT");
   IElementType KW_TYPE = new ValkyrieTokenType("KW_TYPE");
   IElementType LESS = new ValkyrieTokenType("LESS");
@@ -150,6 +150,7 @@ public interface ValkyrieTypes {
   IElementType OP_GGG = new ValkyrieTokenType(">>>");
   IElementType OP_GS = new ValkyrieTokenType("/>");
   IElementType OP_GT = new ValkyrieTokenType(">");
+  IElementType OP_IMPORT = new ValkyrieTokenType("OP_IMPORT");
   IElementType OP_IN = new ValkyrieTokenType("in");
   IElementType OP_INC = new ValkyrieTokenType("++");
   IElementType OP_IS_A = new ValkyrieTokenType("is");
@@ -297,6 +298,9 @@ public interface ValkyrieTypes {
       }
       else if (type == KW_DEFINE) {
         return new ValkyrieKwDefineNode(node);
+      }
+      else if (type == KW_IMPORT) {
+        return new ValkyrieKwImportNode(node);
       }
       else if (type == KW_NAMESPACE) {
         return new ValkyrieKwNamespaceNode(node);

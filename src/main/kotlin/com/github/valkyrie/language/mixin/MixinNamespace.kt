@@ -1,7 +1,10 @@
 package com.github.valkyrie.language.mixin
 
+import com.github.valkyrie.ide.file.ValkyrieIconProvider
+import com.github.valkyrie.ide.view.ValkyrieViewElement
 import com.github.valkyrie.language.ast.ViewableNode
 import com.github.valkyrie.language.psi_node.ValkyrieNamespaceStatementNode
+import com.intellij.ide.projectView.PresentationData
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
@@ -28,7 +31,7 @@ open class MixinNamespace(node: ASTNode) : ViewableNode(node), PsiNameIdentifier
     }
 
     override fun getIcon(flags: Int): Icon {
-        TODO("Not yet implemented")
+        return ValkyrieIconProvider.NAMESPACE
     }
 
     override fun getNavigationElement(): PsiElement {
@@ -37,6 +40,14 @@ open class MixinNamespace(node: ASTNode) : ViewableNode(node), PsiNameIdentifier
 
     override fun getTextOffset(): Int {
         return navigationElement.textOffset
+    }
+
+    override fun getPresentation(): PresentationData {
+        return super.getPresentation()
+    }
+
+    override fun getChildrenView(): Array<ValkyrieViewElement> {
+        return super.getChildrenView()
     }
 }
 

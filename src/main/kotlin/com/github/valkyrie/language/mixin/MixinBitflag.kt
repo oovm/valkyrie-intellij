@@ -1,5 +1,6 @@
 package com.github.valkyrie.language.mixin
 
+import com.github.valkyrie.ide.view.ValkyrieViewElement
 import com.github.valkyrie.language.ast.DeclareNode
 import com.github.valkyrie.language.psi_node.ValkyrieBitflagStatementNode
 import com.intellij.icons.AllIcons
@@ -18,8 +19,6 @@ open class MixinBitflag(node: ASTNode) : DeclareNode(node) {
         TODO("Not yet implemented")
     }
 
-    override fun getChildrenView(): Array<TreeElement> {
-        return super.getChildrenView()
-    }
+
 }
 

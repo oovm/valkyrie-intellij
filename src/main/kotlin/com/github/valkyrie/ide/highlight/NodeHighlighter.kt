@@ -16,12 +16,13 @@ import com.github.valkyrie.ide.highlight.ValkyrieHighlightColor as Color
 class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
     private var infoHolder: HighlightInfoHolder? = null
 
+    override fun visitNamespaceStatement(o: ValkyrieNamespaceStatement) {
+        highlight(o.kwNamespace, Color.KEYWORD)
+    }
 
-//    override fun visitExportName(o: ValkyrieExportName) {
-//        if (o.text.startsWith('@') || o.text.startsWith('#')) {
-//            highlight(o, Color.SYM_MACRO)
-//        }
-//    }
+    override fun visitImportStatement(o: ValkyrieImportStatement) {
+        highlight(o.kwImport, Color.KEYWORD)
+    }
 
     override fun visitNormalPattern(o: ValkyrieNormalPattern) {
         val mut = o.isMutable();
@@ -67,8 +68,8 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 //        super.visitForallStatement(o)
     }
 
-
     override fun visitClassStatement(o: ValkyrieClassStatement) {
+        highlight(o.kwClass, Color.KEYWORD)
         highlight(o.identifier, Color.SYM_CLASS)
     }
 

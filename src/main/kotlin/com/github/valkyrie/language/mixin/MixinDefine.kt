@@ -1,15 +1,20 @@
 package com.github.valkyrie.language.mixin
 
+import com.github.valkyrie.ide.view.ValkyrieViewElement
 import com.github.valkyrie.language.ast.DeclareNode
 import com.github.valkyrie.language.ast.FunctionKind
-import com.github.valkyrie.language.psi_node.ValkyrieDefineItemNode
-import com.github.valkyrie.language.psi_node.ValkyrieDefineStatementNode
-import com.github.valkyrie.language.psi_node.ValkyrieIdentifierNode
-import com.github.valkyrie.language.psi_node.ValkyrieNamepathFreeNode
+import com.github.valkyrie.language.psi.ValkyrieDefineTuple
+import com.github.valkyrie.language.psi.ValkyrieModifiers
+import com.github.valkyrie.language.psi_node.*
 import com.intellij.icons.AllIcons.Nodes.Function
 import com.intellij.icons.AllIcons.Nodes.Method
+import com.intellij.ide.projectView.PresentationData
+import com.intellij.ide.util.treeView.smartTree.TreeElement
 import com.intellij.lang.ASTNode
+import com.intellij.navigation.ItemPresentation
+import com.intellij.psi.NavigatablePsiElement
 import com.intellij.psi.PsiElement
+import com.github.valkyrie.language.ast.addChildrenView
 import javax.swing.Icon
 
 open class MixinDefine(node: ASTNode) : DeclareNode(node) {
@@ -29,6 +34,13 @@ open class MixinDefine(node: ASTNode) : DeclareNode(node) {
 
     override fun setName(name: String): PsiElement {
         TODO("Not yet implemented")
+    }
+
+    override fun getChildrenView(): Array<ValkyrieViewElement> {
+        val childrenView: MutableList<ValkyrieViewElement> = mutableListOf()
+        originalElement.modifiers.addChildrenView(childrenView)
+        originalElement.defineTuple.addChildrenView(childrenView)
+        return childrenView.toTypedArray()
     }
 
     val kind: FunctionKind

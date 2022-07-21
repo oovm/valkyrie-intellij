@@ -23,16 +23,7 @@ open class MixinClass(node: ASTNode) : DeclareNode(node) {
         return this.nameIdentifier
     }
 
-    override fun getChildrenView(): Array<TreeElement> {
-        val view = mutableListOf<TreeElement>()
-//        for (it in originalElement.braceItemList) {
-//            view.add(ValkyrieViewElement(it as NavigatablePsiElement))
-//        }
-//        for (it in originalElement.tupleItemList) {
-//            view.add(ValkyrieViewElement(it as NavigatablePsiElement))
-//        }
-        return view.toTypedArray()
-    }
+
 
 }
 

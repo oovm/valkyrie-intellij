@@ -152,7 +152,12 @@ kw_namespace ::= "namespace" | OP_NAMESAPCE {
     mixin="com.github.valkyrie.language.mixin.MixinKeyword"
 }
 // ---------------------------------------------------------------------------------------------------------------------
-import_statement ::= KW_IMPORT (import_block|import_item)
+import_statement ::= kw_import (import_block|import_item) {
+    mixin="com.github.valkyrie.language.mixin.MixinImport"
+}
+kw_import        ::= "using" | OP_IMPORT {
+    mixin="com.github.valkyrie.language.mixin.MixinKeyword"
+}
 import_item      ::= namepath_free [KW_AS identifier|(COLON|OP_PROPORTION) import_block] {
     mixin="com.github.valkyrie.language.mixin.MixinImportItem"
 }

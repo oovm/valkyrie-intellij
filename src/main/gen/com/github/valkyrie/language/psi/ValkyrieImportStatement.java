@@ -13,4 +13,7 @@ public interface ValkyrieImportStatement extends PsiElement {
   @Nullable
   ValkyrieImportItem getImportItem();
 
+  @NotNull
+  ValkyrieKwImport getKwImport();
+
 }

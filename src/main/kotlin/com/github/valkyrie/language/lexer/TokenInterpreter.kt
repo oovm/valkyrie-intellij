@@ -131,7 +131,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
                 pushToken(ValkyrieTypes.OP_NAMESAPCE, r)
             }
             "using", "using!", "using*" -> {
-                pushToken(ValkyrieTypes.KW_IMPORT, r)
+                pushToken(ValkyrieTypes.OP_IMPORT, r)
             }
             "as", "as?", "as!", "as*" -> {
                 pushToken(ValkyrieTypes.KW_AS, r)

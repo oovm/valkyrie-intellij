@@ -3,7 +3,6 @@ package com.github.valkyrie.language.mixin
 import com.github.valkyrie.language.ast.DeclareNode
 import com.github.valkyrie.language.psi_node.ValkyrieTraitStatementNode
 import com.intellij.icons.AllIcons
-import com.intellij.ide.util.treeView.smartTree.TreeElement
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import javax.swing.Icon
@@ -28,15 +27,6 @@ open class MixinTrait(node: ASTNode) : DeclareNode(node) {
             ty != null -> "${name}: ${ty.text}"
             else -> name.text
         }
-    }
-
-    override fun getChildrenView(): Array<TreeElement> {
-        //        PsiTreeUtil.getChildrenOfTypeAsList(
-//            this.traitBlock,
-//            NavigatablePsiElement::class.java
-//        ).forEach {
-//            childrenView.add(ValkyrieViewElement(it))
-        return super.getChildrenView()
     }
 
 
