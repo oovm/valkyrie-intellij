@@ -5,7 +5,6 @@ import com.github.valkyrie.ValkyrieLanguage
 import com.github.valkyrie.ide.file.ValkyrieFileNode
 import com.github.valkyrie.language.parser.ValkyrieParser
 import com.github.valkyrie.language.psi.ValkyrieTypes
-import com.github.valkyrie.language.psi.ValkyrieTypes.Factory
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
@@ -33,9 +32,11 @@ object ValkyrieParserDefinition : ParserDefinition {
 
     override fun getCommentTokens(): TokenSet = TokenSet.create(ValkyrieTypes.COMMENT)
 
-    override fun getStringLiteralElements(): TokenSet = TokenSet.create(ValkyrieTypes.STRING_RAW)
+    override fun getStringLiteralElements(): TokenSet {
+        return TokenSet.create(ValkyrieTypes.STRING_START, ValkyrieTypes.STRING_TEXT, ValkyrieTypes.STRING_END)
+    }
 
-    override fun createElement(node: ASTNode): PsiElement = Factory.createElement(node)
+    override fun createElement(node: ASTNode): PsiElement = ValkyrieTypes.Factory.createElement(node)
 
     override fun createFile(viewProvider: FileViewProvider): PsiFile = ValkyrieFileNode(viewProvider)
 

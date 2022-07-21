@@ -21,7 +21,9 @@
         // literal
         SYMBOL_XID = "Symbol"
         SYMBOL_RAW = "Symbol"
-        STRING_RAW = "String"
+        STRING_START = "StringStart"
+        STRING_TEXT = "StringText"
+        STRING_END = "StringEnd"
         BYTE = "Byte"
 
         DOT = '.'
@@ -48,6 +50,7 @@
         OP_OR_ASSIGN = "|="
         OP_OR = "|"
         OP_OR2 = "||"
+        OP_POW = "^"
         // DOTS
         OP_ARROW = "->"
         OP_ARROW2 = "=>"
@@ -189,7 +192,7 @@ match_expression ::= case_pattern COLON (normal_statements [SEMICOLON])+
 define_statement ::= KW_DEFINE [modifiers] namespace_dot [type_angle] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefine"
 };
-define_item      ::= ANGLE_L | ANGLE_R | [modifiers] identifier [(DOT2|DOT3) identifier] [COLON type_expression] [OP_EQ expression] {
+define_item      ::= OP_POW | ANGLE_L | ANGLE_R | [modifiers] identifier [(DOT2|DOT3) identifier] [COLON type_expression] [OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefineItem"
 }
 modifiers        ::= KW_MODIFIER+ {
@@ -288,7 +291,7 @@ tuple          ::= <<parenthesis expression COMMA>>
 private atoms  ::= number | string | boolean | namespace;
 boolean        ::= "true" | "false";
 number         ::= number_literal [identifier];
-string         ::= [identifier] STRING_RAW {
+string         ::= [identifier] STRING_START STRING_TEXT STRING_END {
     mixin="com.github.valkyrie.language.mixin.MixinString"
 }
 identifier     ::= SYMBOL_XID | SYMBOL_RAW {

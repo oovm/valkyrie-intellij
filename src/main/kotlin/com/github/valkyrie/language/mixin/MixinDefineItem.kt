@@ -1,19 +1,21 @@
 package com.github.valkyrie.language.mixin
 
 import com.github.valkyrie.language.ast.DeclareNode
+import com.github.valkyrie.language.ast.ValkyrieASTBase
 import com.github.valkyrie.language.psi_node.ValkyrieDefineItemNode
 import com.github.valkyrie.language.psi_node.ValkyrieModifiersNode
 import com.intellij.icons.AllIcons
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiNameIdentifierOwner
 import javax.swing.Icon
 
-open class MixinDefineItem(node: ASTNode) : DeclareNode(node) {
+open class MixinDefineItem(node: ASTNode) : ValkyrieASTBase(node), PsiNameIdentifierOwner {
     override fun getOriginalElement(): ValkyrieDefineItemNode {
         return this as ValkyrieDefineItemNode
     }
 
-    override fun getNameIdentifier(): PsiElement = originalElement.identifierList.first()
+    override fun getNameIdentifier(): PsiElement? = originalElement.identifierList.firstOrNull()
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Parameter
     override fun setName(name: String): PsiElement {
         TODO("Not yet implemented")

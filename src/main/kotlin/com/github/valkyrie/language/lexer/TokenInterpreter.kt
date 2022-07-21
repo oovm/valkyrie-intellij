@@ -9,13 +9,10 @@ import com.intellij.psi.TokenType.WHITE_SPACE
 
 import com.intellij.psi.tree.IElementType
 
-private val KEYWORDS = """(?x)
-      namespace[*!]? | extension
-    | using[*!]?
-    | class | struct | tagged | enum | bitset
-    | trait | interface | protocol | convention
-    | let | def | fun | type
-    | not | is | in | as[*!?]?
+private val KEYWORDS_SP = """(?x)
+      namespace[*!?]
+    | using[*!?]
+    | as[*!?]
     """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
 private val PUNCTUATIONS = """(?x)
       [.]{1,3}
@@ -55,26 +52,26 @@ private val PUNCTUATIONS = """(?x)
     #
     """.toRegex()
 private val COMMENTS = """(?x)
-      (\#{3,})([^\00]*?)(\1)
-    | (\#)([^\n\r]*)
+      (?<s1>\#{3,})(?<t1>[^\00]*?)(?<e1>\k<s1>)
+    | (?<s2>\#)(?<t2>[^\n\r]*)
     """.toRegex()
 private val STRINGS = """(?x)
-      ("{3,}|'{3,})([^\00]*?)(\1)
-    | '[^']*'
-    | "[^"]*"
-    | «[^»]*»
-    | ‘[^’]*’
-    | “[^”]*”
+      (?<s1>"{3,}|'{3,})(?<t1>[^\00]*?)(?<e1>\k<s1>)
+    | (?<s2>')(?<t2>[^']*)(?<e2>')
+    | (?<s3>")(?<t3>[^"]*)(?<e3>")
+    | (?<s4>«)(?<t4>[^»]*)(?<e4>»)
+    | (?<s5>‘)(?<t5>[^’]*)(?<e5>’)
+    | (?<s6>“)(?<t6>[^”]*)(?<e6>”)
     """.toRegex()
 
 @Suppress("MemberVisibilityCanBePrivate")
 class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int) {
     var stack: MutableList<StackItem> = mutableListOf()
 
-    var contextStack: MutableList<LexerContext> = mutableListOf();
+    var contextStack: MutableList<LexerContext> = mutableListOf()
 
     val context: LexerContext
-        get() = contextStack.lastOrNull() ?: LexerContext.TopCoding
+        get() = contextStack.lastOrNull() ?: TopCoding
 
     fun interpreter(): Array<StackItem> {
         while (startOffset < endOffset) {
@@ -105,16 +102,35 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     private fun codeString(): Boolean {
         val r = tryMatch(STRINGS) ?: return false
-        pushToken(ValkyrieTypes.STRING_RAW, r)
+        val slots = arrayOf(
+            arrayOf("s1", "t1", "e1"),
+            arrayOf("s2", "t2", "e2"),
+            arrayOf("s3", "t3", "e3"),
+            arrayOf("s4", "t4", "e4"),
+            arrayOf("s5", "t5", "e5"),
+            arrayOf("s6", "t6", "e6")
+        )
+        for (slot in slots) {
+            val start = r.groups[slot[0]]
+            val text = r.groups[slot[1]]
+            val end = r.groups[slot[2]]
+            if (text != null) {
+                pushToken(ValkyrieTypes.STRING_START, start!!)
+                pushToken(ValkyrieTypes.STRING_TEXT, text)
+                pushToken(ValkyrieTypes.STRING_END, end!!)
+                break
+            }
+
+        }
         return true
     }
 
     private fun codeKeywords(): Boolean {
 
-        val r = tryMatch(KEYWORDS) ?: return false
+        val r = tryMatch(KEYWORDS_SP) ?: return false
         when (context) {
             Coding -> {
-                pushToken(ValkyrieTypes.SYMBOL_XID, r);
+                pushToken(ValkyrieTypes.SYMBOL_XID, r)
                 return true
             }
             else -> {}
@@ -173,7 +189,6 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun codePunctuations(): Boolean {
-
         val r = tryMatch(PUNCTUATIONS) ?: return false
         when (r.value) {
             // DOT
@@ -239,6 +254,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "!!" -> pushToken(ValkyrieTypes.OP_NE, r)
             "!=" -> pushToken(ValkyrieTypes.OP_NE, r)
             "!" -> pushToken(ValkyrieTypes.OP_NOT, r)
+            "|" -> pushToken(ValkyrieTypes.OP_OR, r)
+            "^" -> pushToken(ValkyrieTypes.OP_POW, r)
             // start with =
             "∈", "∊" -> {
                 pushToken(ValkyrieTypes.OP_IN, r)

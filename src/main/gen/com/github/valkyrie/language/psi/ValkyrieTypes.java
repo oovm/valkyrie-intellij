@@ -182,6 +182,7 @@ public interface ValkyrieTypes {
   IElementType OP_OR2 = new ValkyrieTokenType("||");
   IElementType OP_OR_ASSIGN = new ValkyrieTokenType("|=");
   IElementType OP_OR_ELSE = new ValkyrieTokenType("or_else");
+  IElementType OP_POW = new ValkyrieTokenType("^");
   IElementType OP_PROPORTION = new ValkyrieTokenType("OP_PROPORTION");
   IElementType OP_SUB = new ValkyrieTokenType("-");
   IElementType OP_SUB_ASSIGN = new ValkyrieTokenType("-=");
@@ -191,7 +192,9 @@ public interface ValkyrieTypes {
   IElementType PROPORTION = new ValkyrieTokenType("::");
   IElementType QUESTION = new ValkyrieTokenType("QUESTION");
   IElementType SEMICOLON = new ValkyrieTokenType(";");
-  IElementType STRING_RAW = new ValkyrieTokenType("String");
+  IElementType STRING_END = new ValkyrieTokenType("StringEnd");
+  IElementType STRING_START = new ValkyrieTokenType("StringStart");
+  IElementType STRING_TEXT = new ValkyrieTokenType("StringText");
   IElementType SYMBOL_RAW = new ValkyrieTokenType("Symbol");
   IElementType SYMBOL_XID = new ValkyrieTokenType("SYMBOL_XID");
   IElementType TAGGED = new ValkyrieTokenType("TAGGED");

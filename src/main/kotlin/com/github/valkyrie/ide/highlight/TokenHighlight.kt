@@ -45,7 +45,7 @@ class TokenHighlight : SyntaxHighlighterBase() {
             INTEGER -> Color.INTEGER
             BYTE -> Color.INTEGER
             DECIMAL -> Color.DECIMAL
-            STRING_RAW -> Color.STRING
+            STRING_START, STRING_TEXT, STRING_END -> Color.STRING
             SYMBOL_XID, SYMBOL_RAW -> Color.IDENTIFIER
             // 注释
             COMMENT -> Color.BLOCK_COMMENT
