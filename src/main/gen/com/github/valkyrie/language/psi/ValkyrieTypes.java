@@ -41,6 +41,7 @@ public interface ValkyrieTypes {
   IElementType IMPORT_BLOCK = new ValkyrieTokenType("IMPORT_BLOCK");
   IElementType IMPORT_ITEM = new ValkyrieTokenType("IMPORT_ITEM");
   IElementType IMPORT_STATEMENT = new ValkyrieTokenType("IMPORT_STATEMENT");
+  IElementType KW_DEFINE = new ValkyrieTokenType("KW_DEFINE");
   IElementType LET_STATEMENT = new ValkyrieTokenType("LET_STATEMENT");
   IElementType LET_TYPE_HINT = new ValkyrieTokenType("LET_TYPE_HINT");
   IElementType LIST = new ValkyrieTokenType("LIST");
@@ -114,26 +115,13 @@ public interface ValkyrieTypes {
   IElementType IF = new ValkyrieTokenType("IF");
   IElementType IN = new ValkyrieTokenType("IN");
   IElementType INTEGER = new ValkyrieTokenType("INTEGER");
-  IElementType KW_AS = new ValkyrieTokenType("as");
-  IElementType KW_BITFLAG = new ValkyrieTokenType("bitset");
-  IElementType KW_CATCH = new ValkyrieTokenType("catch");
-  IElementType KW_CLASS = new ValkyrieTokenType("class");
-  IElementType KW_DEFINE = new ValkyrieTokenType("def");
-  IElementType KW_ELSE = new ValkyrieTokenType("else");
-  IElementType KW_EXTENDS = new ValkyrieTokenType("extends");
-  IElementType KW_EXTENSION = new ValkyrieTokenType("extension");
-  IElementType KW_FOR = new ValkyrieTokenType("for");
-  IElementType KW_IF = new ValkyrieTokenType("if");
-  IElementType KW_IMPORT = new ValkyrieTokenType("using");
-  IElementType KW_LET = new ValkyrieTokenType("let");
-  IElementType KW_MATCH = new ValkyrieTokenType("match");
-  IElementType KW_MODIFIER = new ValkyrieTokenType("KW_MODIFIER");
-  IElementType KW_NAMESPACE = new ValkyrieTokenType("namespace");
-  IElementType KW_NEW = new ValkyrieTokenType("new");
-  IElementType KW_TAGGED = new ValkyrieTokenType("tagged");
-  IElementType KW_TRAIT = new ValkyrieTokenType("trait");
+  IElementType KW_AS = new ValkyrieTokenType("KW_AS");
+  IElementType KW_CLASS = new ValkyrieTokenType("KW_CLASS");
+  IElementType KW_EXTENSION = new ValkyrieTokenType("KW_EXTENSION");
+  IElementType KW_IMPORT = new ValkyrieTokenType("KW_IMPORT");
+  IElementType KW_NAMESPACE = new ValkyrieTokenType("KW_NAMESPACE");
+  IElementType KW_TRAIT = new ValkyrieTokenType("KW_TRAIT");
   IElementType KW_TYPE = new ValkyrieTokenType("KW_TYPE");
-  IElementType KW_WHILE = new ValkyrieTokenType("while");
   IElementType LESS = new ValkyrieTokenType("LESS");
   IElementType LET = new ValkyrieTokenType("LET");
   IElementType MATCH = new ValkyrieTokenType("MATCH");
@@ -303,6 +291,9 @@ public interface ValkyrieTypes {
       }
       else if (type == IMPORT_STATEMENT) {
         return new ValkyrieImportStatementNode(node);
+      }
+      else if (type == KW_DEFINE) {
+        return new ValkyrieKwDefineNode(node);
       }
       else if (type == LET_STATEMENT) {
         return new ValkyrieLetStatementNode(node);

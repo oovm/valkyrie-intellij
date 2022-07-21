@@ -25,9 +25,9 @@ class ModifierData(
 
     companion object {
         fun builtinData(name: PsiElement): ModifierData? {
-            if (name.elementType != ValkyrieTypes.KW_MODIFIER) {
-                return null;
-            }
+//            if (name.elementType != ValkyrieTypes.KW_MODIFIER) {
+//                return null;
+//            }
             return builtinData.firstOrNull { it.name == name.text }
         }
 

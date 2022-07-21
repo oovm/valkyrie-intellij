@@ -92,27 +92,27 @@
         GENERIC_L = '::<'
         GENERIC_R = '>::'
 
-        KW_NAMESPACE = "namespace"
-        KW_IMPORT = "using"
-        KW_EXTENSION = "extension"
-        KW_AS = "as"
-
-        KW_LET = "let"
-        KW_DEFINE = "def"
-        KW_NEW = 'new'
-
-        KW_IF = "if"
-        KW_ELSE = "else"
-        KW_FOR = "for"
-        KW_WHILE = "while"
-        KW_MATCH = 'match'
-        KW_CATCH = 'catch'
-
-        KW_CLASS = 'class'
-        KW_TRAIT = 'trait'
-        KW_TAGGED = 'tagged'
-        KW_BITFLAG = 'bitset'
-        KW_EXTENDS = 'extends'
+//        KW_NAMESPACE = "namespace"
+//        KW_IMPORT = "using"
+//        KW_EXTENSION = "extension"
+//        KW_AS = "as"
+//
+//        KW_LET = "let"
+//        KW_DEFINE = "def"
+//        KW_NEW = 'new'
+//
+//        KW_IF = "if"
+//        KW_ELSE = "else"
+//        KW_FOR = "for"
+//        KW_WHILE = "while"
+//        KW_MATCH = 'match'
+//        KW_CATCH = 'catch'
+//
+//        KW_CLASS = 'class'
+//        KW_TRAIT = 'trait'
+//        KW_TAGGED = 'tagged'
+//        KW_BITFLAG = 'bitset'
+//        KW_EXTENDS = 'extends'
     ]
 }
 
@@ -189,13 +189,14 @@ match_statement  ::= MATCH identifier* match_block;
 match_block      ::= <<brace_block match_expression SEMICOLON>>;
 match_expression ::= case_pattern COLON (normal_statements [SEMICOLON])+
 // ---------------------------------------------------------------------------------------------------------------------
-define_statement ::= KW_DEFINE [modifiers] namespace_dot [type_angle] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
+define_statement ::= kw_define [modifiers] namespace_dot [type_angle] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefine"
 };
+kw_define        ::= "def"
 define_item      ::= OP_POW | ANGLE_L | ANGLE_R | [modifiers] identifier [(DOT2|DOT3) identifier] [COLON type_expression] [OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefineItem"
 }
-modifiers        ::= KW_MODIFIER+ {
+modifiers        ::= (identifier !(PARENTHESIS_L|DOT|SEMICOLON|PROPORTION))+ {
     mixin="com.github.valkyrie.language.mixin.MixinModifier"
 };
 define_tuple     ::= <<parenthesis define_item COMMA>>;

@@ -139,6 +139,10 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitKwDefine(@NotNull ValkyrieKwDefine o) {
+    visitPsiElement(o);
+  }
+
   public void visitLetStatement(@NotNull ValkyrieLetStatement o) {
     visitPsiElement(o);
   }

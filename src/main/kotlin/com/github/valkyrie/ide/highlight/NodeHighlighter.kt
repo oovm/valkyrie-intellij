@@ -51,6 +51,7 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 
     override fun visitDefineStatement(o: ValkyrieDefineStatement) {
         val node = o as ValkyrieDefineStatementNode;
+        highlight(o.kwDefine, Color.KEYWORD)
         highlight(node.nameIdentifier, node.kind.color)
     }
 
@@ -112,6 +113,12 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
     override fun visitMacro(o: ValkyrieMacro) {
         highlight(o.firstChild, Color.SYM_MACRO)
         highlight(o.identifier, Color.SYM_MACRO)
+    }
+
+    override fun visitModifiers(o: ValkyrieModifiers) {
+        o.identifierList.forEach {
+            highlight(it, Color.MODIFIER)
+        }
     }
 
     // TODO: real syntax resolve
