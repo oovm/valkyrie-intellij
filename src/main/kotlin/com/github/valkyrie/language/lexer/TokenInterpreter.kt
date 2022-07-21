@@ -2,11 +2,10 @@
 
 package com.github.valkyrie.language.lexer
 
-import com.github.valkyrie.language.lexer.LexerContext.*
+import com.github.valkyrie.language.lexer.LexerContext.Coding
 import com.github.valkyrie.language.psi.ValkyrieTypes
 import com.intellij.psi.TokenType.BAD_CHARACTER
 import com.intellij.psi.TokenType.WHITE_SPACE
-
 import com.intellij.psi.tree.IElementType
 
 private val KEYWORDS_SP = """(?x)
@@ -192,36 +191,19 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "->", "⟶" -> pushToken(ValkyrieTypes.OP_ARROW, r)
             "=>", "⇒" -> pushToken(ValkyrieTypes.OP_ARROW2, r)
             "." -> {
-                when (context) {
-                    CatchModifier -> resetToken(ValkyrieTypes.SYMBOL_XID)
-                    else -> {}
-                }
                 pushToken(ValkyrieTypes.DOT, r)
             }
             ":", "∶" -> {
-                when (context) {
-                    CatchModifier -> resetToken(ValkyrieTypes.SYMBOL_XID)
-                    else -> {}
-                }
                 pushToken(ValkyrieTypes.COLON, r)
             }
 
             "::", "∷" -> {
-                when (context) {
-                    CatchModifier -> resetToken(ValkyrieTypes.SYMBOL_XID)
-                    else -> {}
-                }
                 pushToken(ValkyrieTypes.PROPORTION, r)
 
             }
             ".." -> pushToken(ValkyrieTypes.DOT, r)
             "..." -> pushToken(ValkyrieTypes.DOT, r)
             ";" -> {
-                when (context) {
-                    CatchModifier -> resetToken(ValkyrieTypes.SYMBOL_XID)
-                    else -> {}
-                }
-                endContext()
                 pushToken(ValkyrieTypes.SEMICOLON, r)
             }
             "@", "@@", "@!", "@?" -> pushToken(ValkyrieTypes.AT, r)
@@ -272,15 +254,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "/>" -> {
                 pushToken(ValkyrieTypes.OP_GS, r)
             }
-            ">" -> when (context) {
-                Type -> {
-                    pushToken(ValkyrieTypes.GENERIC_R, r)
-                    endContext()
-                }
-                else -> {
-                    pushToken(ValkyrieTypes.OP_GT, r)
-                }
-            }
+            ">" -> pushToken(ValkyrieTypes.OP_GT, r)
             // start with <
             "<<<", "⋘" -> pushToken(ValkyrieTypes.OP_LLL, r)
             "<<", "≪" -> pushToken(ValkyrieTypes.OP_LL, r)

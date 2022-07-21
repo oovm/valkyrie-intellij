@@ -307,5 +307,3 @@ private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>
 private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
 // brace { }
 private meta brace_block   ::= BRACE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACE_R;
-// angle ::< >::
-private meta generic_block ::= GENERIC_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] GENERIC_R;
