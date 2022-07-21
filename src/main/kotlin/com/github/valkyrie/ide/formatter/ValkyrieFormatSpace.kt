@@ -33,7 +33,7 @@ data class ValkyrieFormatSpace(
             DOT,
             OP_MUL,
             OP_SUB,
-            PROPORTION,
+            OP_PROPORTION,
             AT,
         )
         private val remove_space_newline_before = TokenSet.create(

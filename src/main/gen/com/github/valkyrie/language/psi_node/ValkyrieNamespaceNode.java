@@ -34,10 +34,4 @@ public class ValkyrieNamespaceNode extends MixinNamepath implements ValkyrieName
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
   }
 
-  @Override
-  @NotNull
-  public List<ValkyrieMacro> getMacroList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieMacro.class);
-  }
-
 }

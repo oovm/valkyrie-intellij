@@ -60,14 +60,14 @@ public class ValkyrieDefineStatementNode extends MixinDefine implements Valkyrie
 
   @Override
   @NotNull
-  public ValkyrieNamespaceDot getNamespaceDot() {
-    return findNotNullChildByClass(ValkyrieNamespaceDot.class);
+  public ValkyrieNamespaceFree getNamespaceFree() {
+    return findNotNullChildByClass(ValkyrieNamespaceFree.class);
   }
 
   @Override
   @Nullable
-  public ValkyrieTypeAngle getTypeAngle() {
-    return findChildByClass(ValkyrieTypeAngle.class);
+  public ValkyrieOldGeneric getOldGeneric() {
+    return findChildByClass(ValkyrieOldGeneric.class);
   }
 
   @Override

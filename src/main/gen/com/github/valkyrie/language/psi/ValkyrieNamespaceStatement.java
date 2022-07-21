@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieNamespaceStatement extends PsiElement {
 
   @NotNull
-  ValkyrieNamespaceDot getNamespaceDot();
+  ValkyrieNamespaceFree getNamespaceFree();
 
 }

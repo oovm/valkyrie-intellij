@@ -198,7 +198,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             }
 
             "::", "∷" -> {
-                pushToken(ValkyrieTypes.PROPORTION, r)
+                pushToken(ValkyrieTypes.OP_PROPORTION, r)
 
             }
             ".." -> pushToken(ValkyrieTypes.DOT, r)

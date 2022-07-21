@@ -48,8 +48,8 @@ public class ValkyrieImportItemNode extends MixinImportItem implements ValkyrieI
 
   @Override
   @NotNull
-  public ValkyrieNamespaceDot getNamespaceDot() {
-    return findNotNullChildByClass(ValkyrieNamespaceDot.class);
+  public ValkyrieNamespaceFree getNamespaceFree() {
+    return findNotNullChildByClass(ValkyrieNamespaceFree.class);
   }
 
 }

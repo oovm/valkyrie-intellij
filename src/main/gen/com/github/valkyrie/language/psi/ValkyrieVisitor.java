@@ -195,7 +195,7 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitNamespaceDot(@NotNull ValkyrieNamespaceDot o) {
+  public void visitNamespaceFree(@NotNull ValkyrieNamespaceFree o) {
     visitPsiElement(o);
   }
 
@@ -216,6 +216,10 @@ public class ValkyrieVisitor extends PsiElementVisitor {
   }
 
   public void visitNumberLiteral(@NotNull ValkyrieNumberLiteral o) {
+    visitPsiElement(o);
+  }
+
+  public void visitOldGeneric(@NotNull ValkyrieOldGeneric o) {
     visitPsiElement(o);
   }
 

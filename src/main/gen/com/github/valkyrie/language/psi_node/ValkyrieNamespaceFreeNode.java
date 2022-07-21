@@ -12,14 +12,14 @@ import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieNamespaceDotNode extends ValkyrieASTBase implements ValkyrieNamespaceDot {
+public class ValkyrieNamespaceFreeNode extends ValkyrieASTBase implements ValkyrieNamespaceFree {
 
-  public ValkyrieNamespaceDotNode(@NotNull ASTNode node) {
+  public ValkyrieNamespaceFreeNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitNamespaceDot(this);
+    visitor.visitNamespaceFree(this);
   }
 
   @Override

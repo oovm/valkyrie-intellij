@@ -55,12 +55,13 @@ public interface ValkyrieTypes {
   IElementType MAY_DOT = new ValkyrieTokenType("MAY_DOT");
   IElementType MODIFIERS = new ValkyrieTokenType("MODIFIERS");
   IElementType NAMESPACE = new ValkyrieTokenType("NAMESPACE");
-  IElementType NAMESPACE_DOT = new ValkyrieTokenType("NAMESPACE_DOT");
+  IElementType NAMESPACE_FREE = new ValkyrieTokenType("NAMESPACE_FREE");
   IElementType NAMESPACE_STATEMENT = new ValkyrieTokenType("NAMESPACE_STATEMENT");
   IElementType NEW_STATEMENT = new ValkyrieTokenType("NEW_STATEMENT");
   IElementType NORMAL_PATTERN = new ValkyrieTokenType("NORMAL_PATTERN");
   IElementType NUMBER = new ValkyrieTokenType("NUMBER");
   IElementType NUMBER_LITERAL = new ValkyrieTokenType("NUMBER_LITERAL");
+  IElementType OLD_GENERIC = new ValkyrieTokenType("OLD_GENERIC");
   IElementType PAIR = new ValkyrieTokenType("PAIR");
   IElementType PATTERN_ITEM = new ValkyrieTokenType("PATTERN_ITEM");
   IElementType PATTERN_PAIR = new ValkyrieTokenType("PATTERN_PAIR");
@@ -171,13 +172,12 @@ public interface ValkyrieTypes {
   IElementType OP_OR_ASSIGN = new ValkyrieTokenType("|=");
   IElementType OP_OR_ELSE = new ValkyrieTokenType("or_else");
   IElementType OP_POW = new ValkyrieTokenType("^");
-  IElementType OP_PROPORTION = new ValkyrieTokenType("OP_PROPORTION");
+  IElementType OP_PROPORTION = new ValkyrieTokenType("::");
   IElementType OP_SUB = new ValkyrieTokenType("-");
   IElementType OP_SUB_ASSIGN = new ValkyrieTokenType("-=");
   IElementType PARENTHESIS_L = new ValkyrieTokenType("(");
   IElementType PARENTHESIS_R = new ValkyrieTokenType(")");
   IElementType PLUS = new ValkyrieTokenType("PLUS");
-  IElementType PROPORTION = new ValkyrieTokenType("::");
   IElementType QUESTION = new ValkyrieTokenType("QUESTION");
   IElementType SEMICOLON = new ValkyrieTokenType(";");
   IElementType STRING_END = new ValkyrieTokenType("StringEnd");
@@ -334,8 +334,8 @@ public interface ValkyrieTypes {
       else if (type == NAMESPACE) {
         return new ValkyrieNamespaceNode(node);
       }
-      else if (type == NAMESPACE_DOT) {
-        return new ValkyrieNamespaceDotNode(node);
+      else if (type == NAMESPACE_FREE) {
+        return new ValkyrieNamespaceFreeNode(node);
       }
       else if (type == NAMESPACE_STATEMENT) {
         return new ValkyrieNamespaceStatementNode(node);
@@ -351,6 +351,9 @@ public interface ValkyrieTypes {
       }
       else if (type == NUMBER_LITERAL) {
         return new ValkyrieNumberLiteralNode(node);
+      }
+      else if (type == OLD_GENERIC) {
+        return new ValkyrieOldGenericNode(node);
       }
       else if (type == PAIR) {
         return new ValkyriePairNode(node);
