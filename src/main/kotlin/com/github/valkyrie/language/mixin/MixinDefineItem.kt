@@ -27,8 +27,9 @@ open class MixinDefineItem(node: ASTNode) : ValkyrieASTBase(node), PsiNameIdenti
         return nameIdentifier ?: this
     }
 
-    override fun getTextOffset(): Int {
-        return nameIdentifier?.textOffset ?: super.getTextOffset()
+    override fun getTextOffset(): Int = when (val id = originalElement.identifier) {
+        null -> super.getTextOffset()
+        else -> id.textOffset
     }
 
     override fun getIcon(flags: Int): Icon = AllIcons.Nodes.Parameter

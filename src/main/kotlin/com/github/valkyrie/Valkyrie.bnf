@@ -92,6 +92,8 @@
         GENERIC_L = '::<'
         GENERIC_R = '>::'
 
+        OP_NAMESAPCE = "namespace"
+
 //        KW_NAMESPACE = "namespace"
 //        KW_IMPORT = "using"
 //        KW_EXTENSION = "extension"
@@ -116,7 +118,7 @@
     ]
 }
 
-valkyrie ::= ((normal_statements|top_statements) [SEMICOLON])*
+valkyrie ::= ((top_statements|normal_statements) [SEMICOLON])*
 private top_statements ::=
     namespace_statement
   | import_statement
@@ -143,17 +145,20 @@ private normal_statements ::=
   | expression
   ;
 // ---------------------------------------------------------------------------------------------------------------------
-namespace_statement ::= KW_NAMESPACE namespace_free {
+namespace_statement ::= kw_namespace namepath_free {
     mixin="com.github.valkyrie.language.mixin.MixinNamespace"
 };
+kw_namespace ::= "namespace" | OP_NAMESAPCE {
+    mixin="com.github.valkyrie.language.mixin.MixinKeyword"
+}
 // ---------------------------------------------------------------------------------------------------------------------
 import_statement ::= KW_IMPORT (import_block|import_item)
-import_item      ::= namespace_free [KW_AS identifier|(COLON|OP_PROPORTION) import_block] {
+import_item      ::= namepath_free [KW_AS identifier|(COLON|OP_PROPORTION) import_block] {
     mixin="com.github.valkyrie.language.mixin.MixinImportItem"
 }
 import_block     ::= <<brace_block import_item COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
-extension_statement ::= KW_EXTENSION identifier COLON namespace_free top_block {
+extension_statement ::= KW_EXTENSION identifier COLON namepath_free top_block {
     mixin="com.github.valkyrie.language.mixin.MixinExtension"
 };
 top_block        ::= <<brace_block top_statements SEMICOLON>>
@@ -163,7 +168,7 @@ ef_statement     ::= else_if condition block;
 private else_if  ::= ELSE IF
 else_statement   ::= ELSE block;
 condition        ::= case_pattern BIND expression | expression;
-case_pattern     ::= CASE [identifier* [namespace]] pattern;
+case_pattern     ::= CASE [identifier* [namepath]] pattern;
 private block    ::= <<brace_block expression SEMICOLON>>;
 // ---------------------------------------------------------------------------------------------------------------------
 for_statement    ::= FOR (case_pattern|normal_pattern) IN expression [if_guard] block [else_statement];
@@ -187,7 +192,7 @@ match_statement  ::= MATCH identifier* match_block;
 match_block      ::= <<brace_block match_expression SEMICOLON>>;
 match_expression ::= case_pattern COLON (normal_statements [SEMICOLON])+
 // ---------------------------------------------------------------------------------------------------------------------
-define_statement ::= kw_define [modifiers] namespace_free [old_generic] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
+define_statement ::= kw_define [modifiers] namepath_free [old_generic] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefine"
 };
 kw_define        ::= "def" {
@@ -216,7 +221,7 @@ forall_block     ::= <<brace_block (type_expression COLON type_expression) (COMM
 class_statement     ::= kw_class [modifiers] identifier [type_angle] [class_inherit] [class_tuple|class_brace] {
     mixin="com.github.valkyrie.language.mixin.MixinClass"
 };
-kw_class            ::= "class" {
+kw_class            ::= "class"|"struct" {
     mixin="com.github.valkyrie.language.mixin.MixinKeyword"
 }
 class_inherit       ::= COLON type_instance (OP_ADD type_instance)*;
@@ -266,7 +271,7 @@ call_suffix         ::= <<parenthesis expression COMMA>>;
 type_expression     ::= type_expr (type_binary type_expr)*;
 private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
 private type_binary ::= VERTICAL | EQ | NE | PLUS | MINUS | TO;
-type_angle          ::= OP_PROPORTION? <<parenthesis ([identifier COLON] type_expression) COMMA>> OP_PROPORTION?;
+type_angle          ::= OP_PROPORTION? <<parenthesis ([identifier COLON] type_expression) COMMA>>;
 type_instance       ::= identifier type_angle?
 // ---------------------------------------------------------------------------------------------------------------------
 slice_suffix        ::= <<bracket_block slice_expression COMMA>>;
@@ -276,19 +281,19 @@ slice_expression    ::=
   | [expression] OP_PROPORTION [expression]
   | expression;
 // ---------------------------------------------------------------------------------------------------------------------
-macro      ::= AT namespace_free;
+macro      ::= AT namepath_free;
 // ---------------------------------------------------------------------------------------------------------------------
 macro_call ::= macro [macro_item];
 macro_item ::=
     <<parenthesis expression COMMA>>
   | <<brace_block pair COMMA>>
   | <<brace_block expression SEMICOLON>>;
-macro_list ::= [AT|HASH] <<bracket_block (namespace macro_item) COMMA>>;
+macro_list ::= [AT|HASH] <<bracket_block (namepath macro_item) COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
 pair           ::= atoms COLON expression;
 list           ::= <<bracket_block expression COMMA>>
 tuple          ::= <<parenthesis expression COMMA>>
-private atoms  ::= number | string | boolean | namespace;
+private atoms  ::= number | string | boolean | namepath;
 boolean        ::= "true" | "false";
 number         ::= number_literal [identifier];
 string         ::= [identifier] STRING_START STRING_TEXT STRING_END {
@@ -296,10 +301,10 @@ string         ::= [identifier] STRING_START STRING_TEXT STRING_END {
 }
 number_literal ::= BYTE | INTEGER | DECIMAL;
 // ---------------------------------------------------------------------------------------------------------------------
-namespace_free ::= identifier ((DOT|OP_PROPORTION) identifier)* {
+namepath_free  ::= identifier ((DOT|OP_PROPORTION) identifier)* {
     mixin="com.github.valkyrie.language.mixin.MixinNamepath"
 }
-namespace      ::= identifier (OP_PROPORTION identifier)* {
+namepath       ::= identifier (OP_PROPORTION identifier)* {
     mixin="com.github.valkyrie.language.mixin.MixinNamepath"
 }
 identifier     ::= SYMBOL_XID | SYMBOL_RAW {

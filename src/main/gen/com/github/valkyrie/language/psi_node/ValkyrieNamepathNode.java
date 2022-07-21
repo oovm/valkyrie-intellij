@@ -8,18 +8,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieASTBase;
+import com.github.valkyrie.language.mixin.MixinNamepath;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieCasePatternNode extends ValkyrieASTBase implements ValkyrieCasePattern {
+public class ValkyrieNamepathNode extends MixinNamepath implements ValkyrieNamepath {
 
-  public ValkyrieCasePatternNode(@NotNull ASTNode node) {
+  public ValkyrieNamepathNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitCasePattern(this);
+    visitor.visitNamepath(this);
   }
 
   @Override
@@ -32,18 +32,6 @@ public class ValkyrieCasePatternNode extends ValkyrieASTBase implements Valkyrie
   @NotNull
   public List<ValkyrieIdentifier> getIdentifierList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieNamepath getNamepath() {
-    return findChildByClass(ValkyrieNamepath.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ValkyriePatternPair> getPatternPairList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyriePatternPair.class);
   }
 
 }

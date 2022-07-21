@@ -43,6 +43,7 @@ public interface ValkyrieTypes {
   IElementType IMPORT_STATEMENT = new ValkyrieTokenType("IMPORT_STATEMENT");
   IElementType KW_CLASS = new ValkyrieTokenType("KW_CLASS");
   IElementType KW_DEFINE = new ValkyrieTokenType("KW_DEFINE");
+  IElementType KW_NAMESPACE = new ValkyrieTokenType("KW_NAMESPACE");
   IElementType LET_STATEMENT = new ValkyrieTokenType("LET_STATEMENT");
   IElementType LET_TYPE_HINT = new ValkyrieTokenType("LET_TYPE_HINT");
   IElementType LIST = new ValkyrieTokenType("LIST");
@@ -54,8 +55,8 @@ public interface ValkyrieTypes {
   IElementType MATCH_EXPRESSION = new ValkyrieTokenType("MATCH_EXPRESSION");
   IElementType MATCH_STATEMENT = new ValkyrieTokenType("MATCH_STATEMENT");
   IElementType MODIFIERS = new ValkyrieTokenType("MODIFIERS");
-  IElementType NAMESPACE = new ValkyrieTokenType("NAMESPACE");
-  IElementType NAMESPACE_FREE = new ValkyrieTokenType("NAMESPACE_FREE");
+  IElementType NAMEPATH = new ValkyrieTokenType("NAMEPATH");
+  IElementType NAMEPATH_FREE = new ValkyrieTokenType("NAMEPATH_FREE");
   IElementType NAMESPACE_STATEMENT = new ValkyrieTokenType("NAMESPACE_STATEMENT");
   IElementType NEW_STATEMENT = new ValkyrieTokenType("NEW_STATEMENT");
   IElementType NORMAL_PATTERN = new ValkyrieTokenType("NORMAL_PATTERN");
@@ -119,7 +120,6 @@ public interface ValkyrieTypes {
   IElementType KW_AS = new ValkyrieTokenType("KW_AS");
   IElementType KW_EXTENSION = new ValkyrieTokenType("KW_EXTENSION");
   IElementType KW_IMPORT = new ValkyrieTokenType("KW_IMPORT");
-  IElementType KW_NAMESPACE = new ValkyrieTokenType("KW_NAMESPACE");
   IElementType KW_TRAIT = new ValkyrieTokenType("KW_TRAIT");
   IElementType KW_TYPE = new ValkyrieTokenType("KW_TYPE");
   IElementType LESS = new ValkyrieTokenType("LESS");
@@ -162,6 +162,7 @@ public interface ValkyrieTypes {
   IElementType OP_MOD_ASSIGN = new ValkyrieTokenType("%=");
   IElementType OP_MUL = new ValkyrieTokenType("*");
   IElementType OP_MUL_ASSIGN = new ValkyrieTokenType("*=");
+  IElementType OP_NAMESAPCE = new ValkyrieTokenType("namespace");
   IElementType OP_NE = new ValkyrieTokenType("!=");
   IElementType OP_NOT = new ValkyrieTokenType("!");
   IElementType OP_NOT_A = new ValkyrieTokenType("is not");
@@ -297,6 +298,9 @@ public interface ValkyrieTypes {
       else if (type == KW_DEFINE) {
         return new ValkyrieKwDefineNode(node);
       }
+      else if (type == KW_NAMESPACE) {
+        return new ValkyrieKwNamespaceNode(node);
+      }
       else if (type == LET_STATEMENT) {
         return new ValkyrieLetStatementNode(node);
       }
@@ -330,11 +334,11 @@ public interface ValkyrieTypes {
       else if (type == MODIFIERS) {
         return new ValkyrieModifiersNode(node);
       }
-      else if (type == NAMESPACE) {
-        return new ValkyrieNamespaceNode(node);
+      else if (type == NAMEPATH) {
+        return new ValkyrieNamepathNode(node);
       }
-      else if (type == NAMESPACE_FREE) {
-        return new ValkyrieNamespaceFreeNode(node);
+      else if (type == NAMEPATH_FREE) {
+        return new ValkyrieNamepathFreeNode(node);
       }
       else if (type == NAMESPACE_STATEMENT) {
         return new ValkyrieNamespaceStatementNode(node);

@@ -12,14 +12,14 @@ import com.github.valkyrie.language.mixin.MixinNamepath;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieNamespaceFreeNode extends MixinNamepath implements ValkyrieNamespaceFree {
+public class ValkyrieNamepathFreeNode extends MixinNamepath implements ValkyrieNamepathFree {
 
-  public ValkyrieNamespaceFreeNode(@NotNull ASTNode node) {
+  public ValkyrieNamepathFreeNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitNamespaceFree(this);
+    visitor.visitNamepathFree(this);
   }
 
   @Override

@@ -48,8 +48,8 @@ public class ValkyrieTypeExpressionNode extends ValkyrieASTBase implements Valky
 
   @Override
   @NotNull
-  public List<ValkyrieNamespace> getNamespaceList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieNamespace.class);
+  public List<ValkyrieNamepath> getNamepathList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieNamepath.class);
   }
 
   @Override

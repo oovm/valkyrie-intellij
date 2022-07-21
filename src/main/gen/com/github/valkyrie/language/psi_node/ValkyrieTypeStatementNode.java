@@ -54,8 +54,8 @@ public class ValkyrieTypeStatementNode extends MixinType implements ValkyrieType
 
   @Override
   @Nullable
-  public ValkyrieNamespace getNamespace() {
-    return findChildByClass(ValkyrieNamespace.class);
+  public ValkyrieNamepath getNamepath() {
+    return findChildByClass(ValkyrieNamepath.class);
   }
 
   @Override

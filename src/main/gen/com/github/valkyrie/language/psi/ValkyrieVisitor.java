@@ -147,6 +147,10 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitKwNamespace(@NotNull ValkyrieKwNamespace o) {
+    visitPsiElement(o);
+  }
+
   public void visitLetStatement(@NotNull ValkyrieLetStatement o) {
     visitPsiElement(o);
   }
@@ -191,11 +195,11 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitNamespace(@NotNull ValkyrieNamespace o) {
+  public void visitNamepath(@NotNull ValkyrieNamepath o) {
     visitPsiElement(o);
   }
 
-  public void visitNamespaceFree(@NotNull ValkyrieNamespaceFree o) {
+  public void visitNamepathFree(@NotNull ValkyrieNamepathFree o) {
     visitPsiElement(o);
   }
 

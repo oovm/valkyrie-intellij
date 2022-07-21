@@ -125,18 +125,10 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
     }
 
     private fun codeKeywords(): Boolean {
-
         val r = tryMatch(KEYWORDS_SP) ?: return false
-        when (context) {
-            Coding -> {
-                pushToken(ValkyrieTypes.SYMBOL_XID, r)
-                return true
-            }
-            else -> {}
-        }
         when (r.value) {
             "namespace", "namespace!", "namespace*" -> {
-                pushToken(ValkyrieTypes.KW_NAMESPACE, r)
+                pushToken(ValkyrieTypes.OP_NAMESAPCE, r)
             }
             "using", "using!", "using*" -> {
                 pushToken(ValkyrieTypes.KW_IMPORT, r)

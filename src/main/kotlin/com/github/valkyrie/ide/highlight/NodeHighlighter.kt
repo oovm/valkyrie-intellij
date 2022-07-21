@@ -40,7 +40,7 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
     }
 
     private fun visitCasePattern(o: ValkyrieCasePattern, mode: ValkyrieVariableHighlightMode, force_mut: Boolean) {
-        o.namespace?.let {
+        o.namepath?.let {
             highlight(it.lastChild, Color.SYM_CLASS)
         }
 //        o.patternTuple?.let {
@@ -112,7 +112,7 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 
     override fun visitMacro(o: ValkyrieMacro) {
         highlight(o.firstChild, Color.SYM_MACRO)
-        for (i in o.namespaceFree.identifierList) {
+        for (i in o.namepathFree.identifierList) {
             highlight(i, Color.SYM_MACRO)
         }
     }

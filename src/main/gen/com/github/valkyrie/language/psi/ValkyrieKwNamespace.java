@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieNamespaceFree extends PsiElement {
-
-  @NotNull
-  List<ValkyrieIdentifier> getIdentifierList();
+public interface ValkyrieKwNamespace extends PsiElement {
 
 }

@@ -11,6 +11,6 @@ public interface ValkyrieMacroList extends PsiElement {
   List<ValkyrieMacroItem> getMacroItemList();
 
   @NotNull
-  List<ValkyrieNamespace> getNamespaceList();
+  List<ValkyrieNamepath> getNamepathList();
 
 }

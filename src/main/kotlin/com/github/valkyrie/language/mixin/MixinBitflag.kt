@@ -1,8 +1,6 @@
 package com.github.valkyrie.language.mixin
 
 import com.github.valkyrie.language.ast.DeclareNode
-import com.github.valkyrie.language.psi.ValkyrieBitflagStatement
-import com.github.valkyrie.language.psi.ValkyriePresentationItem
 import com.github.valkyrie.language.psi_node.ValkyrieBitflagStatementNode
 import com.intellij.icons.AllIcons
 import com.intellij.ide.util.treeView.smartTree.TreeElement

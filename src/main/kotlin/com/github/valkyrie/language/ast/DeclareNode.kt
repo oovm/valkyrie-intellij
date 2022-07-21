@@ -26,12 +26,5 @@ abstract class DeclareNode(node: ASTNode) : ValkyrieASTBase(node),
     override fun getPresentation(): ItemPresentation {
         return PresentationData(this.name, "", this.getIcon(0), null)
     }
-    open fun getChildrenView(): Array<TreeElement> {
-        val childrenView: MutableSet<ValkyrieViewElement> = mutableSetOf()
-        for (item in PsiTreeUtil.getChildrenOfTypeAsList(this, NavigatablePsiElement::class.java)) {
-            childrenView.add(ValkyrieViewElement(item))
-        }
-        return childrenView.toTypedArray()
-    }
 }
 

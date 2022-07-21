@@ -30,8 +30,8 @@ public class ValkyrieMacroNode extends ValkyrieASTBase implements ValkyrieMacro 
 
   @Override
   @NotNull
-  public ValkyrieNamespaceFree getNamespaceFree() {
-    return findNotNullChildByClass(ValkyrieNamespaceFree.class);
+  public ValkyrieNamepathFree getNamepathFree() {
+    return findNotNullChildByClass(ValkyrieNamepathFree.class);
   }
 
 }

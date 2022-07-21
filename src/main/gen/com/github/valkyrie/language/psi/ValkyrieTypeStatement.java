@@ -20,7 +20,7 @@ public interface ValkyrieTypeStatement extends PsiElement {
   ValkyrieList getList();
 
   @Nullable
-  ValkyrieNamespace getNamespace();
+  ValkyrieNamepath getNamepath();
 
   @Nullable
   ValkyrieNumber getNumber();

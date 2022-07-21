@@ -14,6 +14,6 @@ public interface ValkyrieImportItem extends PsiElement {
   ValkyrieImportBlock getImportBlock();
 
   @NotNull
-  ValkyrieNamespaceFree getNamespaceFree();
+  ValkyrieNamepathFree getNamepathFree();
 
 }

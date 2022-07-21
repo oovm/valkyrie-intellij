@@ -42,8 +42,8 @@ public class ValkyriePairNode extends ValkyrieASTBase implements ValkyriePair {
 
   @Override
   @Nullable
-  public ValkyrieNamespace getNamespace() {
-    return findChildByClass(ValkyrieNamespace.class);
+  public ValkyrieNamepath getNamepath() {
+    return findChildByClass(ValkyrieNamepath.class);
   }
 
   @Override

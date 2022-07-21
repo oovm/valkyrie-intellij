@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieMacro extends PsiElement {
 
   @NotNull
-  ValkyrieNamespaceFree getNamespaceFree();
+  ValkyrieNamepathFree getNamepathFree();
 
 }

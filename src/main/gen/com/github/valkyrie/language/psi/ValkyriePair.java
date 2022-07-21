@@ -14,7 +14,7 @@ public interface ValkyriePair extends PsiElement {
   ValkyrieExpression getExpression();
 
   @Nullable
-  ValkyrieNamespace getNamespace();
+  ValkyrieNamepath getNamepath();
 
   @Nullable
   ValkyrieNumber getNumber();

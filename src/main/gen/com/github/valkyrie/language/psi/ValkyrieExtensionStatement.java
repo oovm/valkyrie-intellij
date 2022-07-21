@@ -11,7 +11,7 @@ public interface ValkyrieExtensionStatement extends PsiElement {
   ValkyrieIdentifier getIdentifier();
 
   @NotNull
-  ValkyrieNamespaceFree getNamespaceFree();
+  ValkyrieNamepathFree getNamepathFree();
 
   @NotNull
   ValkyrieTopBlock getTopBlock();

@@ -17,7 +17,7 @@ public interface ValkyrieTypeExpression extends PsiElement {
   List<ValkyrieList> getListList();
 
   @NotNull
-  List<ValkyrieNamespace> getNamespaceList();
+  List<ValkyrieNamepath> getNamepathList();
 
   @NotNull
   List<ValkyrieNumber> getNumberList();

@@ -60,8 +60,8 @@ public class ValkyrieDefineStatementNode extends MixinDefine implements Valkyrie
 
   @Override
   @NotNull
-  public ValkyrieNamespaceFree getNamespaceFree() {
-    return findNotNullChildByClass(ValkyrieNamespaceFree.class);
+  public ValkyrieNamepathFree getNamepathFree() {
+    return findNotNullChildByClass(ValkyrieNamepathFree.class);
   }
 
   @Override

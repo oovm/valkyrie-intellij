@@ -5,7 +5,7 @@ import com.github.valkyrie.language.ast.FunctionKind
 import com.github.valkyrie.language.psi_node.ValkyrieDefineItemNode
 import com.github.valkyrie.language.psi_node.ValkyrieDefineStatementNode
 import com.github.valkyrie.language.psi_node.ValkyrieIdentifierNode
-import com.github.valkyrie.language.psi_node.ValkyrieNamespaceFreeNode
+import com.github.valkyrie.language.psi_node.ValkyrieNamepathFreeNode
 import com.intellij.icons.AllIcons.Nodes.Function
 import com.intellij.icons.AllIcons.Nodes.Method
 import com.intellij.lang.ASTNode
@@ -19,7 +19,7 @@ open class MixinDefine(node: ASTNode) : DeclareNode(node) {
     }
 
     override fun getNameIdentifier(): ValkyrieIdentifierNode {
-        return originalElement.namespaceFree.identifierList.last() as ValkyrieIdentifierNode
+        return originalElement.namepathFree.identifierList.last() as ValkyrieIdentifierNode
     }
 
     override fun getIcon(flags: Int): Icon = when {
@@ -33,7 +33,7 @@ open class MixinDefine(node: ASTNode) : DeclareNode(node) {
 
     val kind: FunctionKind
         get() {
-            val namespace = originalElement.namespaceFree as ValkyrieNamespaceFreeNode;
+            val namespace = originalElement.namepathFree as ValkyrieNamepathFreeNode;
             val lastDot = namespace.delimiterList().lastOrNull();
             val firstArg = originalElement.defineTuple.defineItemList.firstOrNull()
             return when {

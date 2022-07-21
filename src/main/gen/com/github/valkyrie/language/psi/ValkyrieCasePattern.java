@@ -11,7 +11,7 @@ public interface ValkyrieCasePattern extends PsiElement {
   List<ValkyrieIdentifier> getIdentifierList();
 
   @Nullable
-  ValkyrieNamespace getNamespace();
+  ValkyrieNamepath getNamepath();
 
   @NotNull
   List<ValkyriePatternPair> getPatternPairList();
