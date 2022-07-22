@@ -196,8 +196,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         | (`)((?:[^`\\]|\\.)*)(\1)
         """.toRegex()
         val r = tryMatch(xid) ?: return false
-        when  {
-            r.value == "not" && lastIs()-> {
+        when {
+            r.value == "not" && lastIs() -> {
 
 
             }
@@ -214,6 +214,8 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             ":=", "≔" -> pushToken(ValkyrieTypes.OP_BIND, r)
             "->", "⟶" -> pushToken(ValkyrieTypes.OP_ARROW, r)
             "=>", "⇒" -> pushToken(ValkyrieTypes.OP_ARROW2, r)
+            "==", "≡" -> pushToken(ValkyrieTypes.OP_EQ, r)
+            "=" -> pushToken(ValkyrieTypes.OP_SET, r)
             "." -> {
                 pushToken(ValkyrieTypes.DOT, r)
             }

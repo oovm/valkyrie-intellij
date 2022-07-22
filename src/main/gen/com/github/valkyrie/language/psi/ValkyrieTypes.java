@@ -28,7 +28,6 @@ public interface ValkyrieTypes {
   IElementType DEFINE_STATEMENT = new ValkyrieTokenType("DEFINE_STATEMENT");
   IElementType DEFINE_TUPLE = new ValkyrieTokenType("DEFINE_TUPLE");
   IElementType EF_STATEMENT = new ValkyrieTokenType("EF_STATEMENT");
-  IElementType ELSE_IF = new ValkyrieTokenType("ELSE_IF");
   IElementType ELSE_STATEMENT = new ValkyrieTokenType("ELSE_STATEMENT");
   IElementType EXPRESSION = new ValkyrieTokenType("EXPRESSION");
   IElementType EXTENDS_STATEMENT = new ValkyrieTokenType("EXTENDS_STATEMENT");
@@ -44,6 +43,7 @@ public interface ValkyrieTypes {
   IElementType IMPORT_STATEMENT = new ValkyrieTokenType("IMPORT_STATEMENT");
   IElementType KW_CLASS = new ValkyrieTokenType("KW_CLASS");
   IElementType KW_DEFINE = new ValkyrieTokenType("KW_DEFINE");
+  IElementType KW_ELSE_IF = new ValkyrieTokenType("KW_ELSE_IF");
   IElementType KW_EXTENSION = new ValkyrieTokenType("KW_EXTENSION");
   IElementType KW_IMPORT = new ValkyrieTokenType("KW_IMPORT");
   IElementType KW_NAMESPACE = new ValkyrieTokenType("KW_NAMESPACE");
@@ -89,7 +89,6 @@ public interface ValkyrieTypes {
   IElementType AMP = new ValkyrieTokenType("AMP");
   IElementType AT = new ValkyrieTokenType("AT");
   IElementType BANG = new ValkyrieTokenType("BANG");
-  IElementType BIND = new ValkyrieTokenType("BIND");
   IElementType BITFLAG = new ValkyrieTokenType("BITFLAG");
   IElementType BRACE_L = new ValkyrieTokenType("{");
   IElementType BRACE_R = new ValkyrieTokenType("}");
@@ -106,7 +105,6 @@ public interface ValkyrieTypes {
   IElementType DOT3 = new ValkyrieTokenType("DOT3");
   IElementType DOT_EQ = new ValkyrieTokenType("DOT_EQ");
   IElementType DOT_LESS = new ValkyrieTokenType("DOT_LESS");
-  IElementType EQ = new ValkyrieTokenType("EQ");
   IElementType EXTENDS = new ValkyrieTokenType("EXTENDS");
   IElementType FORALL = new ValkyrieTokenType("FORALL");
   IElementType GENERIC_L = new ValkyrieTokenType("::<");
@@ -119,7 +117,6 @@ public interface ValkyrieTypes {
   IElementType KW_TYPE = new ValkyrieTokenType("KW_TYPE");
   IElementType LET = new ValkyrieTokenType("LET");
   IElementType MATCH = new ValkyrieTokenType("MATCH");
-  IElementType NE = new ValkyrieTokenType("NE");
   IElementType NEW = new ValkyrieTokenType("NEW");
   IElementType OP_ADD = new ValkyrieTokenType("+");
   IElementType OP_ADD_ASSIGN = new ValkyrieTokenType("+=");
@@ -169,6 +166,7 @@ public interface ValkyrieTypes {
   IElementType OP_POW = new ValkyrieTokenType("^");
   IElementType OP_POW_ASSIGN = new ValkyrieTokenType("OP_POW_ASSIGN");
   IElementType OP_PROPORTION = new ValkyrieTokenType("::");
+  IElementType OP_SET = new ValkyrieTokenType("OP_SET");
   IElementType OP_SUB = new ValkyrieTokenType("-");
   IElementType OP_SUB_ASSIGN = new ValkyrieTokenType("-=");
   IElementType OP_TO = new ValkyrieTokenType("OP_TO");
@@ -248,9 +246,6 @@ public interface ValkyrieTypes {
       else if (type == EF_STATEMENT) {
         return new ValkyrieEfStatementNode(node);
       }
-      else if (type == ELSE_IF) {
-        return new ValkyrieElseIfNode(node);
-      }
       else if (type == ELSE_STATEMENT) {
         return new ValkyrieElseStatementNode(node);
       }
@@ -295,6 +290,9 @@ public interface ValkyrieTypes {
       }
       else if (type == KW_DEFINE) {
         return new ValkyrieKwDefineNode(node);
+      }
+      else if (type == KW_ELSE_IF) {
+        return new ValkyrieKwElseIfNode(node);
       }
       else if (type == KW_EXTENSION) {
         return new ValkyrieKwExtensionNode(node);

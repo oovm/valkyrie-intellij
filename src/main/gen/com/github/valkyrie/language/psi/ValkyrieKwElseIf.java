@@ -5,6 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieKwIn extends PsiElement {
+public interface ValkyrieKwElseIf extends PsiElement {
 
 }

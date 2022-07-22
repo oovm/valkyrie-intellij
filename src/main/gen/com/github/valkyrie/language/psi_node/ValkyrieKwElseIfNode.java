@@ -12,14 +12,14 @@ import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieElseIfNode extends ValkyrieASTBase implements ValkyrieElseIf {
+public class ValkyrieKwElseIfNode extends ValkyrieASTBase implements ValkyrieKwElseIf {
 
-  public ValkyrieElseIfNode(@NotNull ASTNode node) {
+  public ValkyrieKwElseIfNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitElseIf(this);
+    visitor.visitKwElseIf(this);
   }
 
   @Override

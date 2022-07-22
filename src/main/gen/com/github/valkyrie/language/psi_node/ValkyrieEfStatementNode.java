@@ -36,14 +36,14 @@ public class ValkyrieEfStatementNode extends ValkyrieASTBase implements Valkyrie
 
   @Override
   @NotNull
-  public ValkyrieElseIf getElseIf() {
-    return findNotNullChildByClass(ValkyrieElseIf.class);
+  public List<ValkyrieExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExpression.class);
   }
 
   @Override
   @NotNull
-  public List<ValkyrieExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExpression.class);
+  public ValkyrieKwElseIf getKwElseIf() {
+    return findNotNullChildByClass(ValkyrieKwElseIf.class);
   }
 
 }
