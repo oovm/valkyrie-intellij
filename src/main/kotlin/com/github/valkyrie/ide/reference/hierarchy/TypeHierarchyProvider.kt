@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement
 
 class TypeHierarchyProvider : HierarchyProvider {
     override fun getTarget(dataContext: DataContext): PsiElement? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override fun createHierarchyBrowser(target: PsiElement): HierarchyBrowser {

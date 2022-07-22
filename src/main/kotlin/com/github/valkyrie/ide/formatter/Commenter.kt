@@ -2,7 +2,7 @@ package com.github.valkyrie.ide.formatter
 
 import com.intellij.lang.Commenter
 
-class ValkyrieCommenter : Commenter {
+class Commenter : Commenter {
     override fun getLineCommentPrefix(): String = "#"
 
     override fun getBlockCommentPrefix(): String = "###"

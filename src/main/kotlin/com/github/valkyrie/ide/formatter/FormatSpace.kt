@@ -7,14 +7,11 @@ import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 import com.intellij.psi.tree.TokenSet
 
-data class ValkyrieFormatSpace(
-    val commonSettings: CommonCodeStyleSettings,
-    val spacingBuilder: SpacingBuilder,
-) {
+data class FormatSpace(val commonSettings: CommonCodeStyleSettings, val spacingBuilder: SpacingBuilder) {
     companion object {
-        fun create(settings: CodeStyleSettings): ValkyrieFormatSpace {
+        fun create(settings: CodeStyleSettings): FormatSpace {
             val commonSettings = settings.getCommonSettings(ValkyrieLanguage)
-            return ValkyrieFormatSpace(commonSettings, createSpacingBuilder(commonSettings))
+            return FormatSpace(commonSettings, createSpacingBuilder(commonSettings))
         }
 
         private val remove_space_before = TokenSet.create(

@@ -42,6 +42,12 @@ public class ValkyrieTopBlockNode extends ValkyrieASTBase implements ValkyrieTop
 
   @Override
   @NotNull
+  public List<ValkyrieDefineStatement> getDefineStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieDefineStatement.class);
+  }
+
+  @Override
+  @NotNull
   public List<ValkyrieExtendsStatement> getExtendsStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExtendsStatement.class);
   }
@@ -62,12 +68,6 @@ public class ValkyrieTopBlockNode extends ValkyrieASTBase implements ValkyrieTop
   @NotNull
   public List<ValkyrieNamespaceStatement> getNamespaceStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieNamespaceStatement.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ValkyrieNewStatement> getNewStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieNewStatement.class);
   }
 
   @Override

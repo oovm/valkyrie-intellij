@@ -36,12 +36,6 @@ public class ValkyrieMatchExpressionNode extends ValkyrieASTBase implements Valk
 
   @Override
   @NotNull
-  public List<ValkyrieDefineStatement> getDefineStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieDefineStatement.class);
-  }
-
-  @Override
-  @NotNull
   public List<ValkyrieExpression> getExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExpression.class);
   }
@@ -74,6 +68,12 @@ public class ValkyrieMatchExpressionNode extends ValkyrieASTBase implements Valk
   @NotNull
   public List<ValkyrieMatchStatement> getMatchStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieMatchStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieNewStatement> getNewStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieNewStatement.class);
   }
 
   @Override

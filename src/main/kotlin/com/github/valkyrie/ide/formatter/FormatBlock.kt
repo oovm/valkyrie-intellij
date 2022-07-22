@@ -9,12 +9,12 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.formatter.FormatterUtil
 
-class ValkyrieFormatBlock(
+class FormatBlock(
     private val node: ASTNode,
     private val alignment: Alignment?,
     private val indent: Indent?,
     private val wrap: Wrap?,
-    private val space: ValkyrieFormatSpace,
+    private val space: FormatSpace,
 ) : ASTBlock {
     private val myIsIncomplete: Boolean by lazy {
         node.getChildren(null).any { it.elementType is PsiErrorElement } || FormatterUtil.isIncomplete(node)
@@ -26,7 +26,7 @@ class ValkyrieFormatBlock(
         return node.getChildren(null)
             .filter { !it.isWhitespaceOrEmpty() }
             .map { childNode ->
-                ValkyrieFormatBlock(
+                FormatBlock(
                     node = childNode,
                     alignment = computeAlignment(childNode),
                     indent = computeIndent(childNode),

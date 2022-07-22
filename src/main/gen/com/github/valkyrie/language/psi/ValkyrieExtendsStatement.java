@@ -8,9 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieExtendsStatement extends PsiElement {
 
   @NotNull
-  ValkyrieKwExtends getKwExtends();
+  ValkyrieIdentifier getIdentifier();
 
   @NotNull
+  ValkyrieKwExtends getKwExtends();
+
+  @Nullable
   ValkyrieModifiers getModifiers();
 
   @NotNull
@@ -19,7 +22,7 @@ public interface ValkyrieExtendsStatement extends PsiElement {
   @Nullable
   ValkyrieTypeExpression getTypeExpression();
 
-  @Nullable
-  ValkyrieTypeGeneric getTypeGeneric();
+  @NotNull
+  List<ValkyrieTypeGeneric> getTypeGenericList();
 
 }

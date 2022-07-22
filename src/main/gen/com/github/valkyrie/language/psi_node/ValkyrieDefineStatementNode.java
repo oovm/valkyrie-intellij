@@ -48,8 +48,8 @@ public class ValkyrieDefineStatementNode extends MixinDefine implements Valkyrie
 
   @Override
   @Nullable
-  public ValkyrieGenericCall getGenericCall() {
-    return findChildByClass(ValkyrieGenericCall.class);
+  public ValkyrieGenericDefine getGenericDefine() {
+    return findChildByClass(ValkyrieGenericDefine.class);
   }
 
   @Override

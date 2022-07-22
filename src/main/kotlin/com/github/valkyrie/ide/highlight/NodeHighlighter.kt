@@ -65,6 +65,7 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 //        highlightModifiers(o.modifiers)
     }
 
+
     override fun visitForallStatement(o: ValkyrieForallStatement) {
 //        o.identifierList.forEach {
 //            highlight(it, Color.SYM_GENERIC)
@@ -93,8 +94,7 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
     }
 
     override fun visitExtendsStatement(o: ValkyrieExtendsStatement) {
-//        highlight(o.symbol, Color.SYM_TRAIT)
-        // highlightModifiers(o.modifiers)
+        highlight(o.kwExtends, Color.KEYWORD)
     }
 
     override fun visitTaggedStatement(o: ValkyrieTaggedStatement) {
@@ -130,49 +130,21 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 
     // TODO: real syntax resolve
     override fun visitIdentifier(o: ValkyrieIdentifier) {
-        if (o.text.startsWith("_")) {
-            highlight(o, Color.SYM_FIELD)
-            return
-        }
-        else if (o.text.uppercase() == o.text) {
-            if (o.text.length == 1) {
-                highlight(o, Color.SYM_GENERIC)
+        highlightWithText(o)
+    }
+
+    override fun visitObjectKey(o: ValkyrieObjectKey) {
+        when (o.text) {
+            "get", "set" -> {
+                highlight(o, Color.KEYWORD)
+                return
             }
-            else {
-                highlight(o, Color.SYM_CONSTANT)
-            }
-            return
         }
 
-        when (o.text) {
-            "Default", "Debug", "Clone", "Copy", "Serialize", "Deserialize",
-            "SemiGroup", "Monoid", "HKT", "Functor",
-            -> {
-                highlight(o, Color.SYM_TRAIT)
-            }
-            "u8", "u16", "u32", "u64", "u128", "u256",
-            "i8", "i16", "i32", "i64", "i128", "i256",
-            "int", "bool", "str", "string", "f32", "f64", "char", "byte", "void",
-            -> {
-                highlight(o, Color.KEYWORD)
-            }
-            "_" -> {
-                highlight(o, Color.SYM_GENERIC)
-            }
-            "map", "or" -> {
-                highlight(o, Color.SYM_FUNCTION_SELF)
-            }
-            "unit", "default" -> {
-                highlight(o, Color.SYM_FUNCTION_FREE)
-            }
-            "Option", "Result", "Current", "Target" -> {
-                highlight(o, Color.SYM_CLASS)
-            }
-            "None", "Some", "Success", "Failure" -> {
-                highlight(o, Color.SYM_VARIANT)
-            }
-            else -> {}
+        if (!o.text.first().isDigit()) {
+            highlight(o, Color.SYM_FIELD)
         }
+
     }
 
 
@@ -238,4 +210,64 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
     override fun suitableForFile(file: PsiFile): Boolean = file is ValkyrieFileNode
 
     override fun visit(element: PsiElement) = element.accept(this)
+}
+
+
+private fun NodeHighlighter.highlightWithText(o: PsiElement) {
+    if (o.text.startsWith("_")) {
+        highlight(o, Color.SYM_FIELD)
+        return
+    }
+    else if (o.text.uppercase() == o.text) {
+        if (o.text.length == 1) {
+            highlight(o, Color.SYM_GENERIC)
+        }
+        else {
+            highlight(o, Color.SYM_CONSTANT)
+        }
+        return
+    }
+
+    when (o.text) {
+        "Default", "Debug", "Clone", "Copy", "Serialize", "Deserialize",
+        "SemiGroup", "Monoid", "HKT", "Functor", "Shape"
+        -> {
+            highlight(o, Color.SYM_TRAIT)
+        }
+        "u8", "u16", "u32", "u64", "u128", "u256",
+        "i8", "i16", "i32", "i64", "i128", "i256",
+        "int", "bool", "str", "string", "f32", "f64", "char", "byte", "void"
+        -> {
+            highlight(o, Color.KEYWORD)
+        }
+        "get", "set", "value", "extends", "self"
+        -> {
+            highlight(o, Color.KEYWORD)
+        }
+        "_" -> {
+            highlight(o, Color.SYM_GENERIC)
+        }
+        "map", "or" -> {
+            highlight(o, Color.SYM_FUNCTION_SELF)
+        }
+        "unit", "default" -> {
+            highlight(o, Color.SYM_FUNCTION_FREE)
+        }
+        "Point", "Ellipse", "Circle" -> {
+            highlight(o, Color.SYM_CLASS)
+        }
+        "center", "minor_axis", "major_axis", "radius" -> {
+            highlight(o, Color.SYM_FUNCTION_SELF)
+        }
+        "x", "y", "v" -> {
+            highlight(o, Color.SYM_FIELD)
+        }
+        "Option", "Result", "Current", "Target" -> {
+            highlight(o, Color.SYM_CLASS)
+        }
+        "None", "Some", "Success", "Failure" -> {
+            highlight(o, Color.SYM_VARIANT)
+        }
+        else -> {}
+    }
 }

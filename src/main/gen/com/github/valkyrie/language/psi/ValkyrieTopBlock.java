@@ -14,6 +14,9 @@ public interface ValkyrieTopBlock extends PsiElement {
   List<ValkyrieClassStatement> getClassStatementList();
 
   @NotNull
+  List<ValkyrieDefineStatement> getDefineStatementList();
+
+  @NotNull
   List<ValkyrieExtendsStatement> getExtendsStatementList();
 
   @NotNull
@@ -24,9 +27,6 @@ public interface ValkyrieTopBlock extends PsiElement {
 
   @NotNull
   List<ValkyrieNamespaceStatement> getNamespaceStatementList();
-
-  @NotNull
-  List<ValkyrieNewStatement> getNewStatementList();
 
   @NotNull
   List<ValkyrieTaggedStatement> getTaggedStatementList();

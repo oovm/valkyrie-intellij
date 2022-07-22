@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieDefineBlock extends PsiElement {
 
   @NotNull
-  List<ValkyrieDefineStatement> getDefineStatementList();
-
-  @NotNull
   List<ValkyrieExpression> getExpressionList();
 
   @NotNull
@@ -27,6 +24,9 @@ public interface ValkyrieDefineBlock extends PsiElement {
 
   @NotNull
   List<ValkyrieMatchStatement> getMatchStatementList();
+
+  @NotNull
+  List<ValkyrieNewStatement> getNewStatementList();
 
   @NotNull
   List<ValkyrieTypeStatement> getTypeStatementList();

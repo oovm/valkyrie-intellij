@@ -128,8 +128,7 @@ private top_statements ::=
   | tagged_statement
   | bitflag_statement
   | extends_statement
-  | new_statement
-  | SEMICOLON
+  | define_statement
   ;
 private normal_statements ::=
     if_statement
@@ -137,7 +136,7 @@ private normal_statements ::=
   | while_statement
   | match_statement
   | let_statement
-  | define_statement
+  | new_statement
   | type_statement
   | forall_statement
 //  | macro_list
@@ -200,7 +199,7 @@ match_statement   ::= MATCH identifier* match_block;
 match_block       ::= <<brace_block match_expression SEMICOLON>>;
 match_expression  ::= case_pattern COLON (normal_statements [SEMICOLON])+
 // ---------------------------------------------------------------------------------------------------------------------
-define_statement  ::= kw_define [modifiers] namepath_free [generic_call] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
+define_statement  ::= kw_define [modifiers] namepath_free [generic_define] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefine"
 };
 kw_define         ::= "def" {
@@ -261,10 +260,10 @@ object_key        ::= SYMBOL_XID | SYMBOL_RAW | INTEGER | KW_IF {
 trait_statement   ::= KW_TRAIT modifiers [type_generic] [COLON type_expression] trait_block {
     extends="com.github.valkyrie.language.mixin.MixinTrait"
 };
-trait_block       ::= <<brace_block normal_statements SEMICOLON>>;
+trait_block       ::= <<brace_free top_statements SEMICOLON>>;
 //trait_item        ::= normal_statements;
 // ---------------------------------------------------------------------------------------------------------------------
-extends_statement ::= kw_extends modifiers [[OP_PROPORTION] type_generic] [COLON type_expression] trait_block {
+extends_statement ::= kw_extends [type_generic] [modifiers] identifier [type_generic] [COLON type_expression] trait_block {
     extends="com.github.valkyrie.language.mixin.MixinExtends"
 }
 kw_extends        ::= "extends" | "extend" {
@@ -297,6 +296,7 @@ private op_binary ::=
     | OP_POW | OP_POW_ASSIGN
     | OP_GT | OP_LT | DOT_LESS | DOT_EQ | DOT2 | DOT
     | OP_TO
+    | OP_AND_THEN | OP_OR_ELSE
     // is | is not
     | OP_NOT_A | OP_IS_A OP_NOT | OP_IS_A | OP_NOT OP_IS_A
     | OP_AS

@@ -47,15 +47,15 @@
 		<!-- Formatter -->
 		<lang.formatter
 			language="Valkyrie"
-			implementationClass="com.github.valkyrie.ide.formatter.ValkyrieFormatBuilder"
+			implementationClass="com.github.valkyrie.ide.formatter.FormatBuilder"
 		/>
 		<lang.commenter
 			language="Valkyrie"
-			implementationClass="com.github.valkyrie.ide.formatter.ValkyrieCommenter"
+			implementationClass="com.github.valkyrie.ide.formatter.Commenter"
 		/>
 		<lang.smartEnterProcessor
 			language="Valkyrie"
-			implementationClass="com.github.valkyrie.ide.formatter.JssSmartEnter"
+			implementationClass="com.github.valkyrie.ide.formatter.SmartEnter"
 		/>
 		<!-- Goto -->
 		<navbar implementation="com.github.valkyrie.ide.goto.VNavigationBarExtension"/>

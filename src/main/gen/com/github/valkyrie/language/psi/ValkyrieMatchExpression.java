@@ -11,9 +11,6 @@ public interface ValkyrieMatchExpression extends PsiElement {
   ValkyrieCasePattern getCasePattern();
 
   @NotNull
-  List<ValkyrieDefineStatement> getDefineStatementList();
-
-  @NotNull
   List<ValkyrieExpression> getExpressionList();
 
   @NotNull
@@ -30,6 +27,9 @@ public interface ValkyrieMatchExpression extends PsiElement {
 
   @NotNull
   List<ValkyrieMatchStatement> getMatchStatementList();
+
+  @NotNull
+  List<ValkyrieNewStatement> getNewStatementList();
 
   @NotNull
   List<ValkyrieTypeStatement> getTypeStatementList();

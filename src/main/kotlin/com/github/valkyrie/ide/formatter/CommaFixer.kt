@@ -4,15 +4,15 @@ import com.github.valkyrie.language.psi.endOffset
 import com.github.valkyrie.language.psi.getNextNonCommentSibling
 import com.github.valkyrie.language.psi.getPrevNonCommentSibling
 import com.github.valkyrie.language.psi.getPrevNonWhitespaceSibling
-import com.intellij.lang.SmartEnterProcessorWithFixers
+import com.intellij.lang.SmartEnterProcessorWithFixers.Fixer
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 
-class JssCommaFixer : SmartEnterProcessorWithFixers.Fixer<JssSmartEnter>() {
-    override fun apply(editor: Editor, processor: JssSmartEnter, element: PsiElement) {
+class CommaFixer : Fixer<SmartEnter>() {
+    override fun apply(editor: Editor, processor: SmartEnter, element: PsiElement) {
         element.isValid
         val current = if (element is LeafPsiElement && element.parent !is PsiFile) {
             element.parent
