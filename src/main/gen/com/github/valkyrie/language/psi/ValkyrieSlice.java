@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieSliceSuffix extends PsiElement {
+public interface ValkyrieSlice extends PsiElement {
 
   @NotNull
-  List<ValkyrieSliceExpression> getSliceExpressionList();
+  List<ValkyrieSliceItem> getSliceItemList();
 
 }

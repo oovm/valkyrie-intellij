@@ -29,7 +29,7 @@ public interface ValkyrieTypeStatement extends PsiElement {
   ValkyrieRange getRange();
 
   @NotNull
-  List<ValkyrieSliceSuffix> getSliceSuffixList();
+  List<ValkyrieSlice> getSliceList();
 
   @Nullable
   ValkyrieString getString();

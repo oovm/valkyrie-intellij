@@ -10,7 +10,4 @@ public interface ValkyrieNumber extends PsiElement {
   @Nullable
   ValkyrieIdentifier getIdentifier();
 
-  @NotNull
-  ValkyrieNumberLiteral getNumberLiteral();
-
 }

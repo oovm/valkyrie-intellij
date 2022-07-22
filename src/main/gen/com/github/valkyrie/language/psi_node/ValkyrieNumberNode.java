@@ -34,10 +34,4 @@ public class ValkyrieNumberNode extends MixinNumber implements ValkyrieNumber {
     return findChildByClass(ValkyrieIdentifier.class);
   }
 
-  @Override
-  @NotNull
-  public ValkyrieNumberLiteral getNumberLiteral() {
-    return findNotNullChildByClass(ValkyrieNumberLiteral.class);
-  }
-
 }

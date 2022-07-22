@@ -72,8 +72,8 @@ public class ValkyrieTypeStatementNode extends MixinType implements ValkyrieType
 
   @Override
   @NotNull
-  public List<ValkyrieSliceSuffix> getSliceSuffixList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieSliceSuffix.class);
+  public List<ValkyrieSlice> getSliceList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieSlice.class);
   }
 
   @Override

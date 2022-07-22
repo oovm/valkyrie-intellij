@@ -66,8 +66,8 @@ public class ValkyrieExpressionNode extends ValkyrieASTBase implements ValkyrieE
 
   @Override
   @NotNull
-  public List<ValkyrieSliceSuffix> getSliceSuffixList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieSliceSuffix.class);
+  public List<ValkyrieSlice> getSliceList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieSlice.class);
   }
 
   @Override

@@ -12,14 +12,14 @@ import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieSliceSuffixNode extends ValkyrieASTBase implements ValkyrieSliceSuffix {
+public class ValkyrieSliceItemNode extends ValkyrieASTBase implements ValkyrieSliceItem {
 
-  public ValkyrieSliceSuffixNode(@NotNull ASTNode node) {
+  public ValkyrieSliceItemNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitSliceSuffix(this);
+    visitor.visitSliceItem(this);
   }
 
   @Override
@@ -30,8 +30,8 @@ public class ValkyrieSliceSuffixNode extends ValkyrieASTBase implements Valkyrie
 
   @Override
   @NotNull
-  public List<ValkyrieSliceExpression> getSliceExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieSliceExpression.class);
+  public List<ValkyrieExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExpression.class);
   }
 
 }

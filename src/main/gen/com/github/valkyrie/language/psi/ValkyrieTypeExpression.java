@@ -26,7 +26,7 @@ public interface ValkyrieTypeExpression extends PsiElement {
   List<ValkyrieRange> getRangeList();
 
   @NotNull
-  List<ValkyrieSliceSuffix> getSliceSuffixList();
+  List<ValkyrieSlice> getSliceList();
 
   @NotNull
   List<ValkyrieString> getStringList();

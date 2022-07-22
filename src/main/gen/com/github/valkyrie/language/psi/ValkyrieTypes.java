@@ -66,14 +66,13 @@ public interface ValkyrieTypes {
   IElementType NEW_STATEMENT = new ValkyrieTokenType("NEW_STATEMENT");
   IElementType NORMAL_PATTERN = new ValkyrieTokenType("NORMAL_PATTERN");
   IElementType NUMBER = new ValkyrieTokenType("NUMBER");
-  IElementType NUMBER_LITERAL = new ValkyrieTokenType("NUMBER_LITERAL");
   IElementType PAIR = new ValkyrieTokenType("PAIR");
   IElementType PATTERN_ITEM = new ValkyrieTokenType("PATTERN_ITEM");
   IElementType PATTERN_PAIR = new ValkyrieTokenType("PATTERN_PAIR");
   IElementType PATTERN_VALUE = new ValkyrieTokenType("PATTERN_VALUE");
   IElementType RANGE = new ValkyrieTokenType("RANGE");
-  IElementType SLICE_EXPRESSION = new ValkyrieTokenType("SLICE_EXPRESSION");
-  IElementType SLICE_SUFFIX = new ValkyrieTokenType("SLICE_SUFFIX");
+  IElementType SLICE = new ValkyrieTokenType("SLICE");
+  IElementType SLICE_ITEM = new ValkyrieTokenType("SLICE_ITEM");
   IElementType STRING = new ValkyrieTokenType("STRING");
   IElementType TAGGED_BLOCK = new ValkyrieTokenType("TAGGED_BLOCK");
   IElementType TAGGED_ITEM = new ValkyrieTokenType("TAGGED_ITEM");
@@ -362,9 +361,6 @@ public interface ValkyrieTypes {
       else if (type == NUMBER) {
         return new ValkyrieNumberNode(node);
       }
-      else if (type == NUMBER_LITERAL) {
-        return new ValkyrieNumberLiteralNode(node);
-      }
       else if (type == PAIR) {
         return new ValkyriePairNode(node);
       }
@@ -380,11 +376,11 @@ public interface ValkyrieTypes {
       else if (type == RANGE) {
         return new ValkyrieRangeNode(node);
       }
-      else if (type == SLICE_EXPRESSION) {
-        return new ValkyrieSliceExpressionNode(node);
+      else if (type == SLICE) {
+        return new ValkyrieSliceNode(node);
       }
-      else if (type == SLICE_SUFFIX) {
-        return new ValkyrieSliceSuffixNode(node);
+      else if (type == SLICE_ITEM) {
+        return new ValkyrieSliceItemNode(node);
       }
       else if (type == STRING) {
         return new ValkyrieStringNode(node);

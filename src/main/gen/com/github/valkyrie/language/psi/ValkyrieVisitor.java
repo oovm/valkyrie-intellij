@@ -239,10 +239,6 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitNumberLiteral(@NotNull ValkyrieNumberLiteral o) {
-    visitPsiElement(o);
-  }
-
   public void visitPair(@NotNull ValkyriePair o) {
     visitPsiElement(o);
   }
@@ -263,11 +259,11 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitSliceExpression(@NotNull ValkyrieSliceExpression o) {
+  public void visitSlice(@NotNull ValkyrieSlice o) {
     visitPsiElement(o);
   }
 
-  public void visitSliceSuffix(@NotNull ValkyrieSliceSuffix o) {
+  public void visitSliceItem(@NotNull ValkyrieSliceItem o) {
     visitPsiElement(o);
   }
 

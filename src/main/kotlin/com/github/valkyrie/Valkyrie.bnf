@@ -274,7 +274,7 @@ bitflag_item        ::= identifier OP_SET expression;
 new_statement       ::= NEW modifiers [type_angle] [COLON type_expression] trait_block;
 // ---------------------------------------------------------------------------------------------------------------------
 expression          ::= expr (op_binary expr)*;
-private expr        ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
+private expr        ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice)*;
 private term        ::= range | list | tuple | atoms;
 private op_binary   ::=
       VERTICAL | OP_EQ | OP_NE
@@ -295,17 +295,9 @@ private op_suffix   ::= BANG | QUESTION;
 call_suffix         ::= <<parenthesis expression COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
 type_expression     ::= type_expr (op_binary type_expr)*;
-private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
+private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice)*;
 type_angle          ::= OP_PROPORTION? <<parenthesis ([identifier COLON] type_expression) COMMA>>;
 type_instance       ::= identifier type_angle?
-// ---------------------------------------------------------------------------------------------------------------------
-range               ::= <<parenthesis slice_expression COMMA>>;
-slice_suffix        ::= <<slice_block slice_expression COMMA>>;
-slice_expression    ::=
-    [expression] COLON [expression] COLON [expression]
-  | [expression] COLON [expression]
-  | [expression] OP_PROPORTION [expression]
-  | expression;
 // ---------------------------------------------------------------------------------------------------------------------
 macro      ::= AT namepath_free;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -316,18 +308,25 @@ macro_item ::=
   | <<brace_block expression SEMICOLON>>;
 macro_list ::= [AT|HASH] <<bracket_block (namepath macro_item) COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
-pair           ::= atoms COLON expression;
-list           ::= <<bracket_block expression COMMA>>
-tuple          ::= <<parenthesis expression COMMA>>
+tuple      ::= <<parenthesis expression COMMA>>
+list       ::= <<bracket_block expression COMMA>>
+range      ::= <<slice_block slice_item COMMA>>;
+slice      ::= <<slice_block slice_item COMMA>>;
+slice_item ::=
+    [expression] COLON [expression] COLON [expression]
+  | [expression] COLON [expression]
+  | [expression] OP_PROPORTION [expression]
+  | expression;
+// ---------------------------------------------------------------------------------------------------------------------
 private atoms  ::= number | string | boolean | namepath;
+pair           ::= atoms COLON expression;
 boolean        ::= "true" | "false";
-number         ::= number_literal [identifier] {
+number         ::= (BYTE | INTEGER | DECIMAL) [identifier] {
     mixin="com.github.valkyrie.language.mixin.MixinNumber"
 }
 string         ::= [identifier] STRING_START STRING_TEXT STRING_END {
     mixin="com.github.valkyrie.language.mixin.MixinString"
 }
-number_literal ::= BYTE | INTEGER | DECIMAL;
 // ---------------------------------------------------------------------------------------------------------------------
 namepath_free  ::= identifier ((DOT|OP_PROPORTION) identifier)* {
     mixin="com.github.valkyrie.language.mixin.MixinNamepath"

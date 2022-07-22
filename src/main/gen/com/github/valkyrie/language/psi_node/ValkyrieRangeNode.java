@@ -30,8 +30,8 @@ public class ValkyrieRangeNode extends ValkyrieASTBase implements ValkyrieRange 
 
   @Override
   @NotNull
-  public List<ValkyrieSliceExpression> getSliceExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieSliceExpression.class);
+  public List<ValkyrieSliceItem> getSliceItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieSliceItem.class);
   }
 
 }

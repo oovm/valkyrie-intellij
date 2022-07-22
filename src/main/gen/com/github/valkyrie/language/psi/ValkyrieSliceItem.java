@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieSliceExpression extends PsiElement {
+public interface ValkyrieSliceItem extends PsiElement {
 
   @NotNull
   List<ValkyrieExpression> getExpressionList();

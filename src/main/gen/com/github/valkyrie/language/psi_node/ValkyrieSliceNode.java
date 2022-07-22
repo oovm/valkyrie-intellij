@@ -12,20 +12,26 @@ import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieNumberLiteralNode extends ValkyrieASTBase implements ValkyrieNumberLiteral {
+public class ValkyrieSliceNode extends ValkyrieASTBase implements ValkyrieSlice {
 
-  public ValkyrieNumberLiteralNode(@NotNull ASTNode node) {
+  public ValkyrieSliceNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitNumberLiteral(this);
+    visitor.visitSlice(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ValkyrieVisitor) accept((ValkyrieVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public List<ValkyrieSliceItem> getSliceItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieSliceItem.class);
   }
 
 }
