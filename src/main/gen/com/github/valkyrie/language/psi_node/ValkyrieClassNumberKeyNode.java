@@ -8,18 +8,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.mixin.MixinClassBrace;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieClassBraceItemNode extends MixinClassBrace implements ValkyrieClassBraceItem {
+public class ValkyrieClassNumberKeyNode extends ValkyrieASTBase implements ValkyrieClassNumberKey {
 
-  public ValkyrieClassBraceItemNode(@NotNull ASTNode node) {
+  public ValkyrieClassNumberKeyNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitClassBraceItem(this);
+    visitor.visitClassNumberKey(this);
   }
 
   @Override
@@ -30,26 +30,8 @@ public class ValkyrieClassBraceItemNode extends MixinClassBrace implements Valky
 
   @Override
   @Nullable
-  public ValkyrieClassNumberKey getClassNumberKey() {
-    return findChildByClass(ValkyrieClassNumberKey.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieExpression getExpression() {
-    return findChildByClass(ValkyrieExpression.class);
-  }
-
-  @Override
-  @Nullable
   public ValkyrieModifiers getModifiers() {
     return findChildByClass(ValkyrieModifiers.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieTypeExpression getTypeExpression() {
-    return findNotNullChildByClass(ValkyrieTypeExpression.class);
   }
 
 }

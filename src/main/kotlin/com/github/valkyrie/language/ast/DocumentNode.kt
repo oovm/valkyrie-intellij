@@ -30,6 +30,9 @@ class DocumentNode(comment: PsiComment, rawText: String? = null) : ValkyrieASTBa
             else -> null
         }
         fun tryBuild(node: PsiComment): DocumentNode? {
+            if (node.text.startsWith("#^")) {
+                return DocumentNode(node, node.text.substring(2))
+            }
             val comment = """(#{3,})(\^)([^\00]*?)(\1)""".toRegex()
             val match = comment.matchEntire(node.text) ?: return null
             return DocumentNode(node, match.groups[3]?.value)

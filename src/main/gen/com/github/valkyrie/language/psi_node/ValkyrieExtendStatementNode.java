@@ -8,18 +8,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.mixin.MixinClassBrace;
+import com.github.valkyrie.language.mixin.MixinExtends;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieClassBraceItemNode extends MixinClassBrace implements ValkyrieClassBraceItem {
+public class ValkyrieExtendStatementNode extends MixinExtends implements ValkyrieExtendStatement {
 
-  public ValkyrieClassBraceItemNode(@NotNull ASTNode node) {
+  public ValkyrieExtendStatementNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitClassBraceItem(this);
+    visitor.visitExtendStatement(this);
   }
 
   @Override
@@ -29,27 +29,33 @@ public class ValkyrieClassBraceItemNode extends MixinClassBrace implements Valky
   }
 
   @Override
-  @Nullable
-  public ValkyrieClassNumberKey getClassNumberKey() {
-    return findChildByClass(ValkyrieClassNumberKey.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieExpression getExpression() {
-    return findChildByClass(ValkyrieExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieModifiers getModifiers() {
-    return findChildByClass(ValkyrieModifiers.class);
+  @NotNull
+  public ValkyrieKwExtends getKwExtends() {
+    return findNotNullChildByClass(ValkyrieKwExtends.class);
   }
 
   @Override
   @NotNull
+  public ValkyrieModifiers getModifiers() {
+    return findNotNullChildByClass(ValkyrieModifiers.class);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieTraitBlock getTraitBlock() {
+    return findNotNullChildByClass(ValkyrieTraitBlock.class);
+  }
+
+  @Override
+  @Nullable
+  public ValkyrieTypeAngle getTypeAngle() {
+    return findChildByClass(ValkyrieTypeAngle.class);
+  }
+
+  @Override
+  @Nullable
   public ValkyrieTypeExpression getTypeExpression() {
-    return findNotNullChildByClass(ValkyrieTypeExpression.class);
+    return findChildByClass(ValkyrieTypeExpression.class);
   }
 
 }

@@ -18,7 +18,7 @@ public interface ValkyrieTypes {
   IElementType CLASS_BRACE = new ValkyrieTokenType("CLASS_BRACE");
   IElementType CLASS_BRACE_ITEM = new ValkyrieTokenType("CLASS_BRACE_ITEM");
   IElementType CLASS_INHERIT = new ValkyrieTokenType("CLASS_INHERIT");
-  IElementType CLASS_NUMERIC_KEY = new ValkyrieTokenType("CLASS_NUMERIC_KEY");
+  IElementType CLASS_NUMBER_KEY = new ValkyrieTokenType("CLASS_NUMBER_KEY");
   IElementType CLASS_STATEMENT = new ValkyrieTokenType("CLASS_STATEMENT");
   IElementType CLASS_TUPLE = new ValkyrieTokenType("CLASS_TUPLE");
   IElementType CLASS_TUPLE_ITEM = new ValkyrieTokenType("CLASS_TUPLE_ITEM");
@@ -30,7 +30,7 @@ public interface ValkyrieTypes {
   IElementType EF_STATEMENT = new ValkyrieTokenType("EF_STATEMENT");
   IElementType ELSE_STATEMENT = new ValkyrieTokenType("ELSE_STATEMENT");
   IElementType EXPRESSION = new ValkyrieTokenType("EXPRESSION");
-  IElementType EXTENDS_STATEMENT = new ValkyrieTokenType("EXTENDS_STATEMENT");
+  IElementType EXTEND_STATEMENT = new ValkyrieTokenType("EXTEND_STATEMENT");
   IElementType EXTENSION_STATEMENT = new ValkyrieTokenType("EXTENSION_STATEMENT");
   IElementType FORALL_BLOCK = new ValkyrieTokenType("FORALL_BLOCK");
   IElementType FORALL_STATEMENT = new ValkyrieTokenType("FORALL_STATEMENT");
@@ -46,6 +46,7 @@ public interface ValkyrieTypes {
   IElementType KW_CLASS = new ValkyrieTokenType("KW_CLASS");
   IElementType KW_DEFINE = new ValkyrieTokenType("KW_DEFINE");
   IElementType KW_ELSE_IF = new ValkyrieTokenType("KW_ELSE_IF");
+  IElementType KW_EXTENDS = new ValkyrieTokenType("KW_EXTENDS");
   IElementType KW_EXTENSION = new ValkyrieTokenType("KW_EXTENSION");
   IElementType KW_IMPORT = new ValkyrieTokenType("KW_IMPORT");
   IElementType KW_NAMESPACE = new ValkyrieTokenType("KW_NAMESPACE");
@@ -106,7 +107,6 @@ public interface ValkyrieTypes {
   IElementType DOT3 = new ValkyrieTokenType("DOT3");
   IElementType DOT_EQ = new ValkyrieTokenType("DOT_EQ");
   IElementType DOT_LESS = new ValkyrieTokenType("DOT_LESS");
-  IElementType EXTENDS = new ValkyrieTokenType("EXTENDS");
   IElementType FORALL = new ValkyrieTokenType("FORALL");
   IElementType HASH = new ValkyrieTokenType("HASH");
   IElementType INTEGER = new ValkyrieTokenType("INTEGER");
@@ -217,8 +217,8 @@ public interface ValkyrieTypes {
       else if (type == CLASS_INHERIT) {
         return new ValkyrieClassInheritNode(node);
       }
-      else if (type == CLASS_NUMERIC_KEY) {
-        return new ValkyrieClassNumericKeyNode(node);
+      else if (type == CLASS_NUMBER_KEY) {
+        return new ValkyrieClassNumberKeyNode(node);
       }
       else if (type == CLASS_STATEMENT) {
         return new ValkyrieClassStatementNode(node);
@@ -253,8 +253,8 @@ public interface ValkyrieTypes {
       else if (type == EXPRESSION) {
         return new ValkyrieExpressionNode(node);
       }
-      else if (type == EXTENDS_STATEMENT) {
-        return new ValkyrieExtendsStatementNode(node);
+      else if (type == EXTEND_STATEMENT) {
+        return new ValkyrieExtendStatementNode(node);
       }
       else if (type == EXTENSION_STATEMENT) {
         return new ValkyrieExtensionStatementNode(node);
@@ -300,6 +300,9 @@ public interface ValkyrieTypes {
       }
       else if (type == KW_ELSE_IF) {
         return new ValkyrieKwElseIfNode(node);
+      }
+      else if (type == KW_EXTENDS) {
+        return new ValkyrieKwExtendsNode(node);
       }
       else if (type == KW_EXTENSION) {
         return new ValkyrieKwExtensionNode(node);
