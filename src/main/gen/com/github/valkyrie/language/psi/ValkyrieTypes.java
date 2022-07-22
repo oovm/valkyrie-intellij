@@ -71,6 +71,7 @@ public interface ValkyrieTypes {
   IElementType PATTERN_ITEM = new ValkyrieTokenType("PATTERN_ITEM");
   IElementType PATTERN_PAIR = new ValkyrieTokenType("PATTERN_PAIR");
   IElementType PATTERN_VALUE = new ValkyrieTokenType("PATTERN_VALUE");
+  IElementType RANGE = new ValkyrieTokenType("RANGE");
   IElementType SLICE_EXPRESSION = new ValkyrieTokenType("SLICE_EXPRESSION");
   IElementType SLICE_SUFFIX = new ValkyrieTokenType("SLICE_SUFFIX");
   IElementType STRING = new ValkyrieTokenType("STRING");
@@ -375,6 +376,9 @@ public interface ValkyrieTypes {
       }
       else if (type == PATTERN_VALUE) {
         return new ValkyriePatternValueNode(node);
+      }
+      else if (type == RANGE) {
+        return new ValkyrieRangeNode(node);
       }
       else if (type == SLICE_EXPRESSION) {
         return new ValkyrieSliceExpressionNode(node);

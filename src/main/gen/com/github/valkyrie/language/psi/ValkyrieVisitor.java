@@ -259,6 +259,10 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitRange(@NotNull ValkyrieRange o) {
+    visitPsiElement(o);
+  }
+
   public void visitSliceExpression(@NotNull ValkyrieSliceExpression o) {
     visitPsiElement(o);
   }

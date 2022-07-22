@@ -2387,6 +2387,18 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // <<parenthesis slice_expression COMMA>>
+  public static boolean range(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "range")) return false;
+    if (!nextTokenIs(b, PARENTHESIS_L)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = parenthesis(b, l + 1, ValkyrieParser::slice_expression, COMMA_parser_);
+    exit_section_(b, m, RANGE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // <<item>> (<<sp>> <<item>>)* [<<sp>>]
   static boolean sequence(PsiBuilder b, int l, Parser _item, Parser _sp) {
     if (!recursion_guard_(b, l, "sequence")) return false;
@@ -2716,11 +2728,12 @@ public class ValkyrieParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // list | tuple | atoms
+  // range | list | tuple | atoms
   static boolean term(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "term")) return false;
     boolean r;
-    r = list(b, l + 1);
+    r = range(b, l + 1);
+    if (!r) r = list(b, l + 1);
     if (!r) r = tuple(b, l + 1);
     if (!r) r = atoms(b, l + 1);
     return r;

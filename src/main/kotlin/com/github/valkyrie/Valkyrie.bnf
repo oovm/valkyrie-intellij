@@ -275,7 +275,7 @@ new_statement       ::= NEW modifiers [type_angle] [COLON type_expression] trait
 // ---------------------------------------------------------------------------------------------------------------------
 expression          ::= expr (op_binary expr)*;
 private expr        ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
-private term        ::= list | tuple | atoms;
+private term        ::= range | list | tuple | atoms;
 private op_binary   ::=
       VERTICAL | OP_EQ | OP_NE
     | OP_ADD | OP_ADD_ASSIGN
@@ -299,6 +299,7 @@ private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_
 type_angle          ::= OP_PROPORTION? <<parenthesis ([identifier COLON] type_expression) COMMA>>;
 type_instance       ::= identifier type_angle?
 // ---------------------------------------------------------------------------------------------------------------------
+range               ::= <<parenthesis slice_expression COMMA>>;
 slice_suffix        ::= <<slice_block slice_expression COMMA>>;
 slice_expression    ::=
     [expression] COLON [expression] COLON [expression]

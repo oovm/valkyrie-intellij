@@ -65,6 +65,12 @@ public class ValkyrieTypeStatementNode extends MixinType implements ValkyrieType
   }
 
   @Override
+  @Nullable
+  public ValkyrieRange getRange() {
+    return findChildByClass(ValkyrieRange.class);
+  }
+
+  @Override
   @NotNull
   public List<ValkyrieSliceSuffix> getSliceSuffixList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieSliceSuffix.class);

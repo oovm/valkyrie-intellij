@@ -73,7 +73,7 @@ private val STRINGS = """(?x)
 private val NUMBERS = """(?x)
       (?<s1>[1-9]\d*[.]\d+)
     | (?<s2>0[.]\d+)
-    | (?<s3>[1-9]\d*)
+    | (?<s3>0|[1-9]\d*)
     | (?<s4>0[a-zA-Z][\da-zA-Z]+)
 """.toRegex()
 
