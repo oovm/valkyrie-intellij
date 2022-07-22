@@ -69,7 +69,7 @@ class ValkyrieFormatBlock(
         return when (node.psi) {
             is ValkyrieImportBlock,
             is ValkyrieTaggedBlock, is ValkyrieBitflagBlock,
-            is ValkyrieClassTuple, is ValkyrieClassBrace,
+            is ValkyrieClassBlock,
             is ValkyrieForallBlock, is ValkyrieTraitBlock,
             is ValkyrieDefineBlock,
             -> when {

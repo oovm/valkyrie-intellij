@@ -8,18 +8,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.mixin.MixinExtends;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieExtendStatementNode extends MixinExtends implements ValkyrieExtendStatement {
+public class ValkyrieClassItemNode extends ValkyrieASTBase implements ValkyrieClassItem {
 
-  public ValkyrieExtendStatementNode(@NotNull ASTNode node) {
+  public ValkyrieClassItemNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitExtendStatement(this);
+    visitor.visitClassItem(this);
   }
 
   @Override
@@ -29,27 +29,21 @@ public class ValkyrieExtendStatementNode extends MixinExtends implements Valkyri
   }
 
   @Override
-  @NotNull
-  public ValkyrieKwExtends getKwExtends() {
-    return findNotNullChildByClass(ValkyrieKwExtends.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieModifiers getModifiers() {
-    return findNotNullChildByClass(ValkyrieModifiers.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieTraitBlock getTraitBlock() {
-    return findNotNullChildByClass(ValkyrieTraitBlock.class);
+  @Nullable
+  public ValkyrieExpression getExpression() {
+    return findChildByClass(ValkyrieExpression.class);
   }
 
   @Override
   @Nullable
-  public ValkyrieTypeAngle getTypeAngle() {
-    return findChildByClass(ValkyrieTypeAngle.class);
+  public ValkyrieModifiers getModifiers() {
+    return findChildByClass(ValkyrieModifiers.class);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieObjectKey getObjectKey() {
+    return findNotNullChildByClass(ValkyrieObjectKey.class);
   }
 
   @Override

@@ -36,8 +36,8 @@ public class ValkyrieTypeInstanceNode extends ValkyrieASTBase implements Valkyri
 
   @Override
   @Nullable
-  public ValkyrieTypeAngle getTypeAngle() {
-    return findChildByClass(ValkyrieTypeAngle.class);
+  public ValkyrieTypeGeneric getTypeGeneric() {
+    return findChildByClass(ValkyrieTypeGeneric.class);
   }
 
 }

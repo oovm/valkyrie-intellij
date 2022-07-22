@@ -5,12 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieClassTupleItem extends PsiElement {
-
-  @Nullable
-  ValkyrieExpression getExpression();
+public interface ValkyrieObjectDefine extends PsiElement {
 
   @NotNull
+  ValkyrieDefineTuple getDefineTuple();
+
+  @NotNull
+  List<ValkyrieExpression> getExpressionList();
+
+  @NotNull
+  ValkyrieIdentifier getIdentifier();
+
+  @Nullable
   ValkyrieTypeExpression getTypeExpression();
 
 }

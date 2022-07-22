@@ -15,13 +15,12 @@ public interface ValkyrieTypes {
   IElementType BOOLEAN = new ValkyrieTokenType("BOOLEAN");
   IElementType CALL_SUFFIX = new ValkyrieTokenType("CALL_SUFFIX");
   IElementType CASE_PATTERN = new ValkyrieTokenType("CASE_PATTERN");
-  IElementType CLASS_BRACE = new ValkyrieTokenType("CLASS_BRACE");
-  IElementType CLASS_BRACE_ITEM = new ValkyrieTokenType("CLASS_BRACE_ITEM");
+  IElementType CLASS_BLOCK = new ValkyrieTokenType("CLASS_BLOCK");
+  IElementType CLASS_DEFINE = new ValkyrieTokenType("CLASS_DEFINE");
   IElementType CLASS_INHERIT = new ValkyrieTokenType("CLASS_INHERIT");
-  IElementType CLASS_NUMBER_KEY = new ValkyrieTokenType("CLASS_NUMBER_KEY");
+  IElementType CLASS_ITEM = new ValkyrieTokenType("CLASS_ITEM");
   IElementType CLASS_STATEMENT = new ValkyrieTokenType("CLASS_STATEMENT");
   IElementType CLASS_TUPLE = new ValkyrieTokenType("CLASS_TUPLE");
-  IElementType CLASS_TUPLE_ITEM = new ValkyrieTokenType("CLASS_TUPLE_ITEM");
   IElementType CONDITION = new ValkyrieTokenType("CONDITION");
   IElementType DEFINE_BLOCK = new ValkyrieTokenType("DEFINE_BLOCK");
   IElementType DEFINE_ITEM = new ValkyrieTokenType("DEFINE_ITEM");
@@ -30,7 +29,7 @@ public interface ValkyrieTypes {
   IElementType EF_STATEMENT = new ValkyrieTokenType("EF_STATEMENT");
   IElementType ELSE_STATEMENT = new ValkyrieTokenType("ELSE_STATEMENT");
   IElementType EXPRESSION = new ValkyrieTokenType("EXPRESSION");
-  IElementType EXTEND_STATEMENT = new ValkyrieTokenType("EXTEND_STATEMENT");
+  IElementType EXTENDS_STATEMENT = new ValkyrieTokenType("EXTENDS_STATEMENT");
   IElementType EXTENSION_STATEMENT = new ValkyrieTokenType("EXTENSION_STATEMENT");
   IElementType FORALL_BLOCK = new ValkyrieTokenType("FORALL_BLOCK");
   IElementType FORALL_STATEMENT = new ValkyrieTokenType("FORALL_STATEMENT");
@@ -67,6 +66,10 @@ public interface ValkyrieTypes {
   IElementType NEW_STATEMENT = new ValkyrieTokenType("NEW_STATEMENT");
   IElementType NORMAL_PATTERN = new ValkyrieTokenType("NORMAL_PATTERN");
   IElementType NUMBER = new ValkyrieTokenType("NUMBER");
+  IElementType OBJECT_BLOCK = new ValkyrieTokenType("OBJECT_BLOCK");
+  IElementType OBJECT_DEFINE = new ValkyrieTokenType("OBJECT_DEFINE");
+  IElementType OBJECT_ITEM = new ValkyrieTokenType("OBJECT_ITEM");
+  IElementType OBJECT_KEY = new ValkyrieTokenType("OBJECT_KEY");
   IElementType PAIR = new ValkyrieTokenType("PAIR");
   IElementType PATTERN_ITEM = new ValkyrieTokenType("PATTERN_ITEM");
   IElementType PATTERN_PAIR = new ValkyrieTokenType("PATTERN_PAIR");
@@ -82,8 +85,8 @@ public interface ValkyrieTypes {
   IElementType TRAIT_BLOCK = new ValkyrieTokenType("TRAIT_BLOCK");
   IElementType TRAIT_STATEMENT = new ValkyrieTokenType("TRAIT_STATEMENT");
   IElementType TUPLE = new ValkyrieTokenType("TUPLE");
-  IElementType TYPE_ANGLE = new ValkyrieTokenType("TYPE_ANGLE");
   IElementType TYPE_EXPRESSION = new ValkyrieTokenType("TYPE_EXPRESSION");
+  IElementType TYPE_GENERIC = new ValkyrieTokenType("TYPE_GENERIC");
   IElementType TYPE_INSTANCE = new ValkyrieTokenType("TYPE_INSTANCE");
   IElementType TYPE_STATEMENT = new ValkyrieTokenType("TYPE_STATEMENT");
   IElementType WHILE_STATEMENT = new ValkyrieTokenType("WHILE_STATEMENT");
@@ -98,6 +101,7 @@ public interface ValkyrieTypes {
   IElementType BRACKET_R = new ValkyrieTokenType("]");
   IElementType BYTE = new ValkyrieTokenType("Byte");
   IElementType CASE = new ValkyrieTokenType("CASE");
+  IElementType CLASS_BRACE = new ValkyrieTokenType("class_brace");
   IElementType COLON = new ValkyrieTokenType(":");
   IElementType COMMA = new ValkyrieTokenType("COMMA");
   IElementType COMMENT = new ValkyrieTokenType("Comment");
@@ -181,7 +185,6 @@ public interface ValkyrieTypes {
   IElementType SYMBOL_RAW = new ValkyrieTokenType("Symbol");
   IElementType SYMBOL_XID = new ValkyrieTokenType("SYMBOL_XID");
   IElementType TAGGED = new ValkyrieTokenType("TAGGED");
-  IElementType VERTICAL = new ValkyrieTokenType("VERTICAL");
   IElementType WHILE = new ValkyrieTokenType("WHILE");
 
   class Factory {
@@ -208,26 +211,23 @@ public interface ValkyrieTypes {
       else if (type == CASE_PATTERN) {
         return new ValkyrieCasePatternNode(node);
       }
-      else if (type == CLASS_BRACE) {
-        return new ValkyrieClassBraceNode(node);
+      else if (type == CLASS_BLOCK) {
+        return new ValkyrieClassBlockNode(node);
       }
-      else if (type == CLASS_BRACE_ITEM) {
-        return new ValkyrieClassBraceItemNode(node);
+      else if (type == CLASS_DEFINE) {
+        return new ValkyrieClassDefineNode(node);
       }
       else if (type == CLASS_INHERIT) {
         return new ValkyrieClassInheritNode(node);
       }
-      else if (type == CLASS_NUMBER_KEY) {
-        return new ValkyrieClassNumberKeyNode(node);
+      else if (type == CLASS_ITEM) {
+        return new ValkyrieClassItemNode(node);
       }
       else if (type == CLASS_STATEMENT) {
         return new ValkyrieClassStatementNode(node);
       }
       else if (type == CLASS_TUPLE) {
         return new ValkyrieClassTupleNode(node);
-      }
-      else if (type == CLASS_TUPLE_ITEM) {
-        return new ValkyrieClassTupleItemNode(node);
       }
       else if (type == CONDITION) {
         return new ValkyrieConditionNode(node);
@@ -253,8 +253,8 @@ public interface ValkyrieTypes {
       else if (type == EXPRESSION) {
         return new ValkyrieExpressionNode(node);
       }
-      else if (type == EXTEND_STATEMENT) {
-        return new ValkyrieExtendStatementNode(node);
+      else if (type == EXTENDS_STATEMENT) {
+        return new ValkyrieExtendsStatementNode(node);
       }
       else if (type == EXTENSION_STATEMENT) {
         return new ValkyrieExtensionStatementNode(node);
@@ -364,6 +364,18 @@ public interface ValkyrieTypes {
       else if (type == NUMBER) {
         return new ValkyrieNumberNode(node);
       }
+      else if (type == OBJECT_BLOCK) {
+        return new ValkyrieObjectBlockNode(node);
+      }
+      else if (type == OBJECT_DEFINE) {
+        return new ValkyrieObjectDefineNode(node);
+      }
+      else if (type == OBJECT_ITEM) {
+        return new ValkyrieObjectItemNode(node);
+      }
+      else if (type == OBJECT_KEY) {
+        return new ValkyrieObjectKeyNode(node);
+      }
       else if (type == PAIR) {
         return new ValkyriePairNode(node);
       }
@@ -409,11 +421,11 @@ public interface ValkyrieTypes {
       else if (type == TUPLE) {
         return new ValkyrieTupleNode(node);
       }
-      else if (type == TYPE_ANGLE) {
-        return new ValkyrieTypeAngleNode(node);
-      }
       else if (type == TYPE_EXPRESSION) {
         return new ValkyrieTypeExpressionNode(node);
+      }
+      else if (type == TYPE_GENERIC) {
+        return new ValkyrieTypeGenericNode(node);
       }
       else if (type == TYPE_INSTANCE) {
         return new ValkyrieTypeInstanceNode(node);

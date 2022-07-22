@@ -30,6 +30,12 @@ public class ValkyrieExtendsStatementNode extends MixinExtends implements Valkyr
 
   @Override
   @NotNull
+  public ValkyrieKwExtends getKwExtends() {
+    return findNotNullChildByClass(ValkyrieKwExtends.class);
+  }
+
+  @Override
+  @NotNull
   public ValkyrieModifiers getModifiers() {
     return findNotNullChildByClass(ValkyrieModifiers.class);
   }
@@ -42,14 +48,14 @@ public class ValkyrieExtendsStatementNode extends MixinExtends implements Valkyr
 
   @Override
   @Nullable
-  public ValkyrieTypeAngle getTypeAngle() {
-    return findChildByClass(ValkyrieTypeAngle.class);
+  public ValkyrieTypeExpression getTypeExpression() {
+    return findChildByClass(ValkyrieTypeExpression.class);
   }
 
   @Override
   @Nullable
-  public ValkyrieTypeExpression getTypeExpression() {
-    return findChildByClass(ValkyrieTypeExpression.class);
+  public ValkyrieTypeGeneric getTypeGeneric() {
+    return findChildByClass(ValkyrieTypeGeneric.class);
   }
 
 }

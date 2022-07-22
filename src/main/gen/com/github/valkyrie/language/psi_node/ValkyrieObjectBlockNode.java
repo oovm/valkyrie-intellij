@@ -8,18 +8,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.mixin.MixinClassTuple;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieClassTupleItemNode extends MixinClassTuple implements ValkyrieClassTupleItem {
+public class ValkyrieObjectBlockNode extends ValkyrieASTBase implements ValkyrieObjectBlock {
 
-  public ValkyrieClassTupleItemNode(@NotNull ASTNode node) {
+  public ValkyrieObjectBlockNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitClassTupleItem(this);
+    visitor.visitObjectBlock(this);
   }
 
   @Override
@@ -29,15 +29,15 @@ public class ValkyrieClassTupleItemNode extends MixinClassTuple implements Valky
   }
 
   @Override
-  @Nullable
-  public ValkyrieExpression getExpression() {
-    return findChildByClass(ValkyrieExpression.class);
+  @NotNull
+  public List<ValkyrieObjectDefine> getObjectDefineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieObjectDefine.class);
   }
 
   @Override
   @NotNull
-  public ValkyrieTypeExpression getTypeExpression() {
-    return findNotNullChildByClass(ValkyrieTypeExpression.class);
+  public List<ValkyrieObjectItem> getObjectItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieObjectItem.class);
   }
 
 }

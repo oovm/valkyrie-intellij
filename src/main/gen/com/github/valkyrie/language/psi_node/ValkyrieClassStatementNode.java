@@ -30,8 +30,8 @@ public class ValkyrieClassStatementNode extends MixinClass implements ValkyrieCl
 
   @Override
   @Nullable
-  public ValkyrieClassBrace getClassBrace() {
-    return findChildByClass(ValkyrieClassBrace.class);
+  public ValkyrieClassBlock getClassBlock() {
+    return findChildByClass(ValkyrieClassBlock.class);
   }
 
   @Override

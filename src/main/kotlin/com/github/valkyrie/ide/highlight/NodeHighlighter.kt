@@ -130,6 +130,20 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 
     // TODO: real syntax resolve
     override fun visitIdentifier(o: ValkyrieIdentifier) {
+        if (o.text.startsWith("_")) {
+            highlight(o, Color.SYM_FIELD)
+            return
+        }
+        else if (o.text.uppercase() == o.text) {
+            if (o.text.length == 1) {
+                highlight(o, Color.SYM_GENERIC)
+            }
+            else {
+                highlight(o, Color.SYM_CONSTANT)
+            }
+            return
+        }
+
         when (o.text) {
             "Default", "Debug", "Clone", "Copy", "Serialize", "Deserialize",
             "SemiGroup", "Monoid", "HKT", "Functor",
@@ -142,7 +156,7 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
             -> {
                 highlight(o, Color.KEYWORD)
             }
-            "_", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" -> {
+            "_" -> {
                 highlight(o, Color.SYM_GENERIC)
             }
             "map", "or" -> {

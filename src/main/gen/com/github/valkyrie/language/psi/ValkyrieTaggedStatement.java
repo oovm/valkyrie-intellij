@@ -14,6 +14,6 @@ public interface ValkyrieTaggedStatement extends PsiElement {
   ValkyrieTaggedBlock getTaggedBlock();
 
   @Nullable
-  ValkyrieTypeAngle getTypeAngle();
+  ValkyrieTypeGeneric getTypeGeneric();
 
 }

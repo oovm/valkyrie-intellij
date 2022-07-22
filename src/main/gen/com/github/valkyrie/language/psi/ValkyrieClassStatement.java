@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface ValkyrieClassStatement extends PsiElement {
 
   @Nullable
-  ValkyrieClassBrace getClassBrace();
+  ValkyrieClassBlock getClassBlock();
 
   @Nullable
   ValkyrieClassInherit getClassInherit();

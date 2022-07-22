@@ -14,9 +14,9 @@ public interface ValkyrieNewStatement extends PsiElement {
   ValkyrieTraitBlock getTraitBlock();
 
   @Nullable
-  ValkyrieTypeAngle getTypeAngle();
+  ValkyrieTypeExpression getTypeExpression();
 
   @Nullable
-  ValkyrieTypeExpression getTypeExpression();
+  ValkyrieTypeGeneric getTypeGeneric();
 
 }

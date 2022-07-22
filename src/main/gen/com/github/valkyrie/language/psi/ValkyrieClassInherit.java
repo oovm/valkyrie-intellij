@@ -10,4 +10,7 @@ public interface ValkyrieClassInherit extends PsiElement {
   @NotNull
   List<ValkyrieIdentifier> getIdentifierList();
 
+  @Nullable
+  ValkyrieTypeGeneric getTypeGeneric();
+
 }

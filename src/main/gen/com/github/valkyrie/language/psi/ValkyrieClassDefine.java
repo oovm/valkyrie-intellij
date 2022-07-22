@@ -5,18 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieClassBraceItem extends PsiElement {
-
-  @Nullable
-  ValkyrieClassNumberKey getClassNumberKey();
-
-  @Nullable
-  ValkyrieExpression getExpression();
-
-  @Nullable
-  ValkyrieModifiers getModifiers();
+public interface ValkyrieClassDefine extends PsiElement {
 
   @NotNull
+  ValkyrieIdentifier getIdentifier();
+
+  @Nullable
+  ValkyrieObjectBlock getObjectBlock();
+
+  @NotNull
+  ValkyrieTuple getTuple();
+
+  @Nullable
   ValkyrieTypeExpression getTypeExpression();
 
 }

@@ -8,42 +8,24 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.mixin.MixinTagged;
+import com.github.valkyrie.language.mixin.MixinIdentifier;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieTaggedStatementNode extends MixinTagged implements ValkyrieTaggedStatement {
+public class ValkyrieObjectKeyNode extends MixinIdentifier implements ValkyrieObjectKey {
 
-  public ValkyrieTaggedStatementNode(@NotNull ASTNode node) {
+  public ValkyrieObjectKeyNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitTaggedStatement(this);
+    visitor.visitObjectKey(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof ValkyrieVisitor) accept((ValkyrieVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieModifiers getModifiers() {
-    return findNotNullChildByClass(ValkyrieModifiers.class);
-  }
-
-  @Override
-  @NotNull
-  public ValkyrieTaggedBlock getTaggedBlock() {
-    return findNotNullChildByClass(ValkyrieTaggedBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieTypeGeneric getTypeGeneric() {
-    return findChildByClass(ValkyrieTypeGeneric.class);
   }
 
 }

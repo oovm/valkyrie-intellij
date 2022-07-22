@@ -34,4 +34,10 @@ public class ValkyrieClassInheritNode extends ValkyrieASTBase implements Valkyri
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieIdentifier.class);
   }
 
+  @Override
+  @Nullable
+  public ValkyrieTypeGeneric getTypeGeneric() {
+    return findChildByClass(ValkyrieTypeGeneric.class);
+  }
+
 }

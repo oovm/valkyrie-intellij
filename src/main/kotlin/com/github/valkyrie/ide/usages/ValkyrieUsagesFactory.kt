@@ -9,7 +9,7 @@ class ValkyrieUsagesFactory : FindUsagesHandlerFactory() {
     override fun canFindUsages(element: PsiElement): Boolean {
         return when (element) {
             is ValkyrieTraitStatementNode,
-            is ValkyrieClassStatementNode, is ValkyrieClassBraceItemNode, is ValkyrieClassTupleItemNode,
+            is ValkyrieClassStatementNode,
             -> true
             else -> false
         }

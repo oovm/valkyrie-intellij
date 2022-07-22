@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.ast.ValkyrieASTBase;
+import com.github.valkyrie.language.mixin.MixinClassTuple;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieClassTupleNode extends ValkyrieASTBase implements ValkyrieClassTuple {
+public class ValkyrieClassTupleNode extends MixinClassTuple implements ValkyrieClassTuple {
 
   public ValkyrieClassTupleNode(@NotNull ASTNode node) {
     super(node);
@@ -30,8 +30,8 @@ public class ValkyrieClassTupleNode extends ValkyrieASTBase implements ValkyrieC
 
   @Override
   @NotNull
-  public List<ValkyrieClassTupleItem> getClassTupleItemList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieClassTupleItem.class);
+  public List<ValkyrieClassItem> getClassItemList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieClassItem.class);
   }
 
 }

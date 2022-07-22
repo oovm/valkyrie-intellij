@@ -30,14 +30,8 @@ public class ValkyrieTaggedItemNode extends ValkyrieASTBase implements ValkyrieT
 
   @Override
   @Nullable
-  public ValkyrieClassBrace getClassBrace() {
-    return findChildByClass(ValkyrieClassBrace.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieClassTuple getClassTuple() {
-    return findChildByClass(ValkyrieClassTuple.class);
+  public ValkyrieClassBlock getClassBlock() {
+    return findChildByClass(ValkyrieClassBlock.class);
   }
 
   @Override

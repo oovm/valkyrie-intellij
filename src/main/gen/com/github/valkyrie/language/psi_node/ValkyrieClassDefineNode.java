@@ -12,14 +12,14 @@ import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieClassNumericKeyNode extends ValkyrieASTBase implements ValkyrieClassNumericKey {
+public class ValkyrieClassDefineNode extends ValkyrieASTBase implements ValkyrieClassDefine {
 
-  public ValkyrieClassNumericKeyNode(@NotNull ASTNode node) {
+  public ValkyrieClassDefineNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitClassNumericKey(this);
+    visitor.visitClassDefine(this);
   }
 
   @Override
@@ -29,9 +29,27 @@ public class ValkyrieClassNumericKeyNode extends ValkyrieASTBase implements Valk
   }
 
   @Override
+  @NotNull
+  public ValkyrieIdentifier getIdentifier() {
+    return findNotNullChildByClass(ValkyrieIdentifier.class);
+  }
+
+  @Override
   @Nullable
-  public ValkyrieModifiers getModifiers() {
-    return findChildByClass(ValkyrieModifiers.class);
+  public ValkyrieObjectBlock getObjectBlock() {
+    return findChildByClass(ValkyrieObjectBlock.class);
+  }
+
+  @Override
+  @NotNull
+  public ValkyrieTuple getTuple() {
+    return findNotNullChildByClass(ValkyrieTuple.class);
+  }
+
+  @Override
+  @Nullable
+  public ValkyrieTypeExpression getTypeExpression() {
+    return findChildByClass(ValkyrieTypeExpression.class);
   }
 
 }

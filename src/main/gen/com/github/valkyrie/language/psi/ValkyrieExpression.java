@@ -35,6 +35,6 @@ public interface ValkyrieExpression extends PsiElement {
   List<ValkyrieTuple> getTupleList();
 
   @NotNull
-  List<ValkyrieTypeAngle> getTypeAngleList();
+  List<ValkyrieTypeGeneric> getTypeGenericList();
 
 }

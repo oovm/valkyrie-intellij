@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieTaggedItem extends PsiElement {
-
-  @Nullable
-  ValkyrieClassBlock getClassBlock();
+public interface ValkyrieObjectBlock extends PsiElement {
 
   @NotNull
-  ValkyrieIdentifier getIdentifier();
+  List<ValkyrieObjectDefine> getObjectDefineList();
+
+  @NotNull
+  List<ValkyrieObjectItem> getObjectItemList();
 
 }

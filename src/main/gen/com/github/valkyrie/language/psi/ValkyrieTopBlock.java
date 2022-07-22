@@ -14,7 +14,7 @@ public interface ValkyrieTopBlock extends PsiElement {
   List<ValkyrieClassStatement> getClassStatementList();
 
   @NotNull
-  List<ValkyrieExtendStatement> getExtendStatementList();
+  List<ValkyrieExtendsStatement> getExtendsStatementList();
 
   @NotNull
   List<ValkyrieExtensionStatement> getExtensionStatementList();

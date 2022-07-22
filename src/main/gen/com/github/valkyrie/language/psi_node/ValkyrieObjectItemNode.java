@@ -8,18 +8,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.mixin.MixinTagged;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieTaggedStatementNode extends MixinTagged implements ValkyrieTaggedStatement {
+public class ValkyrieObjectItemNode extends ValkyrieASTBase implements ValkyrieObjectItem {
 
-  public ValkyrieTaggedStatementNode(@NotNull ASTNode node) {
+  public ValkyrieObjectItemNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitTaggedStatement(this);
+    visitor.visitObjectItem(this);
   }
 
   @Override
@@ -30,20 +30,14 @@ public class ValkyrieTaggedStatementNode extends MixinTagged implements Valkyrie
 
   @Override
   @NotNull
-  public ValkyrieModifiers getModifiers() {
-    return findNotNullChildByClass(ValkyrieModifiers.class);
+  public ValkyrieExpression getExpression() {
+    return findNotNullChildByClass(ValkyrieExpression.class);
   }
 
   @Override
   @NotNull
-  public ValkyrieTaggedBlock getTaggedBlock() {
-    return findNotNullChildByClass(ValkyrieTaggedBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieTypeGeneric getTypeGeneric() {
-    return findChildByClass(ValkyrieTypeGeneric.class);
+  public ValkyrieObjectKey getObjectKey() {
+    return findNotNullChildByClass(ValkyrieObjectKey.class);
   }
 
 }

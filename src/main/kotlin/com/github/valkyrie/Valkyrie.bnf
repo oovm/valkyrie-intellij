@@ -127,7 +127,7 @@ private top_statements ::=
   | trait_statement
   | tagged_statement
   | bitflag_statement
-  | extend_statement
+  | extends_statement
   | new_statement
   | SEMICOLON
   ;
@@ -218,7 +218,7 @@ let_statement     ::=
   | LET case_pattern OP_SET expression;
 let_type_hint     ::= COLON <<sequence type_expression COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
-type_statement    ::= KW_TYPE identifier [[OP_PROPORTION] type_angle] [OP_SET type_expr] {
+type_statement    ::= KW_TYPE identifier [[OP_PROPORTION] type_generic] [OP_SET type_expr] {
     mixin="com.github.valkyrie.language.mixin.MixinType"
 };
 generic_define    ::=
@@ -231,41 +231,51 @@ generic_call      ::=
 forall_statement  ::= FORALL <<sequence identifier COMMA>> [forall_block];
 forall_block      ::= <<brace_block (type_expression COLON type_expression) (COMMA|SEMICOLON)>>;
 // ---------------------------------------------------------------------------------------------------------------------
-class_statement   ::= kw_class [modifiers] identifier [generic_define] [class_inherit] [class_brace|class_tuple] {
+class_statement   ::= kw_class [modifiers] identifier [generic_define] [class_inherit] [class_tuple|class_block] {
     mixin="com.github.valkyrie.language.mixin.MixinClass"
 };
 kw_class          ::= "class"|"struct" {
     mixin="com.github.valkyrie.language.mixin.MixinKeyword"
 }
-class_inherit     ::= COLON identifier (OP_ADD identifier)*;
-class_tuple       ::= <<parenthesis class_tuple_item COMMA>>;
-class_brace       ::= <<brace_block class_brace_item (COMMA|SEMICOLON)>>;
-class_tuple_item  ::= type_expression [OP_SET expression] {
+class_inherit     ::= COLON identifier [type_generic] (OP_ADD identifier)*;
+class_tuple       ::= <<parenthesis class_item COMMA>> {
     mixin="com.github.valkyrie.language.mixin.MixinClassTuple"
+}
+class_block       ::= <<brace_free (class_define|class_item) (COMMA|SEMICOLON)>>
+class_define      ::= identifier tuple [(COLON|OP_ARROW) type_expression] [object_block]
+class_item        ::= [modifiers] object_key [COLON type_expression] [OP_SET expression] {
+
 };
-class_brace_item  ::= (class_number_key | modifiers) COLON type_expression [OP_SET expression] {
-    mixin="com.github.valkyrie.language.mixin.MixinClassBrace"
-};
-class_number_key  ::= [modifiers] INTEGER
 // ---------------------------------------------------------------------------------------------------------------------
-trait_statement   ::= KW_TRAIT modifiers [type_angle] [COLON type_expression] trait_block {
+object_block      ::= <<brace_free (object_define|object_item) (COMMA|SEMICOLON)>>
+object_define     ::= identifier define_tuple [(COLON|OP_ARROW) type_expression] block {
+
+};
+object_item       ::= object_key COLON expression {
+
+}
+object_key        ::= SYMBOL_XID | SYMBOL_RAW | INTEGER | KW_IF {
+    mixin="com.github.valkyrie.language.mixin.MixinIdentifier"
+}
+// ---------------------------------------------------------------------------------------------------------------------
+trait_statement   ::= KW_TRAIT modifiers [type_generic] [COLON type_expression] trait_block {
     extends="com.github.valkyrie.language.mixin.MixinTrait"
 };
 trait_block       ::= <<brace_block normal_statements SEMICOLON>>;
 //trait_item        ::= normal_statements;
 // ---------------------------------------------------------------------------------------------------------------------
-extend_statement  ::= kw_extends modifiers [[OP_PROPORTION] type_angle] [COLON type_expression] trait_block {
+extends_statement ::= kw_extends modifiers [[OP_PROPORTION] type_generic] [COLON type_expression] trait_block {
     extends="com.github.valkyrie.language.mixin.MixinExtends"
 }
 kw_extends        ::= "extends" | "extend" {
     mixin="com.github.valkyrie.language.mixin.MixinKeyword"
 }
 // ---------------------------------------------------------------------------------------------------------------------
-tagged_statement  ::= TAGGED modifiers [[OP_PROPORTION] type_angle] tagged_block {
+tagged_statement  ::= TAGGED modifiers [[OP_PROPORTION] type_generic] tagged_block {
     mixin="com.github.valkyrie.language.mixin.MixinTagged"
 };
 tagged_block      ::= <<brace_block tagged_item (COMMA|SEMICOLON)>>;
-tagged_item       ::= identifier [class_tuple|class_brace];
+tagged_item       ::= identifier [class_block|class_brace];
 // ---------------------------------------------------------------------------------------------------------------------
 bitflag_statement ::= BITFLAG modifiers [bitflag_layout] bitflag_block {
     mixin="com.github.valkyrie.language.mixin.MixinBitflag"
@@ -274,13 +284,12 @@ bitflag_block     ::= <<brace_block (bitflag_item | macro_call) SEMICOLON>>;
 bitflag_layout    ::= PARENTHESIS_L type_expression PARENTHESIS_R;
 bitflag_item      ::= identifier OP_SET expression;
 // -------------- -------------------------------------------------------------------------------------------------------
-new_statement     ::= NEW modifiers [type_angle] [COLON type_expression] trait_block;
+new_statement     ::= NEW modifiers [type_generic] [COLON type_expression] trait_block;
 // ---------------------------------------------------------------------------------------------------------------------
 expression        ::= expr (op_binary expr)*;
-private expr      ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice)*;
-private term      ::= range | list | tuple | atoms;
+private expr      ::= op_prefix* term (op_suffix|call_suffix|type_generic|slice)*;
 private op_binary ::=
-      VERTICAL | OP_EQ | OP_NE
+      OP_SET | OP_EQ | OP_NE
     | OP_ADD | OP_ADD_ASSIGN
     | OP_SUB | OP_SUB_ASSIGN
     | OP_MUL | OP_MUL_ASSIGN
@@ -293,29 +302,30 @@ private op_binary ::=
     | OP_AS
     // in | not in
     | OP_IN | OP_NOT_IN | OP_NOT OP_IN
-private op_prefix   ::= OP_ADD | OP_SUB | OP_NOT | BANG | AMP | DOT3 | DOT2;
-private op_suffix   ::= BANG | QUESTION;
-call_suffix         ::= <<parenthesis expression COMMA>>;
+private op_prefix ::= OP_ADD | OP_SUB | OP_NOT | BANG | AMP | DOT3 | DOT2;
+private op_suffix ::= BANG | QUESTION;
+call_suffix       ::= <<parenthesis expression COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
-type_expression     ::= type_expr (op_binary type_expr)*;
-private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice)*;
-type_angle          ::= OP_PROPORTION? <<parenthesis ([identifier COLON] type_expression) COMMA>>;
-type_instance       ::= identifier type_angle?
+type_expression   ::= type_expr (op_binary type_expr)*;
+private type_expr ::= op_prefix* term (op_suffix|call_suffix|type_generic|slice)*;
+type_generic      ::= <<bracket_block ([identifier COLON] type_expression) COMMA>>;
+type_instance     ::= identifier type_generic?
 // ---------------------------------------------------------------------------------------------------------------------
-macro      ::= AT namepath_free;
+macro             ::= AT namepath_free;
 // ---------------------------------------------------------------------------------------------------------------------
-macro_call ::= macro [macro_item];
-macro_item ::=
+macro_call        ::= macro [macro_item];
+macro_item        ::=
     <<parenthesis expression COMMA>>
   | <<brace_block pair COMMA>>
   | <<brace_block expression SEMICOLON>>;
 macro_list ::= [AT|HASH] <<bracket_block (namepath macro_item) COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
-tuple      ::= <<parenthesis expression COMMA>>
-list       ::= <<bracket_block expression COMMA>>
-range      ::= <<slice_block slice_item COMMA>>;
-slice      ::= <<slice_block slice_item COMMA>>;
-slice_item ::=
+private term   ::= range | list | tuple | atoms;
+tuple          ::= <<parenthesis expression COMMA>>
+list           ::= <<bracket_block expression COMMA>>
+range          ::= <<slice_block slice_item COMMA>>;
+slice          ::= <<slice_block slice_item COMMA>>;
+slice_item     ::=
     [expression] COLON [expression] COLON [expression]
   | [expression] COLON [expression]
   | [expression] OP_PROPORTION [expression]
@@ -356,6 +366,8 @@ private meta parenthesis   ::= PARENTHESIS_L [<<item>> (<<sp>> <<item>>)* [<<sp>
 private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACKET_R;
 // brace { }
 private meta brace_block   ::= BRACE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACE_R;
+// brace { }
+private meta brace_free    ::= BRACE_L (<<item>>|<<sp>>)* BRACE_R;
 // angle ::< >::
 private meta angle_block   ::= OP_LT [<<item>> (<<sp>> <<item>>)* [<<sp>>]] OP_GT;
 // angle ⟦ ⟧

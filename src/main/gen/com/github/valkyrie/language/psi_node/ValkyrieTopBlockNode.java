@@ -42,8 +42,8 @@ public class ValkyrieTopBlockNode extends ValkyrieASTBase implements ValkyrieTop
 
   @Override
   @NotNull
-  public List<ValkyrieExtendStatement> getExtendStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExtendStatement.class);
+  public List<ValkyrieExtendsStatement> getExtendsStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieExtendsStatement.class);
   }
 
   @Override

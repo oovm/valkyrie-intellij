@@ -42,14 +42,14 @@ public class ValkyrieTraitStatementNode extends MixinTrait implements ValkyrieTr
 
   @Override
   @Nullable
-  public ValkyrieTypeAngle getTypeAngle() {
-    return findChildByClass(ValkyrieTypeAngle.class);
+  public ValkyrieTypeExpression getTypeExpression() {
+    return findChildByClass(ValkyrieTypeExpression.class);
   }
 
   @Override
   @Nullable
-  public ValkyrieTypeExpression getTypeExpression() {
-    return findChildByClass(ValkyrieTypeExpression.class);
+  public ValkyrieTypeGeneric getTypeGeneric() {
+    return findChildByClass(ValkyrieTypeGeneric.class);
   }
 
 }

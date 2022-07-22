@@ -38,6 +38,6 @@ public interface ValkyrieTypeStatement extends PsiElement {
   ValkyrieTuple getTuple();
 
   @NotNull
-  List<ValkyrieTypeAngle> getTypeAngleList();
+  List<ValkyrieTypeGeneric> getTypeGenericList();
 
 }

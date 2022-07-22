@@ -35,11 +35,11 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitClassBrace(@NotNull ValkyrieClassBrace o) {
+  public void visitClassBlock(@NotNull ValkyrieClassBlock o) {
     visitPsiElement(o);
   }
 
-  public void visitClassBraceItem(@NotNull ValkyrieClassBraceItem o) {
+  public void visitClassDefine(@NotNull ValkyrieClassDefine o) {
     visitPsiElement(o);
   }
 
@@ -47,7 +47,7 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitClassNumberKey(@NotNull ValkyrieClassNumberKey o) {
+  public void visitClassItem(@NotNull ValkyrieClassItem o) {
     visitPsiElement(o);
   }
 
@@ -56,10 +56,6 @@ public class ValkyrieVisitor extends PsiElementVisitor {
   }
 
   public void visitClassTuple(@NotNull ValkyrieClassTuple o) {
-    visitPsiElement(o);
-  }
-
-  public void visitClassTupleItem(@NotNull ValkyrieClassTupleItem o) {
     visitPsiElement(o);
   }
 
@@ -95,7 +91,7 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitExtendStatement(@NotNull ValkyrieExtendStatement o) {
+  public void visitExtendsStatement(@NotNull ValkyrieExtendsStatement o) {
     visitPsiElement(o);
   }
 
@@ -243,6 +239,22 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitObjectBlock(@NotNull ValkyrieObjectBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitObjectDefine(@NotNull ValkyrieObjectDefine o) {
+    visitPsiElement(o);
+  }
+
+  public void visitObjectItem(@NotNull ValkyrieObjectItem o) {
+    visitPsiElement(o);
+  }
+
+  public void visitObjectKey(@NotNull ValkyrieObjectKey o) {
+    visitPsiElement(o);
+  }
+
   public void visitPair(@NotNull ValkyriePair o) {
     visitPsiElement(o);
   }
@@ -303,11 +315,11 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitTypeAngle(@NotNull ValkyrieTypeAngle o) {
+  public void visitTypeExpression(@NotNull ValkyrieTypeExpression o) {
     visitPsiElement(o);
   }
 
-  public void visitTypeExpression(@NotNull ValkyrieTypeExpression o) {
+  public void visitTypeGeneric(@NotNull ValkyrieTypeGeneric o) {
     visitPsiElement(o);
   }
 

@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieClassBrace extends PsiElement {
+public interface ValkyrieClassKey extends PsiElement {
 
-  @NotNull
-  List<ValkyrieClassBraceItem> getClassBraceItemList();
+  @Nullable
+  ValkyrieIdentifier getIdentifier();
+
+  @Nullable
+  ValkyrieModifiers getModifiers();
 
 }

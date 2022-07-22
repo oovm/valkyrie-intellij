@@ -90,8 +90,8 @@ public class ValkyrieTypeStatementNode extends MixinType implements ValkyrieType
 
   @Override
   @NotNull
-  public List<ValkyrieTypeAngle> getTypeAngleList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieTypeAngle.class);
+  public List<ValkyrieTypeGeneric> getTypeGenericList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValkyrieTypeGeneric.class);
   }
 
 }
