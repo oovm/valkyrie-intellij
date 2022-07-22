@@ -16,6 +16,9 @@ public interface ValkyrieDefineStatement extends PsiElement {
   @Nullable
   ValkyrieExpression getExpression();
 
+  @Nullable
+  ValkyrieGenericCall getGenericCall();
+
   @NotNull
   ValkyrieKwDefine getKwDefine();
 
@@ -24,9 +27,6 @@ public interface ValkyrieDefineStatement extends PsiElement {
 
   @NotNull
   ValkyrieNamepathFree getNamepathFree();
-
-  @Nullable
-  ValkyrieOldGeneric getOldGeneric();
 
   @Nullable
   ValkyrieTypeExpression getTypeExpression();

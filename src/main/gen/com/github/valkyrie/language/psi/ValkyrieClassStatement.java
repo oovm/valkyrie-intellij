@@ -16,6 +16,9 @@ public interface ValkyrieClassStatement extends PsiElement {
   @Nullable
   ValkyrieClassTuple getClassTuple();
 
+  @Nullable
+  ValkyrieGenericDefine getGenericDefine();
+
   @NotNull
   ValkyrieIdentifier getIdentifier();
 
@@ -24,8 +27,5 @@ public interface ValkyrieClassStatement extends PsiElement {
 
   @Nullable
   ValkyrieModifiers getModifiers();
-
-  @Nullable
-  ValkyrieTypeAngle getTypeAngle();
 
 }

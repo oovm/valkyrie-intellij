@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ValkyrieClassInherit extends PsiElement {
+public interface ValkyrieGenericBlock extends PsiElement {
 
   @NotNull
   List<ValkyrieIdentifier> getIdentifierList();
+
+  @NotNull
+  List<ValkyrieTypeExpression> getTypeExpressionList();
 
 }

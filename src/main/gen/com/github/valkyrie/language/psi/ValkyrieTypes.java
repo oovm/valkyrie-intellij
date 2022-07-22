@@ -35,6 +35,8 @@ public interface ValkyrieTypes {
   IElementType FORALL_BLOCK = new ValkyrieTokenType("FORALL_BLOCK");
   IElementType FORALL_STATEMENT = new ValkyrieTokenType("FORALL_STATEMENT");
   IElementType FOR_STATEMENT = new ValkyrieTokenType("FOR_STATEMENT");
+  IElementType GENERIC_CALL = new ValkyrieTokenType("GENERIC_CALL");
+  IElementType GENERIC_DEFINE = new ValkyrieTokenType("GENERIC_DEFINE");
   IElementType IDENTIFIER = new ValkyrieTokenType("IDENTIFIER");
   IElementType IF_GUARD = new ValkyrieTokenType("IF_GUARD");
   IElementType IF_STATEMENT = new ValkyrieTokenType("IF_STATEMENT");
@@ -65,7 +67,6 @@ public interface ValkyrieTypes {
   IElementType NORMAL_PATTERN = new ValkyrieTokenType("NORMAL_PATTERN");
   IElementType NUMBER = new ValkyrieTokenType("NUMBER");
   IElementType NUMBER_LITERAL = new ValkyrieTokenType("NUMBER_LITERAL");
-  IElementType OLD_GENERIC = new ValkyrieTokenType("OLD_GENERIC");
   IElementType PAIR = new ValkyrieTokenType("PAIR");
   IElementType PATTERN_ITEM = new ValkyrieTokenType("PATTERN_ITEM");
   IElementType PATTERN_PAIR = new ValkyrieTokenType("PATTERN_PAIR");
@@ -107,8 +108,6 @@ public interface ValkyrieTypes {
   IElementType DOT_LESS = new ValkyrieTokenType("DOT_LESS");
   IElementType EXTENDS = new ValkyrieTokenType("EXTENDS");
   IElementType FORALL = new ValkyrieTokenType("FORALL");
-  IElementType GENERIC_L = new ValkyrieTokenType("::<");
-  IElementType GENERIC_R = new ValkyrieTokenType(">::");
   IElementType HASH = new ValkyrieTokenType("HASH");
   IElementType INTEGER = new ValkyrieTokenType("INTEGER");
   IElementType KW_FOR = new ValkyrieTokenType("KW_FOR");
@@ -174,6 +173,8 @@ public interface ValkyrieTypes {
   IElementType PARENTHESIS_R = new ValkyrieTokenType(")");
   IElementType QUESTION = new ValkyrieTokenType("QUESTION");
   IElementType SEMICOLON = new ValkyrieTokenType(";");
+  IElementType SLICE_L = new ValkyrieTokenType("[[");
+  IElementType SLICE_R = new ValkyrieTokenType("]]");
   IElementType STRING_END = new ValkyrieTokenType("StringEnd");
   IElementType STRING_START = new ValkyrieTokenType("StringStart");
   IElementType STRING_TEXT = new ValkyrieTokenType("StringText");
@@ -267,6 +268,12 @@ public interface ValkyrieTypes {
       else if (type == FOR_STATEMENT) {
         return new ValkyrieForStatementNode(node);
       }
+      else if (type == GENERIC_CALL) {
+        return new ValkyrieGenericCallNode(node);
+      }
+      else if (type == GENERIC_DEFINE) {
+        return new ValkyrieGenericDefineNode(node);
+      }
       else if (type == IDENTIFIER) {
         return new ValkyrieIdentifierNode(node);
       }
@@ -356,9 +363,6 @@ public interface ValkyrieTypes {
       }
       else if (type == NUMBER_LITERAL) {
         return new ValkyrieNumberLiteralNode(node);
-      }
-      else if (type == OLD_GENERIC) {
-        return new ValkyrieOldGenericNode(node);
       }
       else if (type == PAIR) {
         return new ValkyriePairNode(node);

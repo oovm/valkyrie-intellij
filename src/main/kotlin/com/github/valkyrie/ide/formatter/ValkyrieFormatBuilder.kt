@@ -15,14 +15,4 @@ class ValkyrieFormatBuilder : FormattingModelBuilder {
         val block = ValkyrieFormatBlock(element.node, null, Indent.getNoneIndent(), null, ctx)
         return FormattingModelProvider.createFormattingModelForPsiFile(element.containingFile, block, settings)
     }
-
-    companion object {
-        fun getChildAttributes(node: ASTNode, newChildIndex: Int): ChildAttributes {
-            val indent = when (node.elementType) {
-//                FluentTypes.SELECT_EXPRESSION -> Indent.getNormalIndent()
-                else -> Indent.getNoneIndent()
-            }
-            return ChildAttributes(indent, null)
-        }
-    }
 }

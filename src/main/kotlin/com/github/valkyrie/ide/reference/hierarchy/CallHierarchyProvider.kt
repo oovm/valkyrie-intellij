@@ -8,6 +8,7 @@ import com.intellij.psi.PsiElement
 
 class CallHierarchyProvider : HierarchyProvider {
     override fun getTarget(dataContext: DataContext): PsiElement? {
+        print(dataContext)
         TODO("Not yet implemented")
     }
 

@@ -89,8 +89,8 @@
         BRACKET_R = ']'
         BRACE_L = '{'
         BRACE_R = '}'
-        GENERIC_L = '::<'
-        GENERIC_R = '>::'
+        SLICE_L = '[['
+        SLICE_R = ']]'
 
         OP_NAMESAPCE = "namespace"
 
@@ -200,7 +200,7 @@ match_statement  ::= MATCH identifier* match_block;
 match_block      ::= <<brace_block match_expression SEMICOLON>>;
 match_expression ::= case_pattern COLON (normal_statements [SEMICOLON])+
 // ---------------------------------------------------------------------------------------------------------------------
-define_statement ::= kw_define [modifiers] namepath_free [old_generic] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
+define_statement ::= kw_define [modifiers] namepath_free [generic_call] define_tuple [(COLON|OP_ARROW) type_expression] [define_block| OP_EQ expression] {
     mixin="com.github.valkyrie.language.mixin.MixinDefine"
 };
 kw_define        ::= "def" {
@@ -212,7 +212,6 @@ define_item      ::= OP_POW | OP_LT | OP_GT
     mixin="com.github.valkyrie.language.mixin.MixinDefineItem"
 }
 define_block     ::= <<brace_block normal_statements SEMICOLON>>;
-old_generic      ::= OP_PROPORTION? <<generic_block ([identifier COLON] type_expression) COMMA>>
 // ---------------------------------------------------------------------------------------------------------------------
 let_statement    ::=
     LET normal_pattern [let_type_hint] [OP_SET expression]
@@ -222,17 +221,23 @@ let_type_hint    ::= COLON <<sequence type_expression COMMA>>;
 type_statement   ::= KW_TYPE identifier [[OP_PROPORTION] type_angle] [OP_SET type_expr] {
     mixin="com.github.valkyrie.language.mixin.MixinType"
 };
+generic_define   ::=
+    <<bracket_block ([identifier COLON] type_expression) COMMA>>
+    OP_PROPORTION? <<angle_block ([identifier COLON] type_expression) COMMA>>
+generic_call     ::=
+    <<bracket_block ([identifier COLON] type_expression) COMMA>>
+    OP_PROPORTION <<angle_block ([identifier COLON] type_expression) COMMA>>
 // ---------------------------------------------------------------------------------------------------------------------
 forall_statement ::= FORALL <<sequence identifier COMMA>> [forall_block];
 forall_block     ::= <<brace_block (type_expression COLON type_expression) (COMMA|SEMICOLON)>>;
 // ---------------------------------------------------------------------------------------------------------------------
-class_statement     ::= kw_class [modifiers] identifier [type_angle] [class_inherit] [class_tuple|class_brace] {
+class_statement     ::= kw_class [modifiers] identifier [generic_define] [class_inherit] [class_tuple|class_brace] {
     mixin="com.github.valkyrie.language.mixin.MixinClass"
 };
 kw_class            ::= "class"|"struct" {
     mixin="com.github.valkyrie.language.mixin.MixinKeyword"
 }
-class_inherit       ::= COLON type_instance (OP_ADD type_instance)*;
+class_inherit       ::= COLON identifier (OP_ADD identifier)*;
 class_tuple         ::= <<parenthesis class_tuple_item COMMA>>;
 class_brace         ::= <<brace_block class_brace_item (COMMA|SEMICOLON)>>;
 class_tuple_item    ::= type_expression [OP_SET expression] {
@@ -294,7 +299,7 @@ private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_
 type_angle          ::= OP_PROPORTION? <<parenthesis ([identifier COLON] type_expression) COMMA>>;
 type_instance       ::= identifier type_angle?
 // ---------------------------------------------------------------------------------------------------------------------
-slice_suffix        ::= <<bracket_block slice_expression COMMA>>;
+slice_suffix        ::= <<slice_block slice_expression COMMA>>;
 slice_expression    ::=
     [expression] COLON [expression] COLON [expression]
   | [expression] COLON [expression]
@@ -344,4 +349,6 @@ private meta bracket_block ::= BRACKET_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] 
 // brace { }
 private meta brace_block   ::= BRACE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] BRACE_R;
 // angle ::< >::
-private meta generic_block ::= OP_LT [<<item>> (<<sp>> <<item>>)* [<<sp>>]] OP_GT;
+private meta angle_block   ::= OP_LT [<<item>> (<<sp>> <<item>>)* [<<sp>>]] OP_GT;
+// angle ⟦ ⟧
+private meta slice_block   ::= SLICE_L [<<item>> (<<sp>> <<item>>)* [<<sp>>]] SLICE_R;

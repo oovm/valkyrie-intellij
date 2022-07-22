@@ -47,6 +47,12 @@ public class ValkyrieClassStatementNode extends MixinClass implements ValkyrieCl
   }
 
   @Override
+  @Nullable
+  public ValkyrieGenericDefine getGenericDefine() {
+    return findChildByClass(ValkyrieGenericDefine.class);
+  }
+
+  @Override
   @NotNull
   public ValkyrieIdentifier getIdentifier() {
     return findNotNullChildByClass(ValkyrieIdentifier.class);
@@ -62,12 +68,6 @@ public class ValkyrieClassStatementNode extends MixinClass implements ValkyrieCl
   @Nullable
   public ValkyrieModifiers getModifiers() {
     return findChildByClass(ValkyrieModifiers.class);
-  }
-
-  @Override
-  @Nullable
-  public ValkyrieTypeAngle getTypeAngle() {
-    return findChildByClass(ValkyrieTypeAngle.class);
   }
 
 }

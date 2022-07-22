@@ -55,6 +55,7 @@ private val PUNCTUATIONS = """(?x)
     | === | == | =
     # unicode
     | [∈∊∉⊑⋢⨳∀∁∂∃∄¬±√∛∜⊹⋗]
+    | [⟦⟧⁅⁆⟬⟭]
     #
     """.toRegex()
 private val COMMENTS = """(?x)
@@ -272,6 +273,12 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             }
             "⊁", "|>" -> {
                 pushToken(ValkyrieTypes.OP_OR_ELSE, r)
+            }
+            "⟦" -> {
+                pushToken(ValkyrieTypes.SLICE_L, r)
+            }
+            "⟧" -> {
+                pushToken(ValkyrieTypes.SLICE_R, r)
             }
             // start with >
             ">>>", "⋙" -> pushToken(ValkyrieTypes.OP_GGG, r)

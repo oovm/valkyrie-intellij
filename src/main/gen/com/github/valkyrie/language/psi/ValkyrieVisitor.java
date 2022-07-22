@@ -115,6 +115,14 @@ public class ValkyrieVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitGenericCall(@NotNull ValkyrieGenericCall o) {
+    visitPsiElement(o);
+  }
+
+  public void visitGenericDefine(@NotNull ValkyrieGenericDefine o) {
+    visitPsiElement(o);
+  }
+
   public void visitIdentifier(@NotNull ValkyrieIdentifier o) {
     visitPsiElement(o);
   }
@@ -232,10 +240,6 @@ public class ValkyrieVisitor extends PsiElementVisitor {
   }
 
   public void visitNumberLiteral(@NotNull ValkyrieNumberLiteral o) {
-    visitPsiElement(o);
-  }
-
-  public void visitOldGeneric(@NotNull ValkyrieOldGeneric o) {
     visitPsiElement(o);
   }
 
