@@ -40,7 +40,7 @@ data class ValkyrieFormatSpace(
             BRACKET_R,
         )
         private val newline_indent_after = TokenSet.create()
-        private val binary_operator = TokenSet.create(EQ, TO)
+        private val binary_operator = TokenSet.create(EQ, OP_TO)
         private val left_bracket = TokenSet.create(PARENTHESIS_L, BRACKET_L)
 
         private fun createSpacingBuilder(commonSettings: CommonCodeStyleSettings): SpacingBuilder {

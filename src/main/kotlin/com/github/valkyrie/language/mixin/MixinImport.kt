@@ -8,8 +8,10 @@ import com.github.valkyrie.language.ast.ValkyrieASTBase
 import com.github.valkyrie.language.psi_node.ValkyrieImportStatementNode
 import com.github.valkyrie.language.symbol.ImportData
 import com.intellij.lang.ASTNode
-import com.intellij.model.psi.PsiSymbolDeclaration
+import com.intellij.model.psi.PsiCompletableReference
 import com.intellij.navigation.ItemPresentation
+import com.intellij.psi.PsiReference
+import com.intellij.psi.search.GlobalSearchScope
 import javax.swing.Icon
 
 open class MixinImport(node: ASTNode) : ValkyrieASTBase(node) {
@@ -29,8 +31,6 @@ open class MixinImport(node: ASTNode) : ValkyrieASTBase(node) {
     fun expandImports(): Map<String, Array<String>> {
         val imports = mutableMapOf<String, Array<String>>()
         val importStatement = this.originalElement.importItem
-
-
         return imports
     }
 
@@ -38,8 +38,23 @@ open class MixinImport(node: ASTNode) : ValkyrieASTBase(node) {
 
     }
 
+    override fun getReference(): PsiReference? {
+        return when {
+            references.count() != 1 -> null
+            else -> references.first()
+        }
+    }
+
+    override fun getReferences(): Array<PsiReference> {
+        return  ownReferences.map { it as PsiReference }.toTypedArray()
+    }
+
     override fun getOwnDeclarations(): MutableCollection<out ImportData> {
-        return mutableListOf<ImportData>()
+        return mutableListOf()
+    }
+
+    override fun getOwnReferences(): MutableCollection<out PsiCompletableReference> {
+        return mutableListOf()
     }
 }
 

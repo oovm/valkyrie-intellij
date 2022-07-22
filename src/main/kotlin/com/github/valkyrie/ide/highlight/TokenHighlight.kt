@@ -22,11 +22,11 @@ class TokenHighlight : SyntaxHighlighterBase() {
     private fun getTokenColor(tokenType: IElementType): Color? {
         return when (tokenType) {
             // Keywords
-            KW_NAMESPACE, KW_EXTENSION, KW_IMPORT, KW_AS -> Color.KEYWORD
+            KW_NAMESPACE, KW_EXTENSION, KW_IMPORT, OP_AS -> Color.KEYWORD
             KW_DEFINE -> Color.KEYWORD
             KW_TYPE -> Color.KEYWORD
             MATCH, CASE -> Color.KEYWORD
-            IF, ELSE, FOR, IN, WHILE -> Color.KEYWORD
+            KW_IF, KW_FOR, WHILE -> Color.KEYWORD
             LET, KW_DEFINE, KW_CLASS, KW_TRAIT, TAGGED, BITFLAG, FORALL -> Color.KEYWORD
             // ANNOTATION -> JssColor.ANNOTATION
             //
@@ -36,9 +36,12 @@ class TokenHighlight : SyntaxHighlighterBase() {
             COLON, BIND -> Color.SET
             // STAR -> Color.STAR
             COMMA -> Color.COMMA
-            VERTICAL, LESS, GREATER, DOT3, DOT2, PLUS, MINUS, DOT_LESS, DOT_EQ -> Color.OPERATION_SIGN
+            OP_IS_A, OP_NOT_A, OP_IN, OP_NOT_IN -> Color.OPERATION_SIGN
+            OP_LT, OP_LEQ, OP_LL, OP_LLL -> Color.OPERATION_SIGN
+            OP_GT, OP_GEQ, OP_GG, OP_GGG -> Color.OPERATION_SIGN
+            VERTICAL, DOT3, DOT2, OP_SUB, OP_ADD, DOT_LESS, DOT_EQ -> Color.OPERATION_SIGN
             EQ, NE -> Color.OPERATION_SIGN
-            NOT, BANG, AMP, QUESTION -> Color.OPERATION_SIGN
+            OP_NOT, BANG, AMP, QUESTION -> Color.OPERATION_SIGN
             OP_ARROW, OP_ARROW2 -> Color.OPERATION_SIGN
             // 原子类型
             INTEGER -> Color.INTEGER

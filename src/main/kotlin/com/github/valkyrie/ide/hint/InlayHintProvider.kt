@@ -9,7 +9,7 @@ import javax.swing.JComponent
 import javax.swing.JTextField
 
 @Suppress("UnstableApiUsage")
-class ValkyrieInlayHintProvider : InlayHintsProvider<ValkyrieInlayHintProvider.Settings> {
+class InlayHintProvider : InlayHintsProvider<InlayHintProvider.Settings> {
     companion object {
         private val KEY: SettingsKey<Settings> = SettingsKey("v.type.hints")
     }
@@ -51,3 +51,4 @@ class ValkyrieInlayHintProvider : InlayHintsProvider<ValkyrieInlayHintProvider.S
         }
     }
 }
+

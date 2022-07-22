@@ -11,7 +11,7 @@ import com.intellij.ide.util.treeView.smartTree.Sorter
 import com.intellij.psi.PsiFile
 
 
-class VStructureViewModel(psiFile: PsiFile?) : StructureViewModelBase(psiFile!!, ValkyrieViewElement(psiFile)),
+class StructureViewModel(psiFile: PsiFile?) : StructureViewModelBase(psiFile!!, ValkyrieViewElement(psiFile)),
     ElementInfoProvider {
     override fun getSorters() = arrayOf(Sorter.ALPHA_SORTER)
 

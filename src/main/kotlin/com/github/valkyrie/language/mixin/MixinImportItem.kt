@@ -36,12 +36,14 @@ open class MixinImportItem(node: ASTNode) : ValkyrieASTBase(node), PsiNameIdenti
         TODO("Not yet implemented")
     }
 
+
+
     fun getNamepath(): Array<ValkyrieIdentifierNode> {
         return originalElement.namepathFree.identifierList.map { it as ValkyrieIdentifierNode }.toTypedArray()
     }
 
     fun isAlias(): Boolean {
-        return originalElement.kwAs != null
+        return originalElement.identifier != null
     }
 
     fun getIdentifierSymbol(): ValkyrieIdentifierNode? {

@@ -158,10 +158,7 @@ import_statement ::= kw_import (import_block|import_item) {
 kw_import        ::= "using" | OP_IMPORT {
     mixin="com.github.valkyrie.language.mixin.MixinKeyword"
 }
-kw_as            ::= "as" | OP_AS {
-    mixin="com.github.valkyrie.language.mixin.MixinKeyword"
-}
-import_item      ::= namepath_free [kw_as identifier|(DOT|OP_PROPORTION) import_block] {
+import_item      ::= namepath_free [OP_AS identifier|(DOT|OP_PROPORTION) import_block] {
     mixin="com.github.valkyrie.language.mixin.MixinImportItem"
 }
 import_block     ::= <<brace_block import_item COMMA>>;
@@ -174,16 +171,16 @@ kw_extension     ::= "extension" | OP_EXTENSION {
 }
 top_block        ::= <<brace_block top_statements SEMICOLON>>
 // ---------------------------------------------------------------------------------------------------------------------
-if_statement     ::= (IF condition block) [ef_statement* [else_statement]]
-ef_statement     ::= else_if condition block;
-private else_if  ::= ELSE IF
-else_statement   ::= ELSE block;
+if_statement     ::= (KW_IF condition block) [ef_statement* [else_statement]]
+ef_statement     ::= kw_else_if condition block;
+kw_else_if       ::= "else" KW_IF | "ef"
+else_statement   ::= "else" block;
 condition        ::= case_pattern BIND expression | expression;
 case_pattern     ::= CASE [identifier* [namepath]] pattern;
 private block    ::= <<brace_block expression SEMICOLON>>;
 // ---------------------------------------------------------------------------------------------------------------------
-for_statement    ::= FOR (case_pattern|normal_pattern) IN expression [if_guard] block [else_statement];
-if_guard         ::= IF condition;
+for_statement    ::= KW_FOR (case_pattern|normal_pattern) KW_IF expression [if_guard] block [else_statement];
+if_guard         ::= KW_IF condition;
 normal_pattern   ::= identifier* pattern | <<sequence pattern_item COMMA>> {
     mixin="com.github.valkyrie.language.mixin.MixinNormalPattern"
 };
@@ -274,14 +271,26 @@ new_statement       ::= NEW modifiers [type_angle] [COLON type_expression] trait
 expression          ::= expr (op_binary expr)*;
 private expr        ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
 private term        ::= list | tuple | atoms;
-private op_binary   ::= type_binary | ANGLE_L | ANGLE_R | LESS | GREATER | DOT_LESS | DOT_EQ | DOT2 | DOT;
-private op_prefix   ::= PLUS | MINUS | NOT | BANG | AMP | DOT3 | DOT2;
+private op_binary   ::=
+      VERTICAL | EQ | NE
+    | OP_ADD | OP_ADD_ASSIGN
+    | OP_SUB | OP_SUB_ASSIGN
+    | OP_MUL | OP_MUL_ASSIGN
+    | OP_DIV | OP_DIV_ASSIGN | OP_MOD | OP_MOD_ASSIGN
+    | OP_POW | OP_POW_ASSIGN
+    | OP_GT | OP_LT | DOT_LESS | DOT_EQ | DOT2 | DOT
+    | OP_TO
+    // is | is not
+    | OP_NOT_A | OP_IS_A OP_NOT | OP_IS_A | OP_NOT OP_IS_A
+    | OP_AS
+    // in | not in
+    | OP_IN | OP_NOT_IN | OP_NOT OP_IN
+private op_prefix   ::= OP_ADD | OP_SUB | OP_NOT | BANG | AMP | DOT3 | DOT2;
 private op_suffix   ::= BANG | QUESTION;
 call_suffix         ::= <<parenthesis expression COMMA>>;
 // ---------------------------------------------------------------------------------------------------------------------
-type_expression     ::= type_expr (type_binary type_expr)*;
+type_expression     ::= type_expr (op_binary type_expr)*;
 private type_expr   ::= op_prefix* term (op_suffix|call_suffix|type_angle|slice_suffix)*;
-private type_binary ::= VERTICAL | EQ | NE | PLUS | MINUS | TO;
 type_angle          ::= OP_PROPORTION? <<parenthesis ([identifier COLON] type_expression) COMMA>>;
 type_instance       ::= identifier type_angle?
 // ---------------------------------------------------------------------------------------------------------------------
@@ -306,7 +315,9 @@ list           ::= <<bracket_block expression COMMA>>
 tuple          ::= <<parenthesis expression COMMA>>
 private atoms  ::= number | string | boolean | namepath;
 boolean        ::= "true" | "false";
-number         ::= number_literal [identifier];
+number         ::= number_literal [identifier] {
+    mixin="com.github.valkyrie.language.mixin.MixinNumber"
+}
 string         ::= [identifier] STRING_START STRING_TEXT STRING_END {
     mixin="com.github.valkyrie.language.mixin.MixinString"
 }

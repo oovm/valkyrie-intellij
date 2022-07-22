@@ -8,10 +8,17 @@ import com.intellij.psi.TokenType.BAD_CHARACTER
 import com.intellij.psi.TokenType.WHITE_SPACE
 import com.intellij.psi.tree.IElementType
 
+/**
+ * keywords in any case, except for macros
+ */
 private val KEYWORDS_SP = """(?x)
-      namespace[*!?]
-    | using[*!?]
-    | as[*!?]
+      namespace[*!?]?
+    | using[*!?]?
+    | \bas[*!?]?\b
+    | \bif\b
+    | \bwhile\b | \bfor\b | \bin\b
+    | \bcatch\b
+    | \bis\b | \bnot\b
     """.toRegex(setOf(RegexOption.COMMENTS, RegexOption.DOT_MATCHES_ALL))
 private val PUNCTUATIONS = """(?x)
       [.]{1,3}
@@ -20,11 +27,15 @@ private val PUNCTUATIONS = """(?x)
     | @[*!?@]?
     # start with < >
     | >= | /> | ≥ | ⩾ | >{1,3}
-    | <= | </ | ≤ | ⩽ | <{1,3}
-    # start with +
-    | [+]= | [+]> | [+]{1,2}
+    | <= | </ | ≤ | ⩽ | <: | <! | <{1,3}
+    # start with :
+    | ∷ | :: | :> | :
     # start with -
     | -= | -> | ⟶ | -{1,2}
+    # start with ~
+    | ~> | ~
+    # start with +
+    | [+]= | [+]> | [+]{1,2}
     # start with *
     | [*]=?
     # start with / or % or ÷
@@ -35,10 +46,6 @@ private val PUNCTUATIONS = """(?x)
     | &> | &{1,2} | ≻
     | [|]> | [|]{1,2} | ⊁
     | ⊻=? | ⊼=? | ⊽=?
-    # start with :
-    | :: | :
-    # start with ~
-    | ~> | ~
     # start with !
     | != | ≠ | !
     # start with ?
@@ -62,6 +69,12 @@ private val STRINGS = """(?x)
     | (?<s5>‘)(?<t5>[^’]*)(?<e5>’)
     | (?<s6>“)(?<t6>[^”]*)(?<e6>”)
     """.toRegex()
+private val NUMBERS = """(?x)
+      (?<s1>[1-9]\d*[.]\d+)
+    | (?<s2>0[.]\d+)
+    | (?<s3>[1-9]\d*)
+    | (?<s4>0[a-zA-Z][\da-zA-Z]+)
+""".toRegex()
 
 @Suppress("MemberVisibilityCanBePrivate")
 class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOffset: Int) {
@@ -74,10 +87,10 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     fun interpreter(): Array<StackItem> {
         while (startOffset < endOffset) {
-//            matchesWhitespace() ?: continue
             if (matchesWhitespace()) continue
             if (codeComment()) continue
             if (codeString()) continue
+            if (codeNumber()) continue
             if (codePunctuations()) continue
             if (codeKeywords()) continue
             if (codeIdentifier()) continue
@@ -124,13 +137,32 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
         return true
     }
 
+    private fun codeNumber(): Boolean {
+        val r = tryMatch(NUMBERS) ?: return false
+        when {
+            r.groups["s1"] != null -> {
+                pushToken(ValkyrieTypes.DECIMAL, r)
+            }
+            r.groups["s2"] != null -> {
+                pushToken(ValkyrieTypes.DECIMAL, r)
+            }
+            r.groups["s3"] != null -> {
+                pushToken(ValkyrieTypes.INTEGER, r)
+            }
+            r.groups["s4"] != null -> {
+                pushToken(ValkyrieTypes.BYTE, r)
+            }
+        }
+        return true
+    }
+
     private fun codeKeywords(): Boolean {
         val r = tryMatch(KEYWORDS_SP) ?: return false
         when (r.value) {
-            "namespace", "namespace!", "namespace*" -> {
+            "namespace", "namespace!", "namespace*", "namespace?" -> {
                 pushToken(ValkyrieTypes.OP_NAMESAPCE, r)
             }
-            "using", "using!", "using*" -> {
+            "using", "using!", "using*", "using?" -> {
                 pushToken(ValkyrieTypes.OP_IMPORT, r)
             }
             "as", "as?", "as!", "as*" -> {
@@ -139,8 +171,17 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "is" -> {
                 pushToken(ValkyrieTypes.OP_IS_A, r)
             }
+            "in" -> {
+                pushToken(ValkyrieTypes.OP_IN, r)
+            }
             "not" -> {
-                pushToken(ValkyrieTypes.OP_NOT_A, r)
+                pushToken(ValkyrieTypes.OP_NOT, r)
+            }
+            "if" -> {
+                pushToken(ValkyrieTypes.KW_IF, r)
+            }
+            "for" -> {
+                pushToken(ValkyrieTypes.KW_FOR, r)
             }
             else -> {
                 pushToken(BAD_CHARACTER, r)
@@ -151,18 +192,18 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
 
     private fun codeIdentifier(): Boolean {
         val xid = """(?x)
-        [\p{L}_][\p{L}_\00]*
+        [\p{L}_][\p{L}_\d]*
         | (`)((?:[^`\\]|\\.)*)(\1)
         """.toRegex()
         val r = tryMatch(xid) ?: return false
-        when (context) {
-//            CatchModifier -> {
-//                pushToken(ValkyrieTypes.KW_MODIFIER, r)
-//            }
-            else -> {
-                pushToken(ValkyrieTypes.SYMBOL_XID, r)
+        when  {
+            r.value == "not" && lastIs()-> {
+
+
             }
         }
+
+        pushToken(ValkyrieTypes.SYMBOL_XID, r)
         return true
     }
 
@@ -248,7 +289,7 @@ class TokenInterpreter(val buffer: CharSequence, var startOffset: Int, val endOf
             "<:", "⊑" -> {
                 pushToken(ValkyrieTypes.OP_IS_A, r)
             }
-            "!<:", "⋢" -> {
+            "<!", "⋢" -> {
                 pushToken(ValkyrieTypes.OP_NOT_A, r)
             }
             "<" -> pushToken(ValkyrieTypes.OP_LT, r)

@@ -26,7 +26,6 @@ class NodeHighlighter : ValkyrieVisitor(), HighlightVisitor {
 
     override fun visitImportItem(o: ValkyrieImportItem) {
         //TODO: get real symbol color
-        highlight(o.kwAs, Color.KEYWORD)
     }
 
     override fun visitNormalPattern(o: ValkyrieNormalPattern) {

@@ -17,6 +17,9 @@
 			language="Valkyrie"
 			implementationClass="com.github.valkyrie.language.lexer.ValkyrieParserDefinition"
 		/>
+		<!-- Project -->
+		<indexedRootsProvider implementation="com.github.valkyrie.ide.project.ExtraIndexContributor"/>
+		<additionalLibraryRootsProvider implementation="com.github.valkyrie.ide.project.LibraryRootsProvider"/>
 		<!-- StructureView -->
 		<iconProvider implementation="com.github.valkyrie.ide.file.ValkyrieIconProvider"/>
 		<projectViewNestingRulesProvider implementation="com.github.valkyrie.ide.file.ValkyrieFileGroup"/>
@@ -24,7 +27,16 @@
 		<lang.structureViewExtension implementation="com.github.valkyrie.ide.view.VStructureViewExtension"/>
 		<lang.psiStructureViewFactory
 			language="Valkyrie"
-			implementationClass="com.github.valkyrie.ide.view.VStructureViewFactory"/>
+			implementationClass="com.github.valkyrie.ide.view.StructureViewFactory"/>
+		<typeHierarchyProvider
+			language="Valkyrie"
+			implementationClass="com.github.valkyrie.ide.reference.hierarchy.TypeHierarchyProvider"/>
+		<methodHierarchyProvider
+			language="Valkyrie"
+			implementationClass="com.github.valkyrie.ide.reference.hierarchy.MethodHierarchyProvider"/>
+		<callHierarchyProvider
+			language="Valkyrie"
+			implementationClass="com.github.valkyrie.ide.reference.hierarchy.CallHierarchyProvider"/>
 		<!-- Highlight -->
 		<colorSettingsPage implementation="com.github.valkyrie.settings.VHighlightSetting"/>
 		<highlightVisitor implementation="com.github.valkyrie.ide.highlight.NodeHighlighter"/>
@@ -60,11 +72,11 @@
 			implementationClass="com.github.valkyrie.ide.hint.ValkyrieParameterHintProvider"/>
 		<codeInsight.inlayProvider
 			language="Valkyrie"
-			implementationClass="com.github.valkyrie.ide.hint.ValkyrieInlayHintProvider"/>
+			implementationClass="com.github.valkyrie.ide.hint.InlayHintProvider"/>
 		<vcs.codeVisionLanguageContext
 			language="Valkyrie"
 			implementationClass="com.github.valkyrie.ide.hint.ValkyrieInlayVSCProvider"/>
-<!--		<psi.fileReferenceHelper implementation="com.github.valkyrie.ide.reference.ValkyrieFileReference"/>-->
+		<!--		<psi.fileReferenceHelper implementation="com.github.valkyrie.ide.reference.ValkyrieFileReference"/>-->
 		<psi.referenceContributor implementation="com.github.valkyrie.ide.reference.ValkyrieReferenceContributor"/>
 		<psi.symbolReferenceProvider
 			anyReferenceClass="true"
@@ -73,7 +85,7 @@
 			hostElementClass="com.intellij.psi.xml.XmlAttributeValue"
 			targetClass="com.github.valkyrie.language.symbol.ValkyrieSymbol"/>
 		<!-- Declaration -->
-		<typeDeclarationProvider implementation="com.github.valkyrie.ide.reference.ValkyrieDeclarationTypeProvider"/>
+		<typeDeclarationProvider implementation="com.github.valkyrie.ide.reference.DeclarationProvider"/>
 		<psi.declarationProvider implementation="com.github.valkyrie.ide.reference.ValkyrieDeclarationProvider"/>
 		<declarationRangeHandler
 			key="org.rust.lang.core.psi.ValkyrieClass"
@@ -89,15 +101,13 @@
 			implementationClass="com.github.valkyrie.ide.completion.VCompletionContributor"/>
 		<lang.braceMatcher
 			language="Valkyrie"
-			implementationClass="com.github.valkyrie.ide.matcher.ValkyrieBraceMatcher"/>
-		<!--		<lang.quoteHandler-->
-		<!--				language="Valkyrie"-->
-		<!--				implementationClass="com.github.valkyrie.ide.matcher.JssQuoteHandler"-->
-		<!--		/>-->
+			implementationClass="com.github.valkyrie.ide.matcher.BraceMatchAdapter"/>
+		<lang.quoteHandler
+			language="Valkyrie"
+			implementationClass="com.github.valkyrie.ide.matcher.QuoteHandler"/>
 		<lang.foldingBuilder
 			language="Valkyrie"
-			implementationClass="com.github.valkyrie.ide.folding.ValkyrieFoldingBuilder"
-		/>
+			implementationClass="com.github.valkyrie.ide.folding.ValkyrieFoldingBuilder"/>
 		<codeFoldingOptionsProvider instance="com.github.valkyrie.ide.folding.ValkyrieFoldingOptions"/>
 		<!-- Document -->
 		<lang.documentationProvider

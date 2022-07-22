@@ -8,18 +8,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.valkyrie.language.psi.ValkyrieTypes.*;
-import com.github.valkyrie.language.mixin.MixinKeyword;
+import com.github.valkyrie.language.ast.ValkyrieASTBase;
 import com.github.valkyrie.language.psi.*;
 import com.github.valkyrie.language.ast.ASTMethods;
 
-public class ValkyrieKwAsNode extends MixinKeyword implements ValkyrieKwAs {
+public class ValkyrieElseIfNode extends ValkyrieASTBase implements ValkyrieElseIf {
 
-  public ValkyrieKwAsNode(@NotNull ASTNode node) {
+  public ValkyrieElseIfNode(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ValkyrieVisitor visitor) {
-    visitor.visitKwAs(this);
+    visitor.visitElseIf(this);
   }
 
   @Override
